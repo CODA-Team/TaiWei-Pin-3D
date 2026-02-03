@@ -1,0 +1,209 @@
+# ============================================================================
+# Minimal mixed-tech LEF (with M2 / M2_m and middle pad metal)
+# bottom : nangate45-ish
+# top    : asap7-ish
+# DBU    : 1000
+# ============================================================================
+
+VERSION 5.8 ;
+BUSBITCHARS "[]" ;
+DIVIDERCHAR "/" ;
+
+UNITS
+  DATABASE MICRONS 1000 ;
+END UNITS
+
+MANUFACTURINGGRID 0.001 ;
+
+# ----------------------------------------------------------------------------
+# Sites
+# ----------------------------------------------------------------------------
+SITE asap7sc7p5t
+  CLASS CORE ;
+  SIZE 0.054 BY 0.270 ;
+  SYMMETRY Y ;
+END asap7sc7p5t
+
+SITE FreePDK45_38x28_10R_NP_162NW_34O
+  CLASS CORE ;
+  SIZE 0.19 BY 1.4 ;
+  SYMMETRY Y ;
+END FreePDK45_38x28_10R_NP_162NW_34O
+
+# ----------------------------------------------------------------------------
+# Layers (all tech layers first)
+# ----------------------------------------------------------------------------
+# top-die implants you used in the ASAP7 cells
+LAYER RVTN_m
+  TYPE IMPLANT ;
+END RVTN_m
+
+LAYER RVTP_m
+  TYPE IMPLANT ;
+END RVTP_m
+
+# --- top die routing ---
+LAYER M1_m
+  TYPE ROUTING ;
+  DIRECTION VERTICAL ;
+  PITCH 0.036 ;
+  WIDTH 0.018 ;
+  SPACING 0.018 ;
+  THICKNESS 0.036 ;
+  HEIGHT 0.141 ;
+  RESISTANCE RPERSQ 1.267515 ;
+  CAPACITANCE CPERSQDIST 1.0e-08 ;
+  EDGECAPACITANCE 1.0e-08 ;
+END M1_m
+
+# cut between M1_m and M2_m (参考你大LEF里的 V1_m)
+LAYER V1_m
+  TYPE CUT ;
+  SPACING 0.018 ;
+  WIDTH 0.018 ;
+  RESISTANCE 17.2 ;
+END V1_m
+
+LAYER M2_m
+  TYPE ROUTING ;
+  DIRECTION HORIZONTAL ;
+  PITCH 0.045 0.036 ;
+  WIDTH 0.018 ;
+  SPACING 0.018 ;
+  THICKNESS 0.036 ;
+  HEIGHT 0.213 ;
+  RESISTANCE RPERSQ 0.83216 ;
+  CAPACITANCE CPERSQDIST 0.003076 ;
+  EDGECAPACITANCE 6.45897e-05 ;
+END M2_m
+
+# cut from Pad_mid to top M2_m
+LAYER VIA_PAD_TO_M2M
+  TYPE CUT ;
+  WIDTH 0.02 ;
+  SPACING 0.04 ;
+  RESISTANCE 6.3 ;
+END VIA_PAD_TO_M2M
+
+# --- middle pad metal to bridge bottom/top M2 ---
+LAYER Pad_mid
+  TYPE ROUTING ;
+  DIRECTION HORIZONTAL ;
+  WIDTH 0.04 ;
+  SPACING 0.04 ;
+  PITCH 0.08 0.08 ;
+  THICKNESS 0.50 ;
+  HEIGHT 1.00 ;
+  RESISTANCE RPERSQ 0.50 ;
+  CAPACITANCE CPERSQDIST 0.0010 ;
+  EDGECAPACITANCE 5.0e-05 ;
+END Pad_mid
+
+# cut from bottom M2 to Pad_mid
+LAYER VIA_M2_TO_PAD
+  TYPE CUT ;
+  WIDTH 0.02 ;
+  SPACING 0.04 ;
+  RESISTANCE 6.3 ;
+END VIA_M2_TO_PAD
+
+# --- bottom die routing ---
+LAYER M2
+  TYPE ROUTING ;
+  DIRECTION VERTICAL ;
+  PITCH 0.19 ;
+  WIDTH 0.07 ;
+  SPACING 0.07 ;
+  THICKNESS 0.14 ;
+  HEIGHT 0.62 ;
+  RESISTANCE RPERSQ 0.25 ;
+  CAPACITANCE CPERSQDIST 4.0896e-05 ;
+  EDGECAPACITANCE 2.5157e-05 ;
+END M2
+
+LAYER via1
+  TYPE CUT ;
+  SPACING 0.08 ;
+  WIDTH 0.07 ;
+  RESISTANCE 5 ;
+END via1
+
+LAYER M1
+  TYPE ROUTING ;
+  DIRECTION HORIZONTAL ;
+  PITCH 0.14 ;
+  WIDTH 0.07 ;
+  SPACING 0.07 ;
+  THICKNESS 0.13 ;
+  HEIGHT 0.37 ;
+  RESISTANCE RPERSQ 0.38 ;
+  CAPACITANCE CPERSQDIST 7.7161e-05 ;
+  EDGECAPACITANCE 2.7365e-05 ;
+END M1
+
+VIA VIA12 Default
+  LAYER M1 ;
+    RECT -0.07 -0.07 0.07 0.07 ;
+  LAYER M2 ;
+    RECT -0.07 -0.07 0.07 0.07 ;
+  LAYER via1 ;
+    RECT -0.035 -0.035 0.035 0.035 ;
+END VIA12
+
+# bottom M2 -> middle pad
+VIA M2_TO_PADMID Default
+  LAYER M2 ;
+    RECT -0.03 -0.03 0.03 0.03 ;
+  LAYER Pad_mid ;
+    RECT -0.035 -0.035 0.035 0.035 ;
+  LAYER VIA_M2_TO_PAD ;
+    RECT -0.01 -0.01 0.01 0.01 ;
+END M2_TO_PADMID
+
+# middle pad -> top M2_m
+VIA PADMID_TO_M2_M Default
+  LAYER Pad_mid ;
+    RECT -0.035 -0.035 0.035 0.035 ;
+  LAYER M2_m ;
+    RECT -0.03 -0.03 0.03 0.03 ;
+  LAYER VIA_PAD_TO_M2M ;
+    RECT -0.01 -0.01 0.01 0.01 ;
+END PADMID_TO_M2_M
+
+# top M1_m <-> M2_m
+VIA VIA12_m Default
+  LAYER M1_m ;
+    RECT -0.009 -0.011 0.009 0.011 ;
+  LAYER M2_m ;
+    RECT -0.014 -0.009 0.014 0.009 ;
+  LAYER V1_m ;
+    RECT -0.009 -0.009 0.009 0.009 ;
+END VIA12_m
+
+# ----------------------------------------------------------------------------
+# VIARULES (参考你原始两份LEF的写法)
+# ----------------------------------------------------------------------------
+
+# bottom: M2 <-> M1
+VIARULE M2_M1 GENERATE DEFAULT
+  LAYER M1 ;
+    ENCLOSURE 0.0 0.0 ;
+  LAYER M2 ;
+    ENCLOSURE 0.0 0.0 ;
+  LAYER via1 ;
+    RECT -0.035 -0.035 0.035 0.035 ;
+    SPACING 0.15 BY 0.15 ;
+END M2_M1
+
+# top: M2_m <-> M1_m
+VIARULE M2_m_M1_m GENERATE DEFAULT
+  LAYER M1_m ;
+    ENCLOSURE 0.0 0.0 ;
+  LAYER M2_m ;
+    ENCLOSURE 0.002 0.0 ;
+  LAYER V1_m ;
+    RECT -0.009 -0.009 0.009 0.009 ;
+    SPACING 0.036 BY 0.036 ;
+END M2_m_M1_m
+
+END LIBRARY

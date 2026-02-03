@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<klayout-macro>
+ <description/>
+ <version/>
+ <category>drc</category>
+ <prolog/>
+ <epilog/>
+ <doc/>
+ <autorun>false</autorun>
+ <autorun-early>false</autorun-early>
+ <shortcut/>
+ <show-in-menu>true</show-in-menu>
+ <group-name>drc_scripts</group-name>
+ <menu-path>tools_menu.drc.end</menu-path>
+ <interpreter>dsl</interpreter>
+ <dsl-interpreter-name>drc-dsl-xml</dsl-interpreter-name>
+ <text>
+################################################################################
+# Rules updated from https://github.com/klayoutmatthias/FreePDK45_for_KLayout
+# Reused under GNU GPLv3: https://www.gnu.org/licenses/
+#
+# This DRC file for FreePDK45 was developed from the FreePDK45 DRC docs:
+#   https://www.eda.ncsu.edu/wiki/FreePDK45:RuleDevel
+#   https://www.eda.ncsu.edu/wiki/FreePDK45:Contents
+################################################################################
+
+####################
+# Inputs
+####################
+
+source($in_gds)
+report("FreePDK45 DRC runset", $report_file)
+
+# Enable / disable rule groups
+FEOL    = true # Front-end-of-line checks
+BEOL    = true # Back-end-of-line checks
+OFFGRID = true # Manufacturing grid checks
+ANTENNA = true # Antenna checks
+
+####################
+# KLayout setup
+####################
+
+# Set tiling options
+tiles(1000.um)
+tile_borders(1.um)
+
+# Hierachical
+deep
+
+# Use 4 CPU cores
+threads(4)
+verbose(true)
+
+####################
+# Layer definitions
+####################
+active  = polygons(1, 0)
+pwell   = polygons(2, 0)
+nwell   = polygons(3, 0)
+nplus   = polygons(4, 0)
+pplus   = polygons(5, 0)
+vtg     = polygons(6, 0)
+vth     = polygons(7, 0)
+thkox   = polygons(8, 0)
+poly    = polygons(9, 0)
+cont    = polygons(10, 0)
+M1  = polygons(11, 0)
+via1    = polygons(12, 0)
+M2  = polygons(13, 0)
+via2    = polygons(14, 0)
+M3  = polygons(15, 0)
+via3    = polygons(16, 0)
+M4  = polygons(17, 0)
+via4    = polygons(18, 0)
+M5  = polygons(19, 0)
+via5    = polygons(20, 0)
+M6  = polygons(21, 0)
+via6    = polygons(22, 0)
+M7  = polygons(23, 0)
+via7    = polygons(24, 0)
+M8  = polygons(25, 0)
+via8    = polygons(26, 0)
+M9  = polygons(27, 0)
+via9    = polygons(28, 0)
+M10 = polygons(29, 0)
+
+####################
+# Helper functions
+####################
+
+# splits a layer classes with increasing min dimensions
+def classify_by_width(layer, *dimensions)
+  dimensions.collect { |d| layer = layer.sized(-0.5 * (d - 1.dbu)).sized(0.5 * (d - 1.dbu)) }
+end
+
+####################
+# Rules
+####################
+# TODO(rovinski) Via enclosure rules (Mx.3, Mx.4) do not appear to correctly identify violations
+
+# FEOL checks
+if FEOL
+info("FEOL checks")
+
+# Well
+well = nwell.or(pwell)
+nwell.and(pwell).output("WELL.1", "WELL.1 : nwell/pwell must not overlap")
+# the rule "WELL.2 : Minimum spacing of well at different potential : 225nm" was not coded : see : https://www.klayout.de/forum/discussion/comment/6021
+nwell.space(135.nm, euclidian).output("WELL.3", "WELL.3 : Minimum spacing of nwell at same potential : 135nm")
+pwell.space(135.nm, euclidian).output("WELL.3", "WELL.3 : Minimum spacing of pwell at same potential : 135nm")
+well.separation(well, 200.nm, euclidian).output("WELL.4", "WELL.4 : Minimum width of nwell/pwell : 200nm")
+vtg.not(well).output("VT.1","VT.1 : Vtg adjust layers must coincide with well")
+vth.not(well).output("VT.1","VT.1 : Vth adjust layers must coincide with well")
+ 
+# Poly
+gate = poly &amp; active
+poly.width(50.nm, euclidian).output("POLY.1", "POLY.1 : Minimum width of poly : 50nm")
+
+# TODO(rovinski) This section errors out for some reason
+##if poly.separation(active, 140.nm, projection).polygons?
+#  poly.separation(active, 140.nm, projection).polygons.without_area(0).output("POLY.2", "POLY.2 : Minimum spacing of poly AND active: 140nm")
+##end
+#poly.enclosing(gate, 55.nm, projection).polygons.without_area(0).output("POLY.3", "POLY.3 : Minimum poly extension beyond active : 55nm")
+
+active.enclosing(gate, 70.nm, projection).polygons.without_area(0).output("POLY.4", "POLY.4 : Minimum enclosure of active around gate : 70nm")
+poly.not(active).separation(active, 50.nm, projection).polygons.without_area(0).output("POLY.5", "POLY.5 : Minimum spacing of field poly to active: 50nm")
+poly.space(75.nm, euclidian).output("POLY.6", "POLY.6 : Minimum spacing of field poly: 75nm")
+
+# Active
+active.width(90.nm, euclidian).output("ACTIVE.1", "ACTIVE.1 : Minimum width of active : 90nm")
+active.space(80.nm, euclidian).output("ACTIVE.2", "ACTIVE.2 : Minimum spacing of active : 80nm")
+well.enclosing(active, 55.nm, euclidian).output("ACTIVE.3", "ACTIVE.3 : Minimum enclosure/spacing of nwell/pwell to active: 55nm")
+active.not(well).output("ACTIVE.4", "ACTIVE.4 : active must be inside nwell or pwell")
+
+# Implant
+implant = nplus.or(pplus)
+implant.separation(gate, 70.nm, projection).polygons.without_area(0).output("IMPLANT.1", "IMPLANT.1 : Minimum spacing of nimplant/ pimplant to channel : 70nm")
+implant.separation(cont, 25.nm, projection).polygons.without_area(0).output("IMPLANT.2", "IMPLANT.1 : Minimum spacing of nimplant/ pimplant to contact : 25nm")
+implant.width(45.nm, euclidian).output("IMPLANT.3", "IMPLANT.3 : Minimum width of nimplant/ pimplant  : 45nm")
+implant.space(45.nm, euclidian).output("IMPLANT.4", "IMPLANT.4 : Minimum spacing of nimplant/ pimplant  : 45nm")
+nplus.and(pplus).output("IMPLANT.5", "IMPLANT.5 : Nimplant and pimplant must not overlap")
+
+# Contact
+cont.width(65.nm).output("CONTACT.1", "CONTACT.1 : Minimum/Maximum width of contact : 65nm")
+cont.space(75.nm, euclidian).output("CONTACT.2", "CONTACT.2 : Minimum spacing of contact : 75nm")
+cont.not(active.or(poly.or(M1))).output("CONTACT.3", "CONTACT.3 : contact must be inside active or poly or M1")
+active.enclosing(cont, 5.nm, euclidian).output("CONTACT.4", "CONTACT.4 : Minimum enclosure of active around contact : 5nm")
+poly.enclosing(cont, 5.nm, euclidian).output("CONTACT.5", "CONTACT.5 : Minimum enclosure of poly around contact : 5nm")
+cont.separation(poly, 35.nm, euclidian).output("CONTACT.6", "CONTACT.6 : Minimum spacing of contact and poly : 35nm")
+
+end # FEOL
+
+# BEOL checks
+if BEOL
+info("BEOL checks")
+
+# M1
+M1.width(65.nm, euclidian).output("M1.1", "M1.1 : Minimum width of M1 : 65nm")
+M1.space(65.nm, euclidian).output("M1.2", "M1.2 : Minimum spacing of M1 : 65nm")
+cont_edges_with_less_enclosure = M1.enclosing(cont, 35.nm, projection).second_edges
+error_corners = cont_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+cont.interacting(error_corners.polygons(1.dbu)).output("M1.3", "M1.3 : Minimum enclosure around contact on two opposite sides : 35nm")
+via1_edges_with_less_enclosure = M1.enclosing(via1, 35.nm, projection).second_edges
+error_corners = via1_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+via1.interacting(error_corners.polygons(1.dbu)).output("M1.4", "M1.4 : Minimum enclosure around via1 on two opposite sides : 35nm")
+M1_gt90, M1_gt270, M1_gt500, M1_gt900, M1_gt1500 = classify_by_width(M1, 90.nm, 270.nm, 500.nm, 900.nm, 1500.nm)
+M1_gt90.edges.with_length(300.nm,nil).space(90.nm,euclidian).output("M1.5", "M1.5 : Minimum spacing of M1 wider than 90 nm and longer than 300 nm : 90nm")
+M1_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M1.6", "M1.6 : Minimum spacing of M1 wider than 270 nm and longer than 900 nm : 270nm")
+M1_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M1.7", "M1.7 : Minimum spacing of M1 wider than 500 nm and longer than 1.8 um : 500nm")
+M1_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M1.8", "M1.8 : Minimum spacing of M1 wider than 900 nm and longer than 2.7 um : 900nm")
+M1_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M1.9", "M1.9 : Minimum spacing of M1 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via1
+via1.width(65.nm, euclidian).output("VIA1.1", "VIA1.1 : Minimum/Maximum width of via1 : 65nm")
+via1.space(75.nm, euclidian).output("VIA1.2", "VIA1.2 : Minimum spacing of via1 : 75nm")
+via1.not(M1).output("VIA1.3", "VIA1.3 : via1 must be inside M1")
+via1.not(M2).output("VIA1.4", "VIA1.4 : via1 must be inside M2")
+
+# M2
+M2.width(70.nm, euclidian).output("M2.1", "M2.1 : Minimum width of  intermediate M2 : 70nm")
+M2.space(70.nm, euclidian).output("M2.2", "M2.2 : Minimum spacing of  intermediate M2 : 70nm")
+via1_edges_with_less_enclosure = M2.enclosing(via1, 35.nm, projection).second_edges
+error_corners = via1_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+via1.interacting(error_corners.polygons(1.dbu)).output("M2.3", "M2.3 : Minimum enclosure around via1 on two opposite sides : 35nm")
+via2_edges_with_less_enclosure = M2.enclosing(via2, 35.nm, projection).second_edges
+error_corners = via2_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+via2.interacting(error_corners.polygons(1.dbu)).output("M2.4", "M2.4 : Minimum enclosure around via2 on two opposite sides : 35nm")
+M2_gt90, M2_gt270, M2_gt500, M2_gt900, M2_gt1500 = classify_by_width(M2, 90.nm, 270.nm, 500.nm, 900.nm, 1500.nm)
+M2_gt90.edges.with_length(300.nm,nil).space(90.nm,euclidian).output("M2.5", "M2.5 : Minimum spacing of  intermediate M2 wider than 90 nm and longer than 300 nm : 90nm")
+M2_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M2.6", "M2.6 : Minimum spacing of  intermediate M2 wider than 270 nm and longer than 900 nm : 270nm")
+M2_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M2.7", "M2.7 : Minimum spacing of  intermediate M2 wider than 500 nm and longer than 1.8 um : 500nm")
+M2_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M2.8", "M2.8 : Minimum spacing of  intermediate M2 wider than 900 nm and longer than 2.7 um : 900nm")
+M2_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M2.9", "M2.9 : Minimum spacing of  intermediate M2 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via2
+via2.width(70.nm, euclidian).output("VIA2.1", "VIA2.1 : Minimum/Maximum width of via2 : 70nm")
+via2.space(85.nm, euclidian).output("VIA2.2", "VIA2.2 : Minimum spacing of via2 : 85nm")
+via2.not(M2).output("VIA2.3", "VIA2.3 : via2 must be inside M2")
+via2.not(M3).output("VIA2.4", "VIA2.4 : via2 must be inside M3")
+
+# M3
+M3.width(70.nm, euclidian).output("M3.1", "M3.1 : Minimum width of  intermediate M3 : 70nm")
+M3.space(70.nm, euclidian).output("M3.2", "M3.2 : Minimum spacing of  intermediate M3 : 70nm")
+via2_edges_with_less_enclosure = M3.enclosing(via2, 35.nm, projection).second_edges
+error_corners = via2_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+via2.interacting(error_corners.polygons(1.dbu)).output("M3.3", "M3.3 : Minimum enclosure around via2 on two opposite sides : 35nm")
+via3_edges_with_less_enclosure = M3.enclosing(via3, 35.nm, projection).second_edges
+error_corners = via3_edges_with_less_enclosure.width(angle_limit(100.0), 1.dbu)
+via3.interacting(error_corners.polygons(1.dbu)).output("M3.4", "M3.4 : Minimum enclosure around via3 on two opposite sides : 35nm")
+M3_gt90, M3_gt270, M3_gt500, M3_gt900, M3_gt1500 = classify_by_width(M3, 90.nm, 270.nm, 500.nm, 900.nm, 1500.nm)
+M3_gt90.edges.with_length(300.nm,nil).space(90.nm,euclidian).output("M3.5", "M3.5 : Minimum spacing of  intermediate M3 wider than 90 nm and longer than 300 nm : 90nm")
+M3_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M3.6", "M3.6 : Minimum spacing of  intermediate M3 wider than 270 nm and longer than 900 nm : 270nm")
+M3_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M3.7", "M3.7 : Minimum spacing of  intermediate M3 wider than 500 nm and longer than 1.8 um : 500nm")
+M3_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M3.8", "M3.8 : Minimum spacing of  intermediate M3 wider than 900 nm and longer than 2.7 um : 900nm")
+M3_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M3.9", "M3.9 : Minimum spacing of  intermediate M3 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via3
+via3.width(70.nm, euclidian).output("VIA3.1", "VIA3.1 : Minimum/Maximum width of via3 : 70nm")
+via3.space(85.nm, euclidian).output("VIA3.2", "VIA3.2 : Minimum spacing of via3 : 85nm")
+via3.not(M3).output("VIA3.3", "VIA3.3 : via3 must be inside M3")
+via3.not(M4).output("VIA3.4", "VIA3.4 : via3 must be inside M4")
+
+# M4
+M4.width(140.nm, euclidian).output("M4.1", "M4.1 : Minimum width of  semi-global M4 : 140nm")
+M4.space(140.nm, euclidian).output("M4.2", "M4.2 : Minimum spacing of  semi-global M4 : 140nm")
+M4_gt270, M4_gt500, M4_gt900 = classify_by_width(M4, 270.nm, 500.nm, 900.nm)
+M4_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M4.6", "M4.6 : Minimum spacing of semi-global M4 wider than 270 nm and longer than 900 nm : 270nm")
+M4_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M4.7", "M4.7 : Minimum spacing of semi-global M4 wider than 500 nm and longer than 1.8 um : 500nm")
+M4_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M4.8", "M4.8 : Minimum spacing of semi-global meta4l wider than 900 nm and longer than 2.7 um : 900nm")
+
+# via4
+via4.width(140.nm, euclidian).output("VIA4.1", "VIA4.1 : Minimum width of via4 : 140nm")
+via4.space(160.nm, euclidian).output("VIA4.2", "VIA4.2 : Minimum spacing of via4 : 160nm")
+via4.not(M4).output("VIA4.3", "VIA4.3 : via4 must be inside M4")
+via4.not(M5).output("VIA4.4", "VIA4.4 : via4 must be inside M5")
+
+# M5
+M5.width(140.nm, euclidian).output("M5.1", "M5.1 : Minimum width of semi-global M5 : 140nm")
+M5.space(140.nm, euclidian).output("M5.2", "M5.2 : Minimum spacing of semi-global M5 : 140nm")
+M5_gt270, M5_gt500, M5_gt900 = classify_by_width(M5, 270.nm, 500.nm, 900.nm)
+M5_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M5.6", "M5.6 : Minimum spacing of semi-global M5 wider than 270 nm and longer than 900 nm : 270nm")
+M5_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M5.7", "M5.7 : Minimum spacing of semi-global M5 wider than 500 nm and longer than 1.8 um : 500nm")
+M5_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M5.8", "M5.8 : Minimum spacing of semi-global meta5l wider than 900 nm and longer than 2.7 um : 900nm")
+
+# via5
+via5.width(140.nm, euclidian).output("VIA5.1", "VIA5.1 : Minimum/Maximum width of via5 : 140nm")
+via5.space(160.nm, euclidian).output("VIA5.2", "VIA5.2 : Minimum spacing of via5 : 160nm")
+via5.not(M5).output("VIA5.3", "VIA5.3 : via5 must be inside M5")
+via5.not(M6).output("VIA5.4", "VIA5.4 : via5 must be inside M6")
+
+# M6
+M6.width(140.nm, euclidian).output("M6.1", "M6.1 : Minimum width of semi-global M6 : 140nm")
+M6.space(140.nm, euclidian).output("M6.2", "M6.2 : Minimum spacing of semi-global M6 : 140nm")
+M6_gt270, M6_gt500, M6_gt900 = classify_by_width(M6, 270.nm, 500.nm, 900.nm)
+M6_gt270.edges.with_length(900.nm,nil).space(270.nm,euclidian).output("M6.6", "M6.6 : Minimum spacing of semi-global M6 wider than 270 nm and longer than 900 nm : 270nm")
+M6_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M6.7", "M6.7 : Minimum spacing of semi-global M6 wider than 500 nm and longer than 1.8 um : 500nm")
+M6_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M6.8", "M6.8 : Minimum spacing of semi-global M6 wider than 900 nm and longer than 2.7 um : 900nm")
+
+# via6
+via6.width(140.nm, euclidian).output("VIA6.1", "VIA6.1 : Minimum/Maximum width of via6 : 140nm")
+via6.space(160.nm, euclidian).output("VIA6.2", "VIA6.2 : Minimum spacing of via6 : 160nm")
+via6.not(M6).output("VIA6.3", "VIA6.3 : via6 must be inside M6")
+via6.not(M7).output("VIA6.4", "VIA6.4 : via6 must be inside M7")
+
+# M7
+M7.width(400.nm, euclidian).output("M7.1", "M7.1 : Minimum width of thin global M7 : 400nm")
+M7.space(400.nm, euclidian).output("M7.2", "M7.2 : Minimum spacing of thin global M7 : 400nm")
+M7_gt500, M7_gt900, M7_gt1500 = classify_by_width(M7, 500.nm, 900.nm, 1500.nm)
+M7_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M7.7", "M7.7 : Minimum spacing of thin global M7 wider than 500 nm and longer than 1.8 um : 500nm")
+M7_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M7.8", "M7.8 : Minimum spacing of thin global M7 wider than 900 nm and longer than 2.7 um : 900nm")
+M7_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M7.9", "M7.9 : Minimum spacing of thin global meta7l wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via7
+via7.width(400.nm, euclidian).output("VIA6.1", "VIA6.1 : Minimum/Maximum width of via7 : 400nm")
+via7.space(440.nm, euclidian).output("VIA6.2", "VIA6.2 : Minimum spacing of via7 : 440nm")
+via7.not(M7).output("VIA7.3", "VIA7.3 : via7 must be inside M7")
+via7.not(M8).output("VIA7.4", "VIA7.4 : via7 must be inside M8")
+
+# M8
+M8.width(400.nm, euclidian).output("M8.1", "M8.1 : Minimum width of thin global M8 : 400nm")
+M8.space(400.nm, euclidian).output("M8.2", "M8.2 : Minimum spacing of thin global M8 : 400nm")
+M8_gt500, M8_gt900, M8_gt1500 = classify_by_width(M8, 500.nm, 900.nm, 1500.nm)
+M8_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M8.7", "M8.7 : Minimum spacing of thin global M8 wider than 500 nm and longer than 1.8 um : 500nm")
+M8_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M8.8", "M8.8 : Minimum spacing of thin global M8 wider than 900 nm and longer than 2.7 um : 900nm")
+M8_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M8.9", "M8.9 : Minimum spacing of thin global M8 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via8
+via8.width(400.nm, euclidian).output("VIA8.1", "VIA8.1 : Minimum/Maximum width of via8 : 400nm")
+via8.space(440.nm, euclidian).output("VIA8.2", "VIA8.2 : Minimum spacing of via8 : 440nm")
+via8.not(M8).output("VIA8.3", "VIA8.3 : via8 must be inside M8")
+via8.not(M9).output("VIA8.4", "VIA8.4 : via8 must be inside M9")
+
+# M9
+M9.width(800.nm, euclidian).output("M9.1", "M9.1 : Minimum width of global M9 : 800nm")
+M9.space(800.nm, euclidian).output("M9.2", "M9.2 : Minimum spacing of global M9 : 800nm")
+M9_gt500, M9_gt900, M9_gt1500 = classify_by_width(M9, 500.nm, 900.nm, 1500.nm)
+M9_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M9.7", "M9.7 : Minimum spacing of global M9 wider than 500 nm and longer than 1.8 um : 500nm")
+M9_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M9.8", "M9.8 : Minimum spacing of global M9 wider than 900 nm and longer than 2.7 um : 900nm")
+M9_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M9.9", "M9.9 : Minimum spacing of global M9 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+# via9
+via9.width(800.nm, euclidian).output("VIA9.1", "VIA9.1 : Minimum/Maximum width of via9 : 800nm")
+via9.space(880.nm, euclidian).output("VIA9.2", "VIA9.2 : Minimum spacing of via9 : 880nm")
+via9.not(M9).output("VIA9.3", "VIA9.3 : via9 must be inside M9")
+via9.not(M10).output("VIA9.4", "VIA9.4 : via9 must be inside M10")
+
+# M10
+M10.width(800.nm, euclidian).output("M10.1", "M10.1 : Minimum width of global M10 : 800nm")
+M10.space(800.nm, euclidian).output("M10.2", "M10.2 : Minimum spacing of global M10 : 800nm")
+M10_gt500, M10_gt900, M10_gt1500 = classify_by_width(M10, 500.nm, 900.nm, 1500.nm)
+M10_gt500.edges.with_length(1.8.um,nil).space(500.nm,euclidian).output("M10.7", "M10.7 : Minimum spacing of global M10 wider than 500 nm and longer than 1.8 um : 500nm")
+M10_gt900.edges.with_length(2.7.um,nil).space(900.nm,euclidian).output("M10.8", "M10.8 : Minimum spacing of global M10 wider than 900 nm and longer than 2.7 um : 900nm")
+M10_gt1500.edges.with_length(4.um,nil).space(1500.nm,euclidian).output("M10.9", "M10.9 : Minimum spacing of global M10 wider than 1500 nm and longer than 4.0 um : 1500nm")
+
+end # BEOL
+
+# Manufacturing grid check
+# https://www.eda.ncsu.edu/wiki/FreePDK45:Manufacturing_Grid
+
+if OFFGRID
+info("Off-grid checks")
+
+grid = 2.5.nm
+all_drawing = [ :well, :active, :vtg, :vth, :pplus, :nplus, :poly, :thkox, :cont, :M1, :via1, :M2, :via2, :M3, :via3, :M4, :via4, :M5, :via5, :M6, :via6, :M7, :via7, :M8, :via8, :M9, :via9, :M10 ]
+
+# A Ruby idiom to get the value of a variable whose name is in "dwg" (as symbol)
+# TODO(rovinski) local_variable_get is not compatible with older Ruby versions
+#all_drawing.each do |dwg|
+#  layer = binding.local_variable_get(dwg)
+#  r_grid = layer.ongrid(grid).polygons(10.nm)
+#  r_grid.output("GRID: vertexes on layer #{dwg} not on grid of #{'%.12g' % grid}")
+#end
+end # OFFGRID
+
+# Antenna checks
+
+if ANTENNA
+info("ANTENNA checks")
+
+# Create layer connections
+connect(gate, poly)
+connect(poly, cont)
+connect(cont, M1)
+connect(M1, via1)
+connect(via1, M2)
+connect(M2, via2)
+connect(via2, M3)
+connect(M3, via3)
+connect(via3, M4)
+connect(M4, via4)
+connect(via4, M5)
+connect(M5, via5)
+connect(via5, M6)
+connect(M6, via6)
+connect(via6, M7)
+connect(M7, via7)
+connect(via7, M8)
+connect(M8, via8)
+connect(via8, M9)
+connect(M9, via9)
+connect(via9, M10)
+
+# Create and connect diodes
+diode = nplus &amp; active - nwell
+connect(diode, cont)
+
+antenna_check(gate, M1, 300.0, diode).output("M1_ANTENNA", "M1_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M2, 300.0, diode).output("M2_ANTENNA", "M2_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M3, 300.0, diode).output("M3_ANTENNA", "M3_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M4, 300.0, diode).output("M4_ANTENNA", "M4_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M5, 300.0, diode).output("M5_ANTENNA", "M5_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M6, 300.0, diode).output("M6_ANTENNA", "M6_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M7, 300.0, diode).output("M7_ANTENNA", "M7_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M8, 300.0, diode).output("M8_ANTENNA", "M8_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M9, 300.0, diode).output("M9_ANTENNA", "M9_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+antenna_check(gate, M10, 300.0, diode).output("M10_ANTENNA", "M10_ANTENNA : Ratio of Maximum Allowed (Field poly area or M Layer Area) to transistor gate area : 300:1")
+
+# Remove connections
+clear_connections
+end # ANTENNA
+</text>
+</klayout-macro>
