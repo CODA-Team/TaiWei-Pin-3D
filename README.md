@@ -4,22 +4,26 @@ Taiwei-3D-Eval is an end-to-end reproducible physical design (PD) flow for face-
 which leverages Pin3D methodology and mature 2D physical design tools (ORFS and Cadence tools) for high-quality 3D IC implementation.
 Our flow allows academic researchers to validate and compare their 3D point tools in a full flow context.
 
-
 ## [Quick Start](#quick-start)
 
-### Supported Tools 
-- Open-source physical design tools: [OpenROAD-flow-scripts](https://github.com/The-OpenROAD-Project/OpenROAD-flow-scripts) (ORD)
-  - Commit: e19b7a5176e45bae645ba2d5b46f4457e8913b1c
-  - Other versions may work but have not been tested. If you encounter any issues, please open an issue in this repository.
-- Commerical physical design tools: Cadence tool suites (CDS)
-  - Innovus (v21.39)
-  - Genus (v21.39)
-  
-### Environment setup
-- Please update the working directory and ORFS directory in env.sh file.
-  * `WORK_DIR`: Working directoy (your current path by default)
-  * `ORFS_DIR`: Installation directory for OpenROAD-flow-scripts
-- Please make sure to source environment setup before running our flow.
+### Supported Tools
+- **Open-source PD tools**: [ORFS-Research](https://github.com/ieee-ceda-datc/ORFS-Research) (ORD)
+  - **Tested commit**: `bd2904522e3a26d50f08ffbcb8a0c6017cc48ebd`
+  - Other versions may work but have not been fully validated. If you encounter issues, please open a GitHub issue in this repository.
+  - Note: the branch used in the paper differs from the public release; please use the commit above for reproducibility.
+- **Commercial PD tools**: Cadence tool suite (CDS)
+  - Innovus `v21.39`
+  - Genus `v21.39`
+
+### Environment Setup
+
+- Install **ORFS-Research** first by following the instructions in its repository.
+- Update the paths in `env.sh` before running the flow:
+  - `WORK_DIR`: Working directory (defaults to the current path)
+  - `ORFS_DIR`: Installation directory of **ORFS-Research**
+  - `FLOW_HOME`: Root directory of **TaiWei-Pin-3D**
+- Make sure to source the environment script in every new shell before launching the flow:
+
 ```bash
 source env.sh
 ```
@@ -37,7 +41,10 @@ python3 run_experiments.py --flow cds --tech asap7_nangate45_3D --case gcd
 ```
 After running above command (ASASP7-NanGate45-GCD), you can visualize chip layouts using OpenROAD's or Innovus's GUI.
 
-
+### Example 3: Run the end-to-end flow for the GCD design using the provided bash script (3D stack setting: ASAP7 + NanGate45)
+```bash
+bash experiment_scripts/gcd.sh
+```
 
 <p align="center">
 <table align="center" width="90%">

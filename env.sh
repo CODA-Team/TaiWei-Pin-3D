@@ -11,7 +11,6 @@
 # ------------------------------------------------------------------------------
 # Toolchain paths (override in your shell if needed)
 # ------------------------------------------------------------------------------
-export PIN3D_DIR="${PIN3D_DIR:-$(pwd)}"
 export FLOW_HOME=$(pwd)
 export NUM_CORES="${NUM_CORES:-16}"
 
