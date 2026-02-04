@@ -373,7 +373,7 @@ ord-final:
 	@$(call _or,$(OPENROAD_SCRIPTS_DIR)/final_report.tcl,$(LOG_DIR)/6_report.log)
 
 	@# Elapsed summary
-	@[ -n "$(UTILS_DIR)" ] && [ -f "$(UTILS_DIR)/genElapsedTime.py" ] && $(MAKE) --no-print-directory elapsed || true
+	@# [ -n "$(UTILS_DIR)" ] && [ -f "$(UTILS_DIR)/genElapsedTime.py" ] && $(MAKE) --no-print-directory elapsed || true
 
 # ----- HotSpot -----
 export FINAL_DEF ?= $(RESULTS_DIR)/6_final.def
