@@ -41,7 +41,7 @@ defIn $FPDEF
 source $::env(CADENCE_SCRIPTS_DIR)/tier_cell_policy.tcl
 
 set_tier_placement_status upper fixed
-apply_tier_policy upper
+apply_tier_policy bottom
 
 setPlaceMode -place_design_refine_place false
 place_design
