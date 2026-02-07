@@ -3,7 +3,7 @@ source "${FLOW_ROOT}/env.sh"
 
 export DESIGN_DIMENSION="3D"
 export USE_FLOW="openroad"
-export FLOW_VARIANT="openroad"
+export FLOW_VARIANT="base"
 # export OPEN_GUI=0
 export LOG_DIR=./logs/nangate45_3D/gcd/base
 export OBJECTS_DIR=./objects/nangate45_3D/gcd/base
