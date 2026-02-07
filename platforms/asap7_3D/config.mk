@@ -127,7 +127,6 @@ export FASTROUTE_TCL     ?= $(PLATFORM_DIR)/fastroute.tcl
 # -------- Signoff / RCX / IR --------
 export CDL_FILE           ?=
 export TEMPLATE_PGA_CFG  ?= $(PLATFORM_DIR)/template_pga.cfg
-export RCX_RULES          = $(PLATFORM_DIR)/asap7_tech_1x_9M10M.rcx_patterns.rules
 
 # IR drop（两层同电压；如需区分 T1/T2，可改为 "VDD_T1 0.77 VDD_T2 0.77"）
 export PWR_NETS_VOLTAGES ?= "VDD 0.77"
