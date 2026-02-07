@@ -13,3 +13,10 @@ export GLOBAL_ROUTE_ARGS = -verbose -congestion_iterations 30
 
 
 export NUM_CORES   ?= 32
+
+export SC_LEF_UPPER_COVER ?= \
+$(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.lef \
+$(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.cover.lef 
+export SC_LEF_BOTTOM_COVER ?= \
+$(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.lef \
+$(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.lef

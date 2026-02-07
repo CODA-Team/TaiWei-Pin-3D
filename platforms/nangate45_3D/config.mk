@@ -12,6 +12,7 @@ ifeq ($(USE_FLOW),openroad)
   export SET_RC_TCL  ?= $(PLATFORM_DIR)/setRC.tech21.tcl
   export MIN_ROUTING_LAYER ?= M2
   export MAX_ROUTING_LAYER ?= M3_add
+  export MAKE_TRACKS ?= $(PLATFORM_DIR)/make_tracks.tech21.tcl
 endif
 export MIN_CLK_ROUTING_LAYER ?= M2
 export TECH_LEF ?= $(PLATFORM_DIR)/lef/NangateOpenCellLibrary.tech.lef

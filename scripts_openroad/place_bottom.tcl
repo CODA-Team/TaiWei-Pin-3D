@@ -1,7 +1,7 @@
 # place_bottom.tcl
 # load read design and perform placement
 source $::env(OPENROAD_SCRIPTS_DIR)/load.tcl
-
+source $::env(OPENROAD_SCRIPTS_DIR)/util.tcl
 set DEF_IN $env(DESIGN_NAME)_3D.tmp.def
 set VERILOG_IN $env(DESIGN_NAME)_3D.tmp.v
 set DEF_OUT $env(DESIGN_NAME)_3D.tmp.def

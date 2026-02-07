@@ -12,6 +12,7 @@ ifeq ($(USE_FLOW),openroad)
   export SET_RC_TCL               ?= $(PLATFORM_DIR)/setRC_2A6M10M.tcl
   export MIN_ROUTING_LAYER ?= M2
   export MAX_ROUTING_LAYER ?= M3_add
+  export MAKE_TRACKS       ?= $(PLATFORM_DIR)/openRoad/make_tracks.2A6M10M.tcl
 endif
 export MIN_CLK_ROUTING_LAYER ?= M2
 export TECH_LEF  ?= $(PLATFORM_DIR)/lef/asap7_nangate45_6M10M.lef
@@ -75,7 +76,7 @@ export IO_PLACER_V ?= M3_m
 export PDN_TCL      ?= $(PLATFORM_DIR)/openRoad/pdn/grid_strategy-3D.tcl
 export TAPCELL_TCL  ?= $(PLATFORM_DIR)/tapcell.tcl
 export TAP_CELL_NAME = TAPCELL_ASAP7_75t_R_bottom
-export MAKE_TRACKS       ?= $(PLATFORM_DIR)/openRoad/make_tracks.tcl
+export MAKE_TRACKS       ?= $(PLATFORM_DIR)/openRoad/make_tracks.6M10M.tcl
 
 # -------- Placement --------
 export CELL_PAD_IN_SITES_GLOBAL_PLACEMENT ?= 0

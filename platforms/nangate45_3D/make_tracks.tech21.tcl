@@ -17,3 +17,5 @@ make_tracks M6_m -x_offset 0.095 -x_pitch 0.28 -y_offset 0.07 -y_pitch  0.28
 make_tracks M7_m -x_offset 0.095 -x_pitch 0.8 -y_offset 0.07 -y_pitch  0.8
 make_tracks M8_m -x_offset 0.095 -x_pitch 0.8 -y_offset 0.07 -y_pitch  0.8
 make_tracks M9_m -x_offset 0.095 -x_pitch 1.6 -y_offset 0.07 -y_pitch  1.6
+make_tracks M2_add -x_offset 0.095 -x_pitch 0.19 -y_offset 0.07 -y_pitch 0.14
+make_tracks M3_add -x_offset 0.095 -x_pitch 0.19 -y_offset 0.07 -y_pitch  0.14

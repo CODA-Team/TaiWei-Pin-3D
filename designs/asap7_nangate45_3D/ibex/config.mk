@@ -15,3 +15,10 @@ export DETAILED_ROUTE_END_ITERATION = 10
 export CORE_UTILIZATION ?= 60
 
 export NUM_CORES   ?= 32
+
+export SC_LEF_UPPER_COVER ?= \
+$(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.processed.lef \
+$(PLATFORM_DIR)/lef_upper/asap7sc7p5t_28_R_1x_220121a.upper.cover.processed.lef 
+export SC_LEF_BOTTOM_COVER ?= \
+$(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.processed.lef \
+$(PLATFORM_DIR)/lef_upper/asap7sc7p5t_28_R_1x_220121a.upper.processed.lef 

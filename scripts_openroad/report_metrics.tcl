@@ -22,6 +22,14 @@ proc report_metrics { stage when { include_erc true } { include_clock_skew true 
   report_tns >> $filename
   report_tns_metric
   report_tns_metric -hold
+  
+  # print timing information to terminal
+  puts -nonewline "$when report_tns"
+  report_tns
+  puts -nonewline "$when report_wns"
+  report_wns
+  puts -nonewline "$when report_ecp"
+  report_clock_min_period -include_port_paths
 
   report_puts "\n=========================================================================="
   report_puts "$when report_wns"

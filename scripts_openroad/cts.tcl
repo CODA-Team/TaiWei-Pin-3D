@@ -94,6 +94,8 @@ source_env_var_if_exists POST_CTS_TCL
 
 mark_insts_by_master "*${fix_layer}*" PLACED
 puts "Marked ${fix_layer} instances as PLACED"
+source $::env(OPENROAD_SCRIPTS_DIR)/report_metrics.tcl
+report_metrics 4 "cts" false false
 
 write_def $::env(RESULTS_DIR)/4_cts.def
 write_verilog $::env(RESULTS_DIR)/4_cts.v
