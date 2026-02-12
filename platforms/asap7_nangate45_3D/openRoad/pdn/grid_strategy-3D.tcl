@@ -75,7 +75,8 @@ rename_upper_bottom_insts
 # ==== 2. 只设置 BOT 的 global_connect ====
 
 puts "INFO: Setting up global connections for BOT only..."
-
+puts "INFO: Rebuilding rows for bottom tier site = $::env(BOTTOM_SITE)"
+or_rebuild_rows_for_site $::env(BOTTOM_SITE)
 clear_global_connect
 
 add_global_connection -net {BOT_VDD} -inst_pattern {.*_bottom} -pin_pattern {^VDD$}   -power
