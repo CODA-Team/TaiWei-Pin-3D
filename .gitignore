@@ -33,6 +33,9 @@ partition_log
 genus_reports
 core.*
 
+# ignore scripts
+platforms/process_scripts
+
 # temp cases
 designs/*/ariane133
 designs/*/swerv*
