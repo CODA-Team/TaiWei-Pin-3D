@@ -6,11 +6,11 @@ PROPERTYDEFINITIONS
   MACRO depth INTEGER ;
   MACRO banks INTEGER ;
 END PROPERTYDEFINITIONS
-MACRO fakeram7_256x34_bottom
+MACRO fakeram7_256x34_upper
   PROPERTY width 34 ;
   PROPERTY depth 256 ;
   PROPERTY banks 2 ;
-  FOREIGN fakeram7_256x34_bottom 0 0 ;
+  FOREIGN fakeram7_256x34_upper 0 0 ;
   SYMMETRY X Y R90 ;
   SIZE 8.930 BY 42.000 ;
   CLASS BLOCK ;
@@ -19,7 +19,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.048 0.024 0.072 ;
     END
   END rd_out[0]
@@ -28,7 +28,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.576 0.024 0.600 ;
     END
   END rd_out[1]
@@ -37,7 +37,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.104 0.024 1.128 ;
     END
   END rd_out[2]
@@ -46,7 +46,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.632 0.024 1.656 ;
     END
   END rd_out[3]
@@ -55,7 +55,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.160 0.024 2.184 ;
     END
   END rd_out[4]
@@ -64,7 +64,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.688 0.024 2.712 ;
     END
   END rd_out[5]
@@ -73,7 +73,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.216 0.024 3.240 ;
     END
   END rd_out[6]
@@ -82,7 +82,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.744 0.024 3.768 ;
     END
   END rd_out[7]
@@ -91,7 +91,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.272 0.024 4.296 ;
     END
   END rd_out[8]
@@ -100,7 +100,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.800 0.024 4.824 ;
     END
   END rd_out[9]
@@ -109,7 +109,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.328 0.024 5.352 ;
     END
   END rd_out[10]
@@ -118,7 +118,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.856 0.024 5.880 ;
     END
   END rd_out[11]
@@ -127,7 +127,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.384 0.024 6.408 ;
     END
   END rd_out[12]
@@ -136,7 +136,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.912 0.024 6.936 ;
     END
   END rd_out[13]
@@ -145,7 +145,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.440 0.024 7.464 ;
     END
   END rd_out[14]
@@ -154,7 +154,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.968 0.024 7.992 ;
     END
   END rd_out[15]
@@ -163,7 +163,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.496 0.024 8.520 ;
     END
   END rd_out[16]
@@ -172,7 +172,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.024 0.024 9.048 ;
     END
   END rd_out[17]
@@ -181,7 +181,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.552 0.024 9.576 ;
     END
   END rd_out[18]
@@ -190,7 +190,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.080 0.024 10.104 ;
     END
   END rd_out[19]
@@ -199,7 +199,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.608 0.024 10.632 ;
     END
   END rd_out[20]
@@ -208,7 +208,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.136 0.024 11.160 ;
     END
   END rd_out[21]
@@ -217,7 +217,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.664 0.024 11.688 ;
     END
   END rd_out[22]
@@ -226,7 +226,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.192 0.024 12.216 ;
     END
   END rd_out[23]
@@ -235,7 +235,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.720 0.024 12.744 ;
     END
   END rd_out[24]
@@ -244,7 +244,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.248 0.024 13.272 ;
     END
   END rd_out[25]
@@ -253,7 +253,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.776 0.024 13.800 ;
     END
   END rd_out[26]
@@ -262,7 +262,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.304 0.024 14.328 ;
     END
   END rd_out[27]
@@ -271,7 +271,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.832 0.024 14.856 ;
     END
   END rd_out[28]
@@ -280,7 +280,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.360 0.024 15.384 ;
     END
   END rd_out[29]
@@ -289,7 +289,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.888 0.024 15.912 ;
     END
   END rd_out[30]
@@ -298,7 +298,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.416 0.024 16.440 ;
     END
   END rd_out[31]
@@ -307,7 +307,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.944 0.024 16.968 ;
     END
   END rd_out[32]
@@ -316,7 +316,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.472 0.024 17.496 ;
     END
   END rd_out[33]
@@ -325,7 +325,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.048 0.024 18.072 ;
     END
   END wd_in[0]
@@ -334,7 +334,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.576 0.024 18.600 ;
     END
   END wd_in[1]
@@ -343,7 +343,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.104 0.024 19.128 ;
     END
   END wd_in[2]
@@ -352,7 +352,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.632 0.024 19.656 ;
     END
   END wd_in[3]
@@ -361,7 +361,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.160 0.024 20.184 ;
     END
   END wd_in[4]
@@ -370,7 +370,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.688 0.024 20.712 ;
     END
   END wd_in[5]
@@ -379,7 +379,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 21.216 0.024 21.240 ;
     END
   END wd_in[6]
@@ -388,7 +388,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 21.744 0.024 21.768 ;
     END
   END wd_in[7]
@@ -397,7 +397,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 22.272 0.024 22.296 ;
     END
   END wd_in[8]
@@ -406,7 +406,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 22.800 0.024 22.824 ;
     END
   END wd_in[9]
@@ -415,7 +415,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 23.328 0.024 23.352 ;
     END
   END wd_in[10]
@@ -424,7 +424,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 23.856 0.024 23.880 ;
     END
   END wd_in[11]
@@ -433,7 +433,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 24.384 0.024 24.408 ;
     END
   END wd_in[12]
@@ -442,7 +442,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 24.912 0.024 24.936 ;
     END
   END wd_in[13]
@@ -451,7 +451,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 25.440 0.024 25.464 ;
     END
   END wd_in[14]
@@ -460,7 +460,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 25.968 0.024 25.992 ;
     END
   END wd_in[15]
@@ -469,7 +469,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 26.496 0.024 26.520 ;
     END
   END wd_in[16]
@@ -478,7 +478,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 27.024 0.024 27.048 ;
     END
   END wd_in[17]
@@ -487,7 +487,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 27.552 0.024 27.576 ;
     END
   END wd_in[18]
@@ -496,7 +496,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 28.080 0.024 28.104 ;
     END
   END wd_in[19]
@@ -505,7 +505,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 28.608 0.024 28.632 ;
     END
   END wd_in[20]
@@ -514,7 +514,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 29.136 0.024 29.160 ;
     END
   END wd_in[21]
@@ -523,7 +523,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 29.664 0.024 29.688 ;
     END
   END wd_in[22]
@@ -532,7 +532,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 30.192 0.024 30.216 ;
     END
   END wd_in[23]
@@ -541,7 +541,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 30.720 0.024 30.744 ;
     END
   END wd_in[24]
@@ -550,7 +550,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 31.248 0.024 31.272 ;
     END
   END wd_in[25]
@@ -559,7 +559,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 31.776 0.024 31.800 ;
     END
   END wd_in[26]
@@ -568,7 +568,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 32.304 0.024 32.328 ;
     END
   END wd_in[27]
@@ -577,7 +577,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 32.832 0.024 32.856 ;
     END
   END wd_in[28]
@@ -586,7 +586,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 33.360 0.024 33.384 ;
     END
   END wd_in[29]
@@ -595,7 +595,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 33.888 0.024 33.912 ;
     END
   END wd_in[30]
@@ -604,7 +604,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 34.416 0.024 34.440 ;
     END
   END wd_in[31]
@@ -613,7 +613,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 34.944 0.024 34.968 ;
     END
   END wd_in[32]
@@ -622,7 +622,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 35.472 0.024 35.496 ;
     END
   END wd_in[33]
@@ -631,7 +631,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 36.048 0.024 36.072 ;
     END
   END addr_in[0]
@@ -640,7 +640,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 36.576 0.024 36.600 ;
     END
   END addr_in[1]
@@ -649,7 +649,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 37.104 0.024 37.128 ;
     END
   END addr_in[2]
@@ -658,7 +658,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 37.632 0.024 37.656 ;
     END
   END addr_in[3]
@@ -667,7 +667,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 38.160 0.024 38.184 ;
     END
   END addr_in[4]
@@ -676,7 +676,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 38.688 0.024 38.712 ;
     END
   END addr_in[5]
@@ -685,7 +685,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 39.216 0.024 39.240 ;
     END
   END addr_in[6]
@@ -694,7 +694,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 39.744 0.024 39.768 ;
     END
   END addr_in[7]
@@ -703,7 +703,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 40.320 0.024 40.344 ;
     END
   END we_in
@@ -712,7 +712,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 40.848 0.024 40.872 ;
     END
   END ce_in
@@ -721,7 +721,7 @@ MACRO fakeram7_256x34_bottom
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 41.376 0.024 41.400 ;
     END
   END clk
@@ -729,7 +729,7 @@ MACRO fakeram7_256x34_bottom
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.048 0.000 8.882 0.096 ;
       RECT 0.048 0.768 8.882 0.864 ;
       RECT 0.048 1.536 8.882 1.632 ;
@@ -791,7 +791,7 @@ MACRO fakeram7_256x34_bottom
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.048 0.384 8.882 0.480 ;
       RECT 0.048 1.152 8.882 1.248 ;
       RECT 0.048 1.920 8.882 2.016 ;
@@ -850,15 +850,15 @@ MACRO fakeram7_256x34_bottom
     END
   END VDD
   OBS
-    LAYER M1 ;
+    LAYER M1_m ;
     RECT 0 0 8.930 42.000 ;
-    LAYER M2 ;
+    LAYER M2_m ;
     RECT 0 0 8.930 42.000 ;
-    LAYER M3 ;
+    LAYER M3_m ;
     RECT 0 0 8.930 42.000 ;
-    LAYER M4 ;
+    LAYER M4_m ;
     RECT 0 0 8.930 42.000 ;
   END
-END fakeram7_256x34_bottom
+END fakeram7_256x34_upper
 
 END LIBRARY

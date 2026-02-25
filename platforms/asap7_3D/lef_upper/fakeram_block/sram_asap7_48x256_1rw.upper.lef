@@ -6,11 +6,11 @@ PROPERTYDEFINITIONS
   MACRO depth INTEGER ;
   MACRO banks INTEGER ;
 END PROPERTYDEFINITIONS
-MACRO sram_asap7_48x256_1rw
+MACRO sram_asap7_48x256_1rw_upper
   PROPERTY width 48 ;
   PROPERTY depth 256 ;
   PROPERTY banks 4 ;
-  FOREIGN sram_asap7_48x256_1rw 0 0 ;
+  FOREIGN sram_asap7_48x256_1rw_upper 0 0 ;
   SYMMETRY X Y R90 ;
   SIZE 24.890 BY 21.000 ;
   CLASS BLOCK ;
@@ -19,7 +19,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.048 0.024 0.072 ;
     END
   END rd_out[0]
@@ -28,7 +28,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.240 0.024 0.264 ;
     END
   END rd_out[1]
@@ -37,7 +37,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.432 0.024 0.456 ;
     END
   END rd_out[2]
@@ -46,7 +46,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.624 0.024 0.648 ;
     END
   END rd_out[3]
@@ -55,7 +55,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 0.816 0.024 0.840 ;
     END
   END rd_out[4]
@@ -64,7 +64,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.008 0.024 1.032 ;
     END
   END rd_out[5]
@@ -73,7 +73,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.200 0.024 1.224 ;
     END
   END rd_out[6]
@@ -82,7 +82,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.392 0.024 1.416 ;
     END
   END rd_out[7]
@@ -91,7 +91,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.584 0.024 1.608 ;
     END
   END rd_out[8]
@@ -100,7 +100,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.776 0.024 1.800 ;
     END
   END rd_out[9]
@@ -109,7 +109,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 1.968 0.024 1.992 ;
     END
   END rd_out[10]
@@ -118,7 +118,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.160 0.024 2.184 ;
     END
   END rd_out[11]
@@ -127,7 +127,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.352 0.024 2.376 ;
     END
   END rd_out[12]
@@ -136,7 +136,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.544 0.024 2.568 ;
     END
   END rd_out[13]
@@ -145,7 +145,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.736 0.024 2.760 ;
     END
   END rd_out[14]
@@ -154,7 +154,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 2.928 0.024 2.952 ;
     END
   END rd_out[15]
@@ -163,7 +163,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.120 0.024 3.144 ;
     END
   END rd_out[16]
@@ -172,7 +172,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.312 0.024 3.336 ;
     END
   END rd_out[17]
@@ -181,7 +181,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.504 0.024 3.528 ;
     END
   END rd_out[18]
@@ -190,7 +190,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.696 0.024 3.720 ;
     END
   END rd_out[19]
@@ -199,7 +199,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 3.888 0.024 3.912 ;
     END
   END rd_out[20]
@@ -208,7 +208,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.080 0.024 4.104 ;
     END
   END rd_out[21]
@@ -217,7 +217,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.272 0.024 4.296 ;
     END
   END rd_out[22]
@@ -226,7 +226,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.464 0.024 4.488 ;
     END
   END rd_out[23]
@@ -235,7 +235,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.656 0.024 4.680 ;
     END
   END rd_out[24]
@@ -244,7 +244,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 4.848 0.024 4.872 ;
     END
   END rd_out[25]
@@ -253,7 +253,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.040 0.024 5.064 ;
     END
   END rd_out[26]
@@ -262,7 +262,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.232 0.024 5.256 ;
     END
   END rd_out[27]
@@ -271,7 +271,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.424 0.024 5.448 ;
     END
   END rd_out[28]
@@ -280,7 +280,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.616 0.024 5.640 ;
     END
   END rd_out[29]
@@ -289,7 +289,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 5.808 0.024 5.832 ;
     END
   END rd_out[30]
@@ -298,7 +298,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.000 0.024 6.024 ;
     END
   END rd_out[31]
@@ -307,7 +307,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.192 0.024 6.216 ;
     END
   END rd_out[32]
@@ -316,7 +316,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.384 0.024 6.408 ;
     END
   END rd_out[33]
@@ -325,7 +325,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.576 0.024 6.600 ;
     END
   END rd_out[34]
@@ -334,7 +334,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.768 0.024 6.792 ;
     END
   END rd_out[35]
@@ -343,7 +343,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 6.960 0.024 6.984 ;
     END
   END rd_out[36]
@@ -352,7 +352,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.152 0.024 7.176 ;
     END
   END rd_out[37]
@@ -361,7 +361,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.344 0.024 7.368 ;
     END
   END rd_out[38]
@@ -370,7 +370,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.536 0.024 7.560 ;
     END
   END rd_out[39]
@@ -379,7 +379,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.728 0.024 7.752 ;
     END
   END rd_out[40]
@@ -388,7 +388,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 7.920 0.024 7.944 ;
     END
   END rd_out[41]
@@ -397,7 +397,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.112 0.024 8.136 ;
     END
   END rd_out[42]
@@ -406,7 +406,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.304 0.024 8.328 ;
     END
   END rd_out[43]
@@ -415,7 +415,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.496 0.024 8.520 ;
     END
   END rd_out[44]
@@ -424,7 +424,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.688 0.024 8.712 ;
     END
   END rd_out[45]
@@ -433,7 +433,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 8.880 0.024 8.904 ;
     END
   END rd_out[46]
@@ -442,7 +442,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.072 0.024 9.096 ;
     END
   END rd_out[47]
@@ -451,7 +451,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.360 0.024 9.384 ;
     END
   END wd_in[0]
@@ -460,7 +460,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.552 0.024 9.576 ;
     END
   END wd_in[1]
@@ -469,7 +469,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.744 0.024 9.768 ;
     END
   END wd_in[2]
@@ -478,7 +478,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 9.936 0.024 9.960 ;
     END
   END wd_in[3]
@@ -487,7 +487,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.128 0.024 10.152 ;
     END
   END wd_in[4]
@@ -496,7 +496,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.320 0.024 10.344 ;
     END
   END wd_in[5]
@@ -505,7 +505,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.512 0.024 10.536 ;
     END
   END wd_in[6]
@@ -514,7 +514,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.704 0.024 10.728 ;
     END
   END wd_in[7]
@@ -523,7 +523,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 10.896 0.024 10.920 ;
     END
   END wd_in[8]
@@ -532,7 +532,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.088 0.024 11.112 ;
     END
   END wd_in[9]
@@ -541,7 +541,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.280 0.024 11.304 ;
     END
   END wd_in[10]
@@ -550,7 +550,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.472 0.024 11.496 ;
     END
   END wd_in[11]
@@ -559,7 +559,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.664 0.024 11.688 ;
     END
   END wd_in[12]
@@ -568,7 +568,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 11.856 0.024 11.880 ;
     END
   END wd_in[13]
@@ -577,7 +577,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.048 0.024 12.072 ;
     END
   END wd_in[14]
@@ -586,7 +586,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.240 0.024 12.264 ;
     END
   END wd_in[15]
@@ -595,7 +595,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.432 0.024 12.456 ;
     END
   END wd_in[16]
@@ -604,7 +604,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.624 0.024 12.648 ;
     END
   END wd_in[17]
@@ -613,7 +613,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 12.816 0.024 12.840 ;
     END
   END wd_in[18]
@@ -622,7 +622,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.008 0.024 13.032 ;
     END
   END wd_in[19]
@@ -631,7 +631,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.200 0.024 13.224 ;
     END
   END wd_in[20]
@@ -640,7 +640,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.392 0.024 13.416 ;
     END
   END wd_in[21]
@@ -649,7 +649,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.584 0.024 13.608 ;
     END
   END wd_in[22]
@@ -658,7 +658,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.776 0.024 13.800 ;
     END
   END wd_in[23]
@@ -667,7 +667,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 13.968 0.024 13.992 ;
     END
   END wd_in[24]
@@ -676,7 +676,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.160 0.024 14.184 ;
     END
   END wd_in[25]
@@ -685,7 +685,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.352 0.024 14.376 ;
     END
   END wd_in[26]
@@ -694,7 +694,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.544 0.024 14.568 ;
     END
   END wd_in[27]
@@ -703,7 +703,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.736 0.024 14.760 ;
     END
   END wd_in[28]
@@ -712,7 +712,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 14.928 0.024 14.952 ;
     END
   END wd_in[29]
@@ -721,7 +721,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.120 0.024 15.144 ;
     END
   END wd_in[30]
@@ -730,7 +730,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.312 0.024 15.336 ;
     END
   END wd_in[31]
@@ -739,7 +739,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.504 0.024 15.528 ;
     END
   END wd_in[32]
@@ -748,7 +748,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.696 0.024 15.720 ;
     END
   END wd_in[33]
@@ -757,7 +757,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 15.888 0.024 15.912 ;
     END
   END wd_in[34]
@@ -766,7 +766,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.080 0.024 16.104 ;
     END
   END wd_in[35]
@@ -775,7 +775,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.272 0.024 16.296 ;
     END
   END wd_in[36]
@@ -784,7 +784,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.464 0.024 16.488 ;
     END
   END wd_in[37]
@@ -793,7 +793,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.656 0.024 16.680 ;
     END
   END wd_in[38]
@@ -802,7 +802,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 16.848 0.024 16.872 ;
     END
   END wd_in[39]
@@ -811,7 +811,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.040 0.024 17.064 ;
     END
   END wd_in[40]
@@ -820,7 +820,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.232 0.024 17.256 ;
     END
   END wd_in[41]
@@ -829,7 +829,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.424 0.024 17.448 ;
     END
   END wd_in[42]
@@ -838,7 +838,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.616 0.024 17.640 ;
     END
   END wd_in[43]
@@ -847,7 +847,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 17.808 0.024 17.832 ;
     END
   END wd_in[44]
@@ -856,7 +856,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.000 0.024 18.024 ;
     END
   END wd_in[45]
@@ -865,7 +865,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.192 0.024 18.216 ;
     END
   END wd_in[46]
@@ -874,7 +874,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.384 0.024 18.408 ;
     END
   END wd_in[47]
@@ -883,7 +883,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.672 0.024 18.696 ;
     END
   END addr_in[0]
@@ -892,7 +892,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 18.864 0.024 18.888 ;
     END
   END addr_in[1]
@@ -901,7 +901,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.056 0.024 19.080 ;
     END
   END addr_in[2]
@@ -910,7 +910,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.248 0.024 19.272 ;
     END
   END addr_in[3]
@@ -919,7 +919,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.440 0.024 19.464 ;
     END
   END addr_in[4]
@@ -928,7 +928,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.632 0.024 19.656 ;
     END
   END addr_in[5]
@@ -937,7 +937,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 19.824 0.024 19.848 ;
     END
   END addr_in[6]
@@ -946,7 +946,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.016 0.024 20.040 ;
     END
   END addr_in[7]
@@ -955,7 +955,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.304 0.024 20.328 ;
     END
   END we_in
@@ -964,7 +964,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.496 0.024 20.520 ;
     END
   END ce_in
@@ -973,7 +973,7 @@ MACRO sram_asap7_48x256_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.000 20.688 0.024 20.712 ;
     END
   END clk
@@ -981,7 +981,7 @@ MACRO sram_asap7_48x256_1rw
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.048 0.000 24.842 0.096 ;
       RECT 0.048 0.768 24.842 0.864 ;
       RECT 0.048 1.536 24.842 1.632 ;
@@ -1016,7 +1016,7 @@ MACRO sram_asap7_48x256_1rw
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER M4 ;
+      LAYER M4_m ;
       RECT 0.048 0.384 24.842 0.480 ;
       RECT 0.048 1.152 24.842 1.248 ;
       RECT 0.048 1.920 24.842 2.016 ;
@@ -1047,15 +1047,15 @@ MACRO sram_asap7_48x256_1rw
     END
   END VDD
   OBS
-    LAYER M1 ;
+    LAYER M1_m ;
     RECT 0 0 24.890 21.000 ;
-    LAYER M2 ;
+    LAYER M2_m ;
     RECT 0 0 24.890 21.000 ;
-    LAYER M3 ;
+    LAYER M3_m ;
     RECT 0 0 24.890 21.000 ;
-    LAYER M4 ;
+    LAYER M4_m ;
     RECT 0 0 24.890 21.000 ;
   END
-END sram_asap7_48x256_1rw
+END sram_asap7_48x256_1rw_upper
 
 END LIBRARY

@@ -46,12 +46,12 @@ library(fakeram45_128x256_bottom) {
     output_threshold_pct_rise : 50.000;
 
 
-    lu_table_template(fakeram45_128x256_bottom_mem_out_slew_template) {
+    lu_table_template(fakeram45_128x256_mem_out_slew_template) {
         variable_1 : total_output_net_capacitance;
             index_1 ("1000, 1001");
     }
     library_features(report_delay_calculation);
-    type (fakeram45_128x256_bottom_DATA) {
+    type (fakeram45_128x256_DATA) {
         base_type : array ;
         data_type : bit ;
         bit_width : 256;
@@ -59,7 +59,7 @@ library(fakeram45_128x256_bottom) {
         bit_to : 0 ;
         downto : true ;
     }
-    type (fakeram45_128x256_bottom_ADDRESS) {
+    type (fakeram45_128x256_ADDRESS) {
         base_type : array ;
         data_type : bit ;
         bit_width : 7;
@@ -91,7 +91,7 @@ cell(fakeram45_128x256_bottom) {
     }
 
     bus(rd_out)   {
-        bus_type : fakeram45_128x256_bottom_DATA;
+        bus_type : fakeram45_128x256_DATA;
         direction : output;
         max_capacitance : 500.000;
         memory_read() {
@@ -107,11 +107,11 @@ cell(fakeram45_128x256_bottom) {
             cell_fall(scalar) {
                 values ("0.302");
             }
-            rise_transition(fakeram45_128x256_bottom_mem_out_slew_template) {
+            rise_transition(fakeram45_128x256_mem_out_slew_template) {
                 index_1 ("5.000, 500.000");
                 values ("0.009, 0.227")
             }
-            fall_transition(fakeram45_128x256_bottom_mem_out_slew_template) {
+            fall_transition(fakeram45_128x256_mem_out_slew_template) {
                 index_1 ("5.000, 500.000");
                 values ("0.009, 0.227")
             }
@@ -182,7 +182,7 @@ cell(fakeram45_128x256_bottom) {
         }
     }
     bus(addr_in)   {
-        bus_type : fakeram45_128x256_bottom_ADDRESS;
+        bus_type : fakeram45_128x256_ADDRESS;
         direction : input;
         capacitance : 5.000;
         timing() {
@@ -215,7 +215,7 @@ cell(fakeram45_128x256_bottom) {
         }
     }
     bus(wd_in)   {
-        bus_type : fakeram45_128x256_bottom_DATA;
+        bus_type : fakeram45_128x256_DATA;
         memory_write() {
             address : addr_in;
             clocked_on : "clk";
@@ -262,7 +262,7 @@ cell(fakeram45_128x256_bottom) {
         }
     }
     bus(w_mask_in)   {
-        bus_type : fakeram45_128x256_bottom_DATA;
+        bus_type : fakeram45_128x256_DATA;
         memory_write() {
             address : addr_in;
             clocked_on : "clk";

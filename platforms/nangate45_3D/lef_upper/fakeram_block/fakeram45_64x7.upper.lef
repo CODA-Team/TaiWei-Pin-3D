@@ -10,7 +10,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 2.800 0.070 2.870 ;
     END
   END w_mask_in[0]
@@ -19,7 +19,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 3.640 0.070 3.710 ;
     END
   END w_mask_in[1]
@@ -28,7 +28,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 4.480 0.070 4.550 ;
     END
   END w_mask_in[2]
@@ -37,7 +37,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 5.320 0.070 5.390 ;
     END
   END w_mask_in[3]
@@ -46,7 +46,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 6.160 0.070 6.230 ;
     END
   END w_mask_in[4]
@@ -55,7 +55,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 7.000 0.070 7.070 ;
     END
   END w_mask_in[5]
@@ -64,7 +64,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 7.840 0.070 7.910 ;
     END
   END w_mask_in[6]
@@ -73,7 +73,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 8.960 0.070 9.030 ;
     END
   END rd_out[0]
@@ -82,7 +82,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 9.800 0.070 9.870 ;
     END
   END rd_out[1]
@@ -91,7 +91,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 10.640 0.070 10.710 ;
     END
   END rd_out[2]
@@ -100,7 +100,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 11.480 0.070 11.550 ;
     END
   END rd_out[3]
@@ -109,7 +109,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 12.320 0.070 12.390 ;
     END
   END rd_out[4]
@@ -118,7 +118,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 13.160 0.070 13.230 ;
     END
   END rd_out[5]
@@ -127,7 +127,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 14.000 0.070 14.070 ;
     END
   END rd_out[6]
@@ -136,7 +136,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 15.120 0.070 15.190 ;
     END
   END wd_in[0]
@@ -145,7 +145,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 15.960 0.070 16.030 ;
     END
   END wd_in[1]
@@ -154,7 +154,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 16.800 0.070 16.870 ;
     END
   END wd_in[2]
@@ -163,7 +163,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 17.640 0.070 17.710 ;
     END
   END wd_in[3]
@@ -172,7 +172,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 18.480 0.070 18.550 ;
     END
   END wd_in[4]
@@ -181,7 +181,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 19.320 0.070 19.390 ;
     END
   END wd_in[5]
@@ -190,7 +190,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 20.160 0.070 20.230 ;
     END
   END wd_in[6]
@@ -199,7 +199,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 21.280 0.070 21.350 ;
     END
   END addr_in[0]
@@ -208,7 +208,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 22.120 0.070 22.190 ;
     END
   END addr_in[1]
@@ -217,7 +217,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 22.960 0.070 23.030 ;
     END
   END addr_in[2]
@@ -226,7 +226,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 23.800 0.070 23.870 ;
     END
   END addr_in[3]
@@ -235,7 +235,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 24.640 0.070 24.710 ;
     END
   END addr_in[4]
@@ -244,7 +244,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 25.480 0.070 25.550 ;
     END
   END addr_in[5]
@@ -253,7 +253,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 26.600 0.070 26.670 ;
     END
   END we_in
@@ -262,7 +262,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 27.440 0.070 27.510 ;
     END
   END ce_in
@@ -271,7 +271,7 @@ MACRO fakeram45_64x7_upper
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER M18 ;
+      LAYER M3_m ;
       RECT 0.000 28.280 0.070 28.350 ;
     END
   END clk
@@ -279,7 +279,7 @@ MACRO fakeram45_64x7_upper
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER M17 ;
+      LAYER M4_m ;
       RECT 2.660 2.800 2.940 33.600 ;
       RECT 7.140 2.800 7.420 33.600 ;
     END
@@ -288,16 +288,16 @@ MACRO fakeram45_64x7_upper
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER M17 ;
+      LAYER M4_m ;
       RECT 4.900 2.800 5.180 33.600 ;
     END
   END VDD
   OBS
-    LAYER M20 ;
+    LAYER M1_m ;
     RECT 0 0 10.640 36.400 ;
-    LAYER M19 ;
+    LAYER M2_m ;
     RECT 0 0 10.640 36.400 ;
-    LAYER M18 ;
+    LAYER M3_m ;
     RECT 0.070 0 10.640 36.400 ;
     RECT 0 0.000 0.070 2.800 ;
     RECT 0 2.870 0.070 3.640 ;
@@ -330,7 +330,7 @@ MACRO fakeram45_64x7_upper
     RECT 0 26.670 0.070 27.440 ;
     RECT 0 27.510 0.070 28.280 ;
     RECT 0 28.350 0.070 36.400 ;
-    LAYER M17 ;
+    LAYER M4_m ;
     RECT 0 0 10.640 2.800 ;
     RECT 0 33.600 10.640 36.400 ;
     RECT 0.000 2.800 2.660 33.600 ;
