@@ -32,3 +32,8 @@ eval_*.sh
 partition_log
 genus_reports
 core.*
+
+# temp cases
+designs/*/ariane133
+designs/*/swerv*
+designs/*/bp_quad

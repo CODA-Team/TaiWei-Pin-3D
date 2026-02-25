@@ -11,7 +11,7 @@ export CORE_UTILIZATION ?= 60
 export PLACE_DENSITY_LB_ADDON = 0.10
 export SKIP_INCREMENTAL_REPAIR = 1
 export GLOBAL_ROUTE_ARGS = -verbose -congestion_iterations 30
-export CORE_UTILIZATION ?= 60
+export DETAILED_ROUTE_END_ITERATION = 20
 
 export NUM_CORES   ?= 32
 
