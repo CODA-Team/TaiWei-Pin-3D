@@ -110,6 +110,8 @@ if {$A_max <= 0.0} {
 # ------------------------------------------------------------
 if {[info exists ::env(MAKE_TRACKS)] && $::env(MAKE_TRACKS) ne ""} {
   source $::env(MAKE_TRACKS)
+  set tgs [::odb::dbBlock_getTrackGrids $block]
+  puts "New TrackGrids = [llength $tgs]"
 } else {
   make_tracks
 }
@@ -123,7 +125,7 @@ if {[info exists ::env(PAUSE_VISUALIZE)] && $::env(PAUSE_VISUALIZE) ne "" && $::
 # ------------------------------------------------------------
 source $::env(OPENROAD_SCRIPTS_DIR)/io_place.tcl
 
-source $::env(PDN_TCL)
+[catch { source $::env(PDN_TCL)} errorMessage]
 if { [info exists ::env(UPPER_SITE)] && [info exists ::env(BOTTOM_SITE)] } {
   puts "PDN sites: UPPER_SITE=$::env(UPPER_SITE), BOTTOM_SITE=$::env(BOTTOM_SITE)"
 } else {

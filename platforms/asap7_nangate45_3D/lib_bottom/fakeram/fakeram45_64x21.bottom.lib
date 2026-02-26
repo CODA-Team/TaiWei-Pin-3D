@@ -267,7 +267,7 @@ cell(fakeram45_64x21_bottom) {
             address : addr_in;
             clocked_on : "clk";
         }
-        direction : input;
+        direction : internal;
         capacitance : 5.000;
         timing() {
             related_pin     : clk;

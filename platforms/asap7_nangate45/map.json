@@ -2204,6 +2204,154 @@
         "VDD": "VDD",
         "VSS": "VSS"
       }
+    },
+    "fakeram45_64x21": {
+      "base": "fakeram45_64x21",
+      "bottom": {
+        "macro": "fakeram45_64x21_bottom",
+        "width": 15.77,
+        "height": 60.2,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "upper": {
+        "macro": "fakeram7_64x21_upper",
+        "width": 5.51,
+        "height": 11.2,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "pin_map": {
+        "clk": "clk",
+        "rd_out": "rd_out",
+        "we_in": "we_in",
+        "ce_in": "ce_in",
+        "addr_in": "addr_in",
+        "wd_in": "wd_in"
+      }
+    },
+    "fakeram45_256x34": {
+      "base": "fakeram45_256x34",
+      "bottom": {
+        "macro": "fakeram45_256x34_bottom",
+        "width": 98.42,
+        "height": 65.8,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "upper": {
+        "macro": "fakeram7_256x34_upper",
+        "width": 8.93,
+        "height": 42.0,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "pin_map": {
+        "clk": "clk",
+        "rd_out": "rd_out",
+        "we_in": "we_in",
+        "ce_in": "ce_in",
+        "addr_in": "addr_in",
+        "wd_in": "wd_in"
+      }
+    },
+    "fakeram45_2048x39": {
+      "base": "fakeram45_2048x39",
+      "bottom": {
+        "macro": "fakeram45_2048x39_bottom",
+        "width": 206.91,
+        "height": 219.8,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "upper": {
+        "macro": "fakeram7_2048x39_upper",
+        "width": 20.33,
+        "height": 166.6,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "pin_map": {
+        "clk": "clk",
+        "rd_out": "rd_out",
+        "we_in": "we_in",
+        "ce_in": "ce_in",
+        "addr_in": "addr_in",
+        "wd_in": "wd_in"
+      }
+    },
+    "fakeram45_256x16": {
+      "base": "fakeram45_256x16",
+      "bottom": {
+        "macro": "fakeram45_256x16_bottom",
+        "width": 77.71,
+        "height": 40.6,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "upper": {
+        "macro": "sram_asap7_16x256_1rw_upper",
+        "width": 8.36,
+        "height": 16.8,
+        "pins": [
+          "clk",
+          "rd_out",
+          "we_in",
+          "ce_in",
+          "addr_in",
+          "wd_in"
+        ]
+      },
+      "pin_map": {
+        "clk": "clk",
+        "rd_out": "rd_out",
+        "we_in": "we_in",
+        "ce_in": "ce_in",
+        "addr_in": "addr_in",
+        "wd_in": "wd_in"
+      }
     }
   }
 }

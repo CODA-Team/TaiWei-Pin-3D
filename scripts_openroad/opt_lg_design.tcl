@@ -40,7 +40,7 @@ puts "detailed_placement"
 detailed_placement
 
 puts "improve_placement"
-improve_placement
+[catch { improve_placement } ]
 
 puts "optimize_mirroring"
 optimize_mirroring

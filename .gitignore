@@ -37,6 +37,4 @@ core.*
 platforms/process_scripts
 
 # temp cases
-designs/*/ariane133
-designs/*/swerv*
-designs/*/bp_quad
+

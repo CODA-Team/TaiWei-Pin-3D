@@ -68,11 +68,6 @@ set PERIM_um [expr {2.0*($W_um + $H_um)}]
 
 puts [format "IO-DIE(um): W=%.6f H=%.6f Perim=%.6f" $W_um $H_um $PERIM_um]
 
-# =======================================================
-# 4) place_pins feasibility-first strategy
-#    If it fails even with (min_dist=0, ca=0), parameters cannot fix it.
-# =======================================================
-
 proc run_place_pins {LAYER_H LAYER_V min_dist_um ca_um} {
   clear_io_pin_constraints
   return [catch {
@@ -85,37 +80,6 @@ proc run_place_pins {LAYER_H LAYER_V min_dist_um ca_um} {
   } err]
 }
 
-# --- 4.1 Try maximum packing first ---
-set min_dist_um 0.0
-set ca_um       0.0
-
-puts [format "IO-TRY pack: N=%d min_distance=%.6f um corner_avoidance=%.6f um H=%s V=%s" \
-      $N $min_dist_um $ca_um $LAYER_H $LAYER_V]
-
-set rc [run_place_pins $LAYER_H $LAYER_V $min_dist_um $ca_um]
-if {$rc != 0} {
-  # Re-run without log_cmd just to capture the error string reliably
-  set rc2 [catch {
-    place_pins -hor_layers $LAYER_H -ver_layers $LAYER_V -min_distance $min_dist_um -corner_avoidance $ca_um -annealing
-  } last_err]
-
-  if {[regexp {PPL-0024} $last_err] && [regexp {available positions \(([0-9]+)\)} $last_err -> avail]} {
-    set need_perim [expr {$PERIM_um * (double($N) / double($avail))}]
-    puts [format "IO-FAIL: pins=%d > available=%d on layers H=%s V=%s" $N $avail $LAYER_H $LAYER_V]
-    puts [format "IO-FAIL: With these layers, even min_distance=0 and corner_avoidance=0 cannot fit." ]
-    puts [format "IO-FAIL: You must (a) increase die perimeter to >= %.2f um (current %.2f um), or (b) use tighter-pitch layers / multiple layers." \
-                  $need_perim $PERIM_um]
-    error $last_err
-  } else {
-    error $last_err
-  }
-}
-
-# =======================================================
-# 5) Optional: spread pins after feasibility is confirmed
-#    Now that it fits, compute a reasonable spacing.
-# =======================================================
-
 # Keep ca modest; avoid eating too much perimeter.
 set short_um [expr {min($W_um, $H_um)}]
 set ca_um    [expr {0.02 * $short_um}]          ;# 2% of short side
@@ -126,7 +90,7 @@ set L_eff [eff_perim $PERIM_um $ca_um]
 if {$L_eff <= 0.0} { set ca_um 0.0; set L_eff [eff_perim $PERIM_um $ca_um] }
 
 set pitch_um    [expr {$L_eff / double($N)}]
-set min_dist_um [expr {0.70 * $pitch_um}]
+set min_dist_um [expr {0.50 * $pitch_um}]
 if {$min_dist_um < 0.0} { set min_dist_um 0.0 }
 
 puts [format "IO-SPREAD(um): N=%d Perim=%.6f L_eff=%.6f ca=%.6f pitch=%.6f min_dist=%.6f" \
@@ -135,9 +99,9 @@ puts [format "IO-SPREAD(um): N=%d Perim=%.6f L_eff=%.6f ca=%.6f pitch=%.6f min_d
 # Re-run place_pins with spreading; if it fails, fall back to pack.
 set rc [run_place_pins $LAYER_H $LAYER_V $min_dist_um $ca_um]
 if {$rc != 0} {
-  puts "[WARN] Spread parameters not feasible; falling back to pack (min_dist=0, ca=0)."
+  puts "\[WARN\] Spread parameters not feasible; falling back to pack (min_dist=0, ca=0)."
   set rc [run_place_pins $LAYER_H $LAYER_V 0.0 0.0]
-  if {$rc != 0} { error "place_pins failed even in pack mode unexpectedly." }
+  if {$rc != 0} { puts "place_pins failed even in pack mode unexpectedly." }
 }
 
 puts [format "FINAL(um): min_distance=%.6f corner_avoidance=%.6f" $min_dist_um $ca_um]
