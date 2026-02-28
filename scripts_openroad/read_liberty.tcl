@@ -5,7 +5,7 @@ if {[info exists ::env(PLATFORM)] && $::env(PLATFORM) == "asap7"} {
    suppress_message STA 164
 }
 
-#Read Liberty
+# Read Liberty
 if {[info exists ::env(CORNERS)]} {
   # corners
   define_corners {*}$::env(CORNERS)

@@ -16,7 +16,6 @@
 #   HONOR_INST_PAD       : Set to 1 to treat instance padding as a hard rule
 #   MAX_ROUTING_LAYER / MIN_ROUTING_LAYER : Constrain routing layers
 # ==========================================
-
 # Ensure namespace exists
 if {![namespace exists pc]} {
   namespace eval pc {

@@ -12,7 +12,6 @@
 #   connectivity (verifyConnectivity): IMPVFC-92/94/total
 #   ERC (electrical) via report_constraint: max_tran/max_cap/max_fanout
 # ============================================================
-
 proc _open_any {path} {
   if {![file exists $path]} { return "" }
   set fp [open $path r]
@@ -94,21 +93,21 @@ proc extract_cross_tier_nets {list_rpt_path} {
   lappend report_lines [format "%-40s | %s" "Net Name" "Type"]
   lappend report_lines "-----------------------------------------|--------------"
 
-  # --- 1. 遍历 Signal Nets ---
+  # --- 1. Iterate signal nets ---
   foreach net [dbGet top.nets] {
-    # 检查是否有 HB Layer 的 Via
-    # 注意: 这里的 dbGet 返回的是指针列表或 0x0
+    # Check whether HB-layer vias exist
+    # Note: dbGet here returns a pointer list or 0x0
     set vias [dbGet $net.vias.via.cutLayer.name $cut_layer -e]
     
-    # 必须先检查是否为 0x0，再检查长度
+    # Must check 0x0 first, then length
     if {$vias ne "0x0" && $vias ne "" && [llength $vias] > 0} {
         incr count
         set net_name [dbGet $net.name]
         
-        # --- 修复核心: 准确判断是否连接 IO ---
+        # --- Core fix: accurately detect IO connectivity ---
         set terms [dbGet $net.terms]
         
-        # 只有当 terms 不是 0x0 且不为空时，才认为是 IO 连接
+        # Treat as IO-connected only when terms is neither 0x0 nor empty
         if {$terms ne "0x0" && $terms ne ""} {
             lappend report_lines [format "%-40s | %s" $net_name "IO_Connected"]
         } else {
@@ -117,7 +116,7 @@ proc extract_cross_tier_nets {list_rpt_path} {
     }
   }
 
-  # --- 2. 遍历 PG Nets ---
+  # --- 2. Iterate PG nets ---
   foreach net [dbGet top.pgNets] {
     set vias [dbGet $net.vias.via.cutLayer.name $cut_layer -e]
     if {$vias ne "0x0" && $vias ne "" && [llength $vias] > 0} {
@@ -127,7 +126,7 @@ proc extract_cross_tier_nets {list_rpt_path} {
     }
   }
 
-  # 3. 写入报告
+  # 3. Write report
   if {$list_rpt_path ne ""} {
       set fh [open $list_rpt_path w]
       foreach line $report_lines { puts $fh $line }
@@ -206,7 +205,7 @@ proc extract_drc {drc_rpt} {
 # HB via count (Physical Total)
 # --------------------------
 proc count_hb_viaInst {cutlayer} {
-  # 这是你验证过的绝对正确的命令
+  # Verified command for accurate counting
   set sig [dbGet -e -u -p3 top.nets.vias.via.cutLayer.name $cutlayer]
   if {$sig eq "" || $sig eq "0x0"} { set sig {} }
   set pg {}

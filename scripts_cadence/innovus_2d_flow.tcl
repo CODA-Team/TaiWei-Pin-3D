@@ -6,7 +6,6 @@
 # innovus_preplace.tcl
 # Floorplan init + Pin placement (editPin)
 # ===============================
-
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
@@ -53,7 +52,7 @@ setOptMode -powerEffort low -leakageToDynamicRatio 0.5
 setGenerateViaMode -auto true
 generateVias
 
-# ===== Place pins evenly on four sides (with explicit layer settings) =====
+# --- Place pins evenly on four sides (with explicit layer settings) ---
 # error "INTENTIONAL_ABORT: PDN stage completed; failing at user request"
 source $::env(PLATFORM_DIR)/util/pdn_config.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/pdn_util.tcl
@@ -82,7 +81,7 @@ ccopt_design
 set_interactive_constraint_modes [all_constraint_modes -active]
 set_propagated_clock [all_clocks]
 set_clock_propagation propagated
-# ---------- Router Settings (Robust) ----------
+# --- Router Settings (Robust) ---
 # GR: Disable timing if too slow; enable advanced node fix
 setNanoRouteMode -grouteExpWithTimingDriven false
 if {![info exists ::env(DETAILED_ROUTE_END_ITERATION)]} {
@@ -103,12 +102,12 @@ setNanoRouteMode -drouteAutoStop true
 setNanoRouteMode -drouteExpAdvancedMarFix true
 setNanoRouteMode -routeExpAdvancedTechnology true
 
-# ---------- Route + Post-Route Optimization ----------
+# --- Route + Post-Route Optimization ---
 routeDesign
 
 optDesign -postRoute
 
-# ---------- Export ----------
+# --- Export ---
 set DEF_OUT  [file join $RESULTS_DIR "5_route.def"]
 set V_OUT    [file join $RESULTS_DIR "5_route.v"]
 set ENC_OUT  [file join $OBJECTS_DIR  "${DESIGN}_postRoute.enc"]
@@ -119,7 +118,8 @@ fit
 dumpToGIF $LOG_DIR/5_route.png
 puts "INFO: Routing done. DEF: $DEF_OUT  V: $V_OUT  ENC: $ENC_OUT"
 
-# # Run unified extractor directly into LOG_DIR
+# 
+# Run unified extractor directly into LOG_DIR
 # file mkdir [file join $LOG_DIR timingReports]
 
 # set EXTRACT_TCL [file join $::env(CADENCE_SCRIPTS_DIR) extract_report.tcl]

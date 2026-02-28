@@ -1,15 +1,14 @@
 # SPDX-License-Identifier: BSD-3-Clause
 # Copyright (c) 2019-2025, The OpenROAD Authors
 #
-# ============================================================
+# ------------------------------------------------------------
 # SIMPLE TritonPart balance sweep (single-process, N points)
 # Log-only parallel-friendly variant:
 #   - If env(PAR_LOG_ONLY)=1: do NOT write RESULTS_DIR outputs
 #   - Per-run result is printed as a single line:
 #       FINAL <timestamp> balance=... seed=... cut=... feasible=... abs_diff=...
 #   - Solution file is written to /tmp with pid isolation (safe for parallel)
-# ============================================================
-
+# ------------------------------------------------------------
 source $::env(OPENROAD_SCRIPTS_DIR)/load.tcl
 source $::env(OPENROAD_SCRIPTS_DIR)/util.tcl
 
@@ -32,9 +31,9 @@ proc write_kv_file {outfile kv_dict} {
   close $fh
 }
 
-# ----------------------------
+# ------------------------------------------------------------
 # Knobs (override via env)
-# ----------------------------
+# ------------------------------------------------------------
 set ::PAR_BAL_LO_DEFAULT   1.0
 set ::PAR_BAL_HI_DEFAULT   5.0
 set ::PAR_BAL_ITER_DEFAULT 5
@@ -77,14 +76,14 @@ set ::IGNORE_NET_NAMES {VDD VSS VPWR VGND TOP_VDD TOP_VSS BOT_VDD BOT_VSS}
 set ::DUMP_CUT_NETS      false
 set ::CUT_NETS_DUMP_FILE "cut_nets.list"
 
-# ============================================================
+# ------------------------------------------------------------
 # Load design + floorplan
-# ============================================================
+# ------------------------------------------------------------
 load_design 2_2_floorplan_io.v 1_synth.sdc "Start Triton Partitioning (Uniform Sweep)"
 
-# ============================================================
+# ------------------------------------------------------------
 # ODB helpers: die area, dbu
-# ============================================================
+# ------------------------------------------------------------
 proc _get_dbu {} {
   set db [ord::get_db]
   if {$db eq "NULL"} { utl::error PAR 910 "No db." }
@@ -190,9 +189,9 @@ proc estimate_max_hb_cuts_from_pitch {die_area_um2 pitch_x pitch_y density} {
   return [list $grid_area $nmax]
 }
 
-# ============================================================
+# ------------------------------------------------------------
 # CUT(nets) from solution
-# ============================================================
+# ------------------------------------------------------------
 proc read_solution_part_map_kv {solution_file} {
   if {![file exists $solution_file]} { utl::error PAR 930 "Solution file not found: $solution_file" }
   set fh [open $solution_file r]
@@ -256,9 +255,9 @@ proc calc_cut_nets_from_solution {solution_file ignore_net_names dump_file} {
   return $cut_nets
 }
 
-# ============================================================
+# ------------------------------------------------------------
 # TritonPart (timing-aware)
-# ============================================================
+# ------------------------------------------------------------
 proc run_triton_part {solution_file balance seed} {
   puts [format {INFO %s: triton_part_design balance=%.4f seed=%d timing_aware=true -> %s} \
     [_ts] $balance $seed $solution_file]
@@ -272,9 +271,9 @@ proc run_triton_part {solution_file balance seed} {
     -timing_aware_flag true
 }
 
-# ============================================================
+# ------------------------------------------------------------
 # Target cut budget from hb_layer density
-# ============================================================
+# ------------------------------------------------------------
 puts [format {INFO %s: HB layer=%s width=%.3fum spacing=%.3fum density=%.3f cuts_per_net=%d tol=%d log_only=%d} \
   [_ts] $::HB_CUT_LAYER $::HB_LAYER_WIDTH_UM $::HB_LAYER_SPACING_UM $::HB_VIA_DENSITY $::CUTS_PER_NET $::CUT_TOL $::LOG_ONLY]
 flush stdout
@@ -292,9 +291,9 @@ puts [format {STAT %s: grid=%d max_hb_cuts=%d => CUT_NET_BUDGET(target)=%d} \
   [_ts] $grid $nmax $target_cut]
 flush stdout
 
-# ============================================================
+# ------------------------------------------------------------
 # Build sweep range + N points (include endpoints)
-# ============================================================
+# ------------------------------------------------------------
 set ::PAR_BAL_ITER [expr {int([_get PAR_BAL_ITERATION $::PAR_BAL_ITER_DEFAULT])}]
 if {$::PAR_BAL_ITER < 2} {
   utl::error PAR 965 "PAR_BAL_ITERATION must be >= 2 (got $::PAR_BAL_ITER)."
@@ -351,9 +350,9 @@ puts [format {INFO %s: Sweep %d points (include endpoints) with %d seeds each: %
   [_ts] $::PAR_BAL_ITER $::PAR_SEEDS_PER_POINT [join $balances ","]]
 flush stdout
 
-# ============================================================
+# ------------------------------------------------------------
 # Evaluate points, pick best
-# ============================================================
+# ------------------------------------------------------------
 set best ""
 set best_feasible 0
 
@@ -423,9 +422,9 @@ foreach b $balances {
 
 if {$best eq ""} { utl::error PAR 962 "No valid sweep result." }
 
-# ============================================================
+# ------------------------------------------------------------
 # Final output: log-only prints FINAL line; normal mode writes files
-# ============================================================
+# ------------------------------------------------------------
 if {!$::LOG_ONLY} {
   set final_sol [file join $::env(RESULTS_DIR) partition.txt]
   file copy -force [dict get $best solution_file] $final_sol

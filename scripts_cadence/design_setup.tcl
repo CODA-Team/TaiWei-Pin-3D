@@ -5,7 +5,6 @@
 # generation of innovators.
 # design_setup.tcl  — common DESIGN/RTL/SDC setup
 # ==========================================
-
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 puts "--- DESIGN/RTL/SDC setup ---"
 
@@ -33,4 +32,3 @@ set GEN_EFF [_get GEN_EFF "medium"]
 set MAP_EFF [_get MAP_EFF "high"]
 set SITE [_get PLACE_SITE]
 set HALO_WIDTH [_get HALO_WIDTH "5"]
-

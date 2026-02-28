@@ -5,7 +5,6 @@
 # ==========================================
 # lib_setup.tcl  — common LIB/LEF setup for Genus & Innovus
 # ==========================================
-
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 puts "=== lib_setup.tcl ==="
 # ---- inputs from environment (config.mk provides these) ----

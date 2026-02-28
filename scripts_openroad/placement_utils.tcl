@@ -1,11 +1,10 @@
 # placement_utils.tcl
 # In placement phase
-# ----------------------------------------------------------------------
+# ------------------------------------------------------------
 # Mark instances as a given placement status by matching master name
 # Usage:
 #   mark_insts_by_master "*_bottom" FIRM
 #   mark_insts_by_master "" FIRM
-# ----------------------------------------------------------------------
 # ------------------------------------------------------------------------------
 # master_has_site: expects a dbMaster object (pointer), NOT a name string.
 # ------------------------------------------------------------------------------
@@ -101,7 +100,7 @@ proc mark_insts_by_master {{pattern ""} {status "FIRM"}} {
   return $cnt
 }
 
-# ---------- Helpers ----------
+# Helpers
 proc ::_as_int {v default} {
   if {![info exists v]} { return $default }
   if {![string is integer -strict $v]} { return $default }
@@ -113,26 +112,26 @@ proc ::_env_or {name default} {
   return $default
 }
 
-# 递归打印某个 namespace 下的所有命令和子 namespace
+# Recursively print all commands and child namespaces under a namespace
 proc or_list_ns_cmds {ns {indent ""}} {
-  # 打印当前 namespace
+  # Print current namespace
   puts "${indent}Namespace: $ns"
 
-  # 当前 namespace 下的命令（用 pattern 匹配）
+  # Commands under current namespace (matched by pattern)
   set pattern "${ns}::*"
   set cmds [lsort [info commands $pattern]]
   foreach c $cmds {
     puts "${indent}  [string range $c 0 end]"
   }
 
-  # 递归进入子 namespace
+  # Recursively traverse child namespaces
   set children [lsort [namespace children $ns]]
   foreach child $children {
     or_list_ns_cmds $child "${indent}  "
   }
 }
 
-# ---------- Robust density calculator ----------
+# Robust density calculator
 proc calculate_placement_density {} {
   set base_density [::_env_or PLACE_DENSITY 0.60]
 
@@ -169,7 +168,7 @@ proc calculate_placement_density {} {
   return $density
 }
 
-# ==== Utility: delete instances by matching master name ====
+# Utility: delete instances by matching master name
 # pattern default "*_bottom*"; dry_run=1 only prints; verbose controls logging
 proc delete_insts_by_master {{pattern ""} {dry_run 0} {verbose 1}} {
   set db   [ord::get_db]
@@ -209,10 +208,9 @@ proc delete_insts_by_master {{pattern ""} {dry_run 0} {verbose 1}} {
   return $ok
 }
 
-# ===============================
+# ------------------------------------------------------------
 # OpenROAD: dont_use & FastRoute
-# ===============================
-
+# ------------------------------------------------------------
 # Get environment variable as list (missing/empty => {})
 proc _as_list {envname} {
   if {[info exists ::env($envname)] && $::env($envname) ne ""} {
@@ -248,7 +246,7 @@ proc _set_dont_use {cells} {
   }
 }
 
-# ============= FastRoute fallback setup (can be overridden by external Tcl) =============
+# FastRoute fallback setup (can be overridden by external Tcl)
 proc fastroute_setup {} {
   # Prefer user-provided external script
   if {[info exists ::env(FASTROUTE_TCL)] && $::env(FASTROUTE_TCL) ne ""} {
@@ -271,7 +269,6 @@ proc fastroute_setup {} {
 # ============================================================
 # Row rebuild for OpenROAD (site-snapped + die-clamped)
 # ============================================================
-
 proc _snap_down_dbu {x pitch} {
   if {$pitch <= 0} { error "ERROR: pitch must be > 0, got $pitch" }
   return [expr {($x / $pitch) * $pitch}]   ;# floor to pitch grid

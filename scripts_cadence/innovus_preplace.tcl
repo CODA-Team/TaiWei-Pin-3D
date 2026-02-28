@@ -6,7 +6,6 @@
 # innovus_preplace.tcl
 # Floorplan init + Pin placement (editPin)
 # ===============================
-
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
@@ -61,13 +60,13 @@ set CORE_UTIL     [_get CORE_UTILIZATION 60]
 set ASPECT_RATIO  [_get CORE_ASPECT_RATIO 1.0]      
 set CORE_MARGIN   [_get CORE_MARGIN 0]       
 
-# ===== Floorplan Initialization =====
+# --- Floorplan Initialization ---
 set util [expr {double($CORE_UTIL)/100.0}]
 set mL $CORE_MARGIN; set mR $CORE_MARGIN; set mT $CORE_MARGIN; set mB $CORE_MARGIN
 # floorPlan -r <aspect> <density> <l> <b> <r> <t>
 floorPlan -r $ASPECT_RATIO $util $mL $mB $mR $mT
 generateTracks
-# ===== Place pins evenly on four sides (with explicit layer settings) =====
+# --- Place pins evenly on four sides (with explicit layer settings) ---
 # error "INTENTIONAL_ABORT: PDN stage completed; failing at user request"
 source $::env(CADENCE_SCRIPTS_DIR)/place_pin.tcl 
 

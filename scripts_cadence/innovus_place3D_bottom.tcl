@@ -49,4 +49,3 @@ fit
 dumpToGIF $LOG_DIR/bottom_place.png
 puts "INFO: 3D bottom placement done."
 exit
-

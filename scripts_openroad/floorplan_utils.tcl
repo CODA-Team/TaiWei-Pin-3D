@@ -17,11 +17,11 @@ proc _inst_area_um2 {inst dbu} {
   return [expr {double($w) * double($h) / double($dbu*$dbu)}]
 }
 
-# tier 判定优先级：
-#   1) inst 上有 partition_id（你 partition 脚本里就是这么写的）
-#      - 约定 pid==0 => upper, pid==1 => bottom（与你 calc_upper_bottom_size 一致）
-#   2) master name 后缀 *_upper / *_bottom
-#   3) inst name 后缀 *_upper / *_bottom
+# Tier classification priority:
+#   1) Instance has partition_id (as set by the partition script)
+#      - Convention: pid==0 => upper, pid==1 => bottom (consistent with calc_upper_bottom_size)
+#   2) Master name suffix: *_upper / *_bottom
+#   3) Instance name suffix: *_upper / *_bottom
 proc _classify_tier {inst} {
   # (1) property partition_id
   set prop [odb::dbIntProperty_find $inst "partition_id"]
@@ -61,7 +61,7 @@ proc get_tier_areas_um2 {} {
 
   set saw_prop 0
   foreach inst [odb::dbBlock_getInsts $block] {
-    # 先探测有没有 partition_id（用于报告 method）
+    # First probe whether partition_id exists (used for method reporting)
     if {!$saw_prop} {
       set p [odb::dbIntProperty_find $inst "partition_id"]
       if {$p ne "NULL"} { set saw_prop 1 }

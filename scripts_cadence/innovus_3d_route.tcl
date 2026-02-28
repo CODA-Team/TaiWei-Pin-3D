@@ -22,7 +22,7 @@ source $::env(CADENCE_SCRIPTS_DIR)/mmmc_setup.tcl
 
 setMultiCpuUsage -localCpu [_get NUM_CORES 16]
 
-# ---------- Initialization ----------
+# --- Initialization ---
 set init_lef_file $lefs
 set init_mmmc_file ""
 set init_design_settop 1
@@ -46,7 +46,7 @@ if {[info exists ::env(MAX_ROUTING_LAYER)]} { setDesignMode -topRoutingLayer    
 if {[info exists ::env(MIN_ROUTING_LAYER)]} { setDesignMode -bottomRoutingLayer $::env(MIN_ROUTING_LAYER) }
 # deleteTrack
 # source $::env(MAKE_TRACKS)
-# ---------- Router Settings (Robust) ----------
+# --- Router Settings (Robust) ---
 # GR: Disable timing if too slow; enable advanced node fix
 setNanoRouteMode -grouteExpWithTimingDriven false
 if {![info exists ::env(DETAILED_ROUTE_END_ITERATION)]} {
@@ -74,21 +74,21 @@ setNanoRouteMode -routeWithSiDriven true
 setNanoRouteMode -routeWithTimingDriven true
 setNanoRouteMode -routeUseAutoVia true
 
-##Recommended by lib owners
+# Recommended by lib owners
 # Prevent router modifying M1 pins shapes
 setNanoRouteMode -routeWithViaInPin "1:1"
 setNanoRouteMode -routeWithViaOnlyForStandardCellPin "1:1"
 
-## limit VIAs to ongrid only for VIA1 (S1)
+# limit VIAs to ongrid only for VIA1 (S1)
 setNanoRouteMode -drouteOnGridOnly "via 1:1"
 setNanoRouteMode -drouteAutoStop false
 setNanoRouteMode -drouteExpAdvancedMarFix true
 setNanoRouteMode -routeExpAdvancedTechnology true
 
-#SM suggestion for solving long extraction runtime during GR
+# SM suggestion for solving long extraction runtime during GR
 setNanoRouteMode -grouteExpWithTimingDriven false
 
-# ---------- Route + Post-Route Optimization ----------
+# --- Route + Post-Route Optimization ---
 routeDesign
 
 source $::env(CADENCE_SCRIPTS_DIR)/tier_cell_policy.tcl
@@ -96,7 +96,7 @@ set_tier_placement_status bottom fixed
 set_tier_placement_status upper fixed
 optDesign -postRoute
 
-# ---------- Export ----------
+# --- Export ---
 set DEF_OUT  [file join $RESULTS_DIR "5_route.def"]
 set V_OUT    [file join $RESULTS_DIR "5_route.v"]
 set ENC_OUT  [file join $OBJECTS_DIR  "${DESIGN}_postRoute.enc"]

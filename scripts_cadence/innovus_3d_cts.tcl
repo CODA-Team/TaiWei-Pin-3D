@@ -66,7 +66,7 @@ if { !([info exists ::env(UPPER_SITE)] && [info exists ::env(BOTTOM_SITE)]) } {
 
 set_tier_placement_status $fix_layer placed
 
-# --- 写出 DEF + Netlist（CTS 视图）---
+# --- Write DEF + netlist (CTS view) ---
 defOut -floorplan -routing [file join $RESULTS_DIR "4_1_cts.def"]
 saveNetlist [file join $RESULTS_DIR "4_1_cts.v"]
 fit

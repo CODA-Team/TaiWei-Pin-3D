@@ -6,10 +6,10 @@ set VERILOG_IN   "$::env(DESIGN_NAME)_3D.lg.v"
 set DEF_OUT      "$::env(DESIGN_NAME)_3D.lg.def"
 set VERILOG_OUT  "$::env(DESIGN_NAME)_3D.lg.v"
 
-# 装载设计
+# Load design
 load_design $DEF_IN 2_floorplan.sdc "Starting upper optimization and legalization"
 
-# 引入工具函数
+# Source helper utilities
 source $::env(OPENROAD_SCRIPTS_DIR)/placement_utils.tcl
 
 mark_insts_by_master "*bottom*" FIRM

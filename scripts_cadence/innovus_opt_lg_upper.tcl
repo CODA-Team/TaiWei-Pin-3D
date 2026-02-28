@@ -2,7 +2,7 @@
 # commands and reports are copyrighted by Cadence. We thank Cadence for
 # granting permission to share our research to help promote and foster the next
 # generation of innovators.
-# ============== Legalize ONLY UPPER tier ==============
+# --- Legalize ONLY UPPER tier ---
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl

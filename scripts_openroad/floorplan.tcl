@@ -2,7 +2,7 @@ utl::set_metrics_stage "floorplan__{}"
 source $::env(OPENROAD_SCRIPTS_DIR)/load.tcl
 load_design 1_synth.v 1_synth.sdc "Starting floorplan"
 
-#Run check_setup
+# Run check_setup
 puts "\n=========================================================================="
 puts "Floorplan check_setup"
 puts "--------------------------------------------------------------------------"
@@ -12,12 +12,12 @@ set num_instances [llength [get_cells -hier *]]
 puts "number instances in verilog is $num_instances"
 
 # Initialize floorplan by reading in floorplan DEF
-# ---------------------------------------------------------------------------
+# ------------------------------------------------------------
 if {[info exists ::env(FLOORPLAN_DEF)]} {
     puts "Read in Floorplan DEF to initialize floorplan:  $env(FLOORPLAN_DEF)"
     read_def -floorplan_initialize $env(FLOORPLAN_DEF)
 # Initialize floorplan using ICeWall FOOTPRINT
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------
 } elseif {[info exists ::env(CORE_UTILIZATION)] && $::env(CORE_UTILIZATION) != "" } {
   set aspect_ratio 1.0
   if {[info exists ::env(CORE_ASPECT_RATIO)] && $::env(CORE_ASPECT_RATIO) != ""} {
@@ -33,7 +33,7 @@ if {[info exists ::env(FLOORPLAN_DEF)]} {
                        -site $::env(PLACE_SITE)
 
 # Initialize floorplan using DIE_AREA/CORE_AREA
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------
 } else {
   initialize_floorplan -die_area $::env(DIE_AREA) \
                        -core_area $::env(CORE_AREA) \
@@ -51,7 +51,7 @@ if { [info exists ::env(MAKE_TRACKS)] } {
 # remove buffers inserted by yosys/abc
 remove_buffers
 
-##### Restructure for timing #########
+# Restructure for timing #########
 if { [info exist ::env(RESYNTH_TIMING_RECOVER)] && $::env(RESYNTH_TIMING_RECOVER) == 1 } {
   repair_design
   repair_timing

@@ -7,9 +7,9 @@ if {![info exists ::env(IO_PLACER_H)] || ![info exists ::env(IO_PLACER_V)]} {
 set LAYER_H $::env(IO_PLACER_H)
 set LAYER_V $::env(IO_PLACER_V)
 
-# =====================================
+# ------------------------------------------------------------
 # 1) Utility: die bbox & DBU conversion
-# =====================================
+# ------------------------------------------------------------
 proc get_die_bbox {} {
     return [ord::get_die_area]
 }
@@ -25,9 +25,9 @@ proc um_to_dbu_round {val_um dbu_per_um} {
   return [expr {round ($val_um * $dbu_per_um * 1000) / 1000.0 }]
 }
 
-# ==========================================
+# ------------------------------------------------------------
 # 2) Collect & sanitize top-level IO port set
-# ==========================================
+# ------------------------------------------------------------
 proc has_bits {base all_list} {
   foreach q $all_list { if {[string match "${base}\[*]" $q]} { return 1 } }
   return 0
@@ -56,10 +56,10 @@ set N [llength $pins_all]
 
 puts [format "IO-INFO: total ports=%d, kept=%d" [llength $all_raw] $N]
 
-# ===============================
+# ------------------------------------------------------------
 # 3) Geometry & perimeter in um
 #    NOTE: ord::get_die_area is already in MICRONS.
-# ===============================
+# ------------------------------------------------------------
 lassign [get_die_bbox] LX_um LY_um UX_um UY_um
 set W_um     [expr {$UX_um - $LX_um}]
 set H_um     [expr {$UY_um - $LY_um}]

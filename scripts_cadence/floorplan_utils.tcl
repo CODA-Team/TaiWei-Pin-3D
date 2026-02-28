@@ -7,7 +7,6 @@
 #   - Tier-aware instance area and core sizing helpers
 #   - Assumes master name suffix: *_upper or *_bottom
 # ============================================================
-
 # Ensure namespace exists
 namespace eval tier {}
 

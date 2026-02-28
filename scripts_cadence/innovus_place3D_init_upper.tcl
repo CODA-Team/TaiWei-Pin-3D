@@ -64,4 +64,3 @@ puts "INFO: 3D place init done. DEF: $GPDEFOUT  V: $GPVOUT"
 
 # Exit the tool
 exit
-

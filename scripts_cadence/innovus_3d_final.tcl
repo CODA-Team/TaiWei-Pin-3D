@@ -3,7 +3,6 @@
 # granting permission to share our research to help promote and foster the next
 # generation of innovators.
 # ============== Final and extract metrics (restoreDesign → extract_report -postRoute) ==============
-
 # ---- Common setup ----
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl

@@ -27,7 +27,7 @@ if {$aspect_ratio <= 0.0} {
 
 set mL 0.0; set mR 0.0; set mT 0.0; set mB 0.0
 if {[info exists ::env(CORE_MARGIN)] && $::env(CORE_MARGIN) ne ""} {
-  # 支持 "0.2" 或 "0.2 0.2 0.2 0.2" (L B R T)
+  # Supports "0.2" or "0.2 0.2 0.2 0.2" (L B R T)
   set cm $::env(CORE_MARGIN)
   set toks [split $cm]
   if {[llength $toks] == 1} {
@@ -63,7 +63,7 @@ puts [format "INFO: bottom: inst=%d area=%.6f um^2" $C_bot $A_bot]
 puts [format "INFO: max-tier area=%.6f um^2, target_util=%.3f, aspect_ratio(H/W)=%.3f" \
   $A_max $U_target $aspect_ratio]
 
-# 如果没法识别 tier（A_max=0），就退回 initialize_floorplan -utilization 的方式
+# If tier classification is unavailable (A_max=0), fall back to initialize_floorplan -utilization
 if {$A_max <= 0.0} {
   puts "WARN: A_max <= 0 (cannot classify tier instances). Fallback to utilization-based initialize_floorplan."
   set site_opt {}

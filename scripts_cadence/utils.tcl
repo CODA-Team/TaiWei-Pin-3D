@@ -5,7 +5,6 @@
 # ==========================================
 # util.tcl  — common helpers for Tcl scripts
 # ==========================================
-
 proc _get {name {def ""}} {
   if {[info exists ::env($name)] && $::env($name) ne ""} { return $::env($name) }
   return $def

@@ -7,10 +7,9 @@ import os
 import re
 from typing import Dict, List, Tuple, Optional
 
-# ==========================================================
+# ------------------------------------------------------------
 # Name normalization helpers (DEF / Verilog / partition shared)
-# ==========================================================
-
+# ------------------------------------------------------------
 def normalize_name(s: str) -> str:
     """
     Normalize instance/net/pin identifiers across DEF / Verilog / partition:
@@ -38,10 +37,9 @@ def strip_tier_suffix(master: str) -> str:
         return master[:-7]
     return master
 
-# ==========================================================
+# ------------------------------------------------------------
 # Partition file parsing
-# ==========================================================
-
+# ------------------------------------------------------------
 def parse_partition_file(partition_path: Optional[str]) -> Dict[str, int]:
     """
     Reads partition file lines in common formats:
@@ -74,10 +72,9 @@ def parse_partition_file(partition_path: Optional[str]) -> Dict[str, int]:
             part[normalize_name(inst)] = die
     return part
 
-# ==========================================================
+# ------------------------------------------------------------
 # DEF parsing helpers
-# ==========================================================
-
+# ------------------------------------------------------------
 COMP_BEGIN_RE = re.compile(r"^\s*COMPONENTS\b", re.I)
 COMP_END_RE   = re.compile(r"^\s*END\s+COMPONENTS\b", re.I)
 NETS_BEGIN_RE = re.compile(r"^\s*NETS\b", re.I)
@@ -288,10 +285,9 @@ def rewrite_def(
     with open(def_out, "w", encoding="utf-8") as f:
         f.writelines(out)
 
-# ==========================================================
+# ------------------------------------------------------------
 # Verilog robust instance statement scanning + comment masking
-# ==========================================================
-
+# ------------------------------------------------------------
 def mask_verilog_comments_keep_len(s: str) -> str:
     """
     Replace comment characters with spaces, preserving string length.

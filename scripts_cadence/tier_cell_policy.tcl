@@ -9,11 +9,11 @@
 #   DONT_USE_CELLS_BOTTOM
 #   FILL_CELLS_UPPER
 #   FILL_CELLS_BOTTOM
-#   TAPCELL_UPPER   ;# Optional: if you want to explicitly specify for addWellTap/by layer
+#   TAPCELL_UPPER   (optional; explicitly specify for addWellTap/by layer)
 #   TAPCELL_BOTTOM
 # Usage:
 #   source $::env(CADENCE_SCRIPTS_DIR)/tier_cell_policy.tcl
-#   apply_tier_policy upper   ;# or bottom
+#   apply_tier_policy upper   (or bottom)
 # ==========================================
 
 proc _as_list {envname} {
@@ -123,10 +123,10 @@ proc rebuild_rows_for_site {site_name {core_margin 0}} {
 
 # Sets the placement status of tier-specific cells.
 # Usage:
-#   set_tier_placement_status bottom fixed  ;# Fixes bottom-tier cells
-#   set_tier_placement_status bottom placed ;# Unfixes bottom-tier cells (sets to 'placed')
-#   set_tier_placement_status upper fixed   ;# Fixes upper-tier cells
-#   set_tier_placement_status upper placed  ;# Unfixes upper-tier cells (sets to 'placed')
+#   set_tier_placement_status bottom fixed   (fixes bottom-tier cells)
+#   set_tier_placement_status bottom placed  (unfixes bottom-tier cells, sets to 'placed')
+#   set_tier_placement_status upper fixed    (fixes upper-tier cells)
+#   set_tier_placement_status upper placed   (unfixes upper-tier cells, sets to 'placed')
 proc set_tier_placement_status {tier status} {
   # Validate tier
   set tier_arg [string tolower $tier]
