@@ -194,6 +194,13 @@ if {
   check -assert
 }
 
+select -list a:keep_hierarchy
+select -list A:keep_hierarchy
+setattr -unset keep_hierarchy a:keep_hierarchy
+setattr -mod -unset keep_hierarchy A:keep_hierarchy
+flatten
+clean -purge
+
 # Write synthesized design
 puts "--- Writing synthesized Verilog. ---"
 write_verilog -nohex -nodec $::env(RESULTS_DIR)/1_synth.v

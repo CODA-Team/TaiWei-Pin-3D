@@ -2,6 +2,8 @@ export DESIGN_NAME = ariane
 export DESIGN_NICKNAME = ariane133
 export PLATFORM    = asap7_nangate45
 
+export SYNTH_HIERARCHICAL = 1
+
 export VERILOG_FILES = $(DESIGN_HOME)/src/$(DESIGN_NICKNAME)/ariane.sv2v.v \
                        $(DESIGN_HOME)/asap7_nangate45_3D/$(DESIGN_NICKNAME)/macros.v
 

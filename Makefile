@@ -144,7 +144,7 @@ export RESYNTH_TIMING_RECOVER ?= 0
 export ABC_AREA ?= 0
 
 # Global synthesis args
-export SYNTH_ARGS ?= -flatten
+# export SYNTH_ARGS ?= -flatten
 
 # Global floorplan args
 export PLACE_PINS_ARGS

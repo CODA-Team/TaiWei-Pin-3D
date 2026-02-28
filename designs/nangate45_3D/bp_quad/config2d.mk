@@ -2,6 +2,8 @@ export DESIGN_NAME = bsg_chip
 export DESIGN_NICKNAME = bp_quad
 export PLATFORM    = nangate45
 
+export SYNTH_HIERARCHICAL = 1
+
 export VERILOG_FILES = $(DESIGN_HOME)/nangate45_3D/$(DESIGN_NICKNAME)/bsg_chip_block.sv2v.v \
                        $(DESIGN_HOME)/nangate45_3D/$(DESIGN_NICKNAME)/fakeram45_32x32_dp.v
 
