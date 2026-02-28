@@ -6,6 +6,51 @@
 #   mark_insts_by_master "*_bottom" FIRM
 #   mark_insts_by_master "" FIRM
 # ----------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# master_has_site: expects a dbMaster object (pointer), NOT a name string.
+# ------------------------------------------------------------------------------
+proc master_has_site {m} {
+  # Return 1 if master is bound to a SITE (typical stdcell), else 0.
+  if {![catch {set s [::odb::dbMaster_getSite $m]}]} {
+    if {$s ne "" && $s ne "NULL"} { return 1 }
+  }
+  return 0
+}
+
+# ------------------------------------------------------------------------------
+# Helper: resolve master by name (slow path). Used by name-based test API.
+# ------------------------------------------------------------------------------
+proc _find_master_by_name {mname} {
+  set db [ord::get_db]
+  set libs [::odb::dbDatabase_getLibs $db]
+  foreach lib $libs {
+    set masters [::odb::dbLib_getMasters $lib]
+    foreach m $masters {
+      if {[$m getName] eq $mname} { return $m }
+    }
+  }
+  return ""
+}
+
+# ------------------------------------------------------------------------------
+# Name-based test API (for your colleague): master_has_site_by_name "CELLNAME"
+# Uses cache to avoid repeated library scans.
+# ------------------------------------------------------------------------------
+proc master_has_site_by_name {mname} {
+  # Cache: ::_MASTER_HAS_SITE_CACHE($mname) => 0/1
+  if {[info exists ::_MASTER_HAS_SITE_CACHE($mname)]} {
+    return $::_MASTER_HAS_SITE_CACHE($mname)
+  }
+  set m [_find_master_by_name $mname]
+  if {$m eq ""} {
+    set ::_MASTER_HAS_SITE_CACHE($mname) 0
+    return 0
+  }
+  set v [master_has_site $m]
+  set ::_MASTER_HAS_SITE_CACHE($mname) $v
+  return $v
+}
+
 proc mark_insts_by_master {{pattern ""} {status "FIRM"}} {
   # 1) Parse pattern
   if {$pattern eq ""} {
@@ -37,13 +82,16 @@ proc mark_insts_by_master {{pattern ""} {status "FIRM"}} {
   set examples {}
   foreach inst [$block getInsts] {
     set mname [[$inst getMaster] getName]
-    if {[string match -nocase $pattern $mname]} {
-      if {[catch {$inst setPlacementStatus $status} err]} {
-        puts "WARN: fail to set $status for [$inst getName]($mname): $err"
-      } else {
-        incr cnt
-        if {[llength $examples] < 5} {
-          lappend examples "[$inst getName]($mname)"
+    # if master have site, it is CORE CELL
+    if {[master_has_site_by_name $mname]} {
+      if {[string match -nocase $pattern $mname]} {
+        if {[catch {$inst setPlacementStatus $status} err]} {
+          puts "WARN: fail to set $status for [$inst getName]($mname): $err"
+        } else {
+          incr cnt
+          if {[llength $examples] < 5} {
+            lappend examples "[$inst getName]($mname)"
+          }
         }
       }
     }
