@@ -1,55 +1,50 @@
 ########################################################################
-# This script was written and developed by Zhiyu Zheng at Fudan University; however, the underlying
-# commands and reports are copyrighted by Cadence. We thank Cadence for
-# granting permission to share our research to help promote and foster the next
-# generation of innovators.
-# pdn_3d_stacked.tcl
-# 3D PDN for Innovus (aligning with OpenROAD 3D PDN logic, no renaming)
-# - Part 0: helper procs (box flatten / row rebuild / tier inst query)
-# - Part 1: BOT PG connect + M1 rails + M4/M7 mesh
-# - Part 2: (optional) rebuild upper rows + TOP PG connect
-#           + M1_m/M2_m rails + M5_m/M6_m mesh
+# pdn_3d_stacked.tcl  (HETERO, Innovus)
+# 3D PDN for Innovus (aligned with OpenROAD 3D PDN logic, no renaming)
+#
+# - Part 0: helper procs (tier inst query)
+# - Part 1: BOT PG connect + M1 rails + M4(V)/M7(H) mesh   (Nangate45-like)
+# - Part 2: rebuild upper rows + TOP PG connect
+#           + M1_m/M2_m rails + M3_m(V)/M6_m(H) mesh       (ASAP7-like)
+#
 # - PG nets:
 #     Bottom : BOT_VDD / BOT_VSS
-#     Top    : TOP_VDD / BOT_VSS  (shared ground; change if needed)
+#     Top    : TOP_VDD / TOP_VSS
+#
+# Key fixes vs common pitfalls:
+# - BOT mesh uses per-layer stacked-via limits to avoid unintended M7->M8 via attempts.
+# - TOP mesh uses mirrored-stack stacked-via limits and M6_m horizontal straps.
 ########################################################################
+
 source $::env(CADENCE_SCRIPTS_DIR)/tier_cell_policy.tcl
 puts "INFO: \[pdn_3d_stacked\] Start 3D PDN (BOT then TOP)..."
 
+########################################################################
+# Part 0. Tier instance query
+########################################################################
 proc get_bottom_tier_insts {} {
-  # pointers to insts whose cell.name matches "*_bottom"
   set inst_ptrs [dbGet top.insts.cell.name "*_bottom" -p2]
-  if {[llength $inst_ptrs] == 0} {
-    return ""
-  }
-  # return instance names
+  if {[llength $inst_ptrs] == 0} { return "" }
   return [dbGet $inst_ptrs.name]
 }
 
 proc get_upper_tier_insts {} {
-  # pointers to insts whose cell.name matches "*_upper"
   set inst_ptrs [dbGet top.insts.cell.name "*_upper" -p2]
-  if {[llength $inst_ptrs] == 0} {
-    return ""
-  }
+  if {[llength $inst_ptrs] == 0} { return "" }
   return [dbGet $inst_ptrs.name]
 }
 
-########################################################################
-# Part 0. NOTE: No rename — we keep original instance names
-########################################################################
-
-puts "INFO: \[pdn_3d_stacked\] Skip renaming instances; use master name (*_upper/*_bottom) to classify tiers."
+puts "INFO: \[pdn_3d_stacked\] Skip renaming instances; classify tiers by master suffix (*_upper/*_bottom)."
 
 ########################################################################
 # Part 1. BOT tier: BOT_VDD / BOT_VSS
+#   Nangate45-like: M1 rails + M4 vertical straps + M7 horizontal straps
 ########################################################################
-
 puts "INFO: \[pdn_3d_stacked\] === Part 1: BOT tier PDN (BOT_VDD / BOT_VSS) ==="
 
 set minCh 2
 
-# 1) Unplace core cells and cut rows
+# 1) Unplace core cells and cut rows (kept from your original flow)
 dbset [dbget top.insts.cell.subClass core -p2].pStatus unplaced
 finishFloorplan -fillPlaceBlockage hard $minCh
 cutRow
@@ -79,13 +74,12 @@ if {[llength $bot_insts] == 0} {
   }
 }
 
-# Tie cells behavior (only to BOT_VDD / BOT_VSS)
+# Tie cells (bottom)
 globalNetConnect BOT_VDD -type tiehi -all -override
 globalNetConnect BOT_VSS -type tielo -all -override
-
 puts "INFO: \[pdn_3d_stacked\] BOT globalNetConnect done."
 
-# 3) Via generation
+# 3) Via generation housekeeping (kept)
 setGenerateViaMode -auto true
 generateVias
 editDelete -type Special -net $nets_bot
@@ -101,14 +95,20 @@ sroute -nets {BOT_VDD BOT_VSS} \
        -corePinLayer {M1} \
        -corePinTarget {firstAfterRowEnd}
 
-# 5) BOT mesh on M4/M7
+# 5) BOT mesh on M4 (vertical) / M7 (horizontal)
 setAddStripeMode -orthogonal_only true -ignore_DRC false
 setAddStripeMode -over_row_extension true
 setAddStripeMode -extend_to_closest_target area_boundary
 setAddStripeMode -inside_cell_only false
 setAddStripeMode -route_over_rows_only false
-setAddStripeMode -stacked_via_bottom_layer M1 -stacked_via_top_layer M7
 
+# IMPORTANT:
+# Do NOT allow a broad M1->M7 stacked-via range when adding M4 stripes.
+# Otherwise the power planner may attempt unintended connections up to M8.
+# Use per-layer stacked-via limits.
+
+# (a) M4 vertical stripes: allow vias ONLY between M1 and M4
+setAddStripeMode -stacked_via_bottom_layer M1 -stacked_via_top_layer M4
 addStripe -layer M4 \
           -direction vertical \
           -nets $nets_bot \
@@ -117,6 +117,8 @@ addStripe -layer M4 \
           -start_offset 0.0 \
           -set_to_set_distance 20.16
 
+# (b) M7 horizontal straps: allow vias ONLY between M4 and M7
+setAddStripeMode -stacked_via_bottom_layer M4 -stacked_via_top_layer M7
 addStripe -layer M7 \
           -direction horizontal \
           -nets $nets_bot \
@@ -125,15 +127,15 @@ addStripe -layer M7 \
           -start_offset 2.0 \
           -set_to_set_distance 40.0
 
-puts "INFO: \[pdn_3d_stacked\] BOT PDN (M1 rails + M4/M7 mesh) completed."
+puts "INFO: \[pdn_3d_stacked\] BOT PDN (M1 rails + M4(V)/M7(H) mesh) completed."
 
 ########################################################################
-# Part 2. TOP tier: TOP_VDD / BOT_VSS  (shared ground)
+# Part 2. TOP tier: TOP_VDD / TOP_VSS
+#   ASAP7-like: M1_m/M2_m rails + M3_m vertical + M6_m horizontal
 ########################################################################
+puts "INFO: \[pdn_3d_stacked\] === Part 2: TOP tier PDN (TOP_VDD / TOP_VSS) ==="
 
-puts "INFO: \[pdn_3d_stacked\] === Part 2: TOP tier PDN (TOP_VDD / BOT_VSS) ==="
-
-# 1) Rebuild rows for upper site (optional)
+# 1) Rebuild rows for upper site (hetero requires this)
 if {[info exists ::env(UPPER_SITE)]} {
   puts "INFO: \[pdn_3d_stacked\] Rebuilding rows for upper tier site = $::env(UPPER_SITE)"
   rebuild_rows_for_site $::env(UPPER_SITE)
@@ -142,7 +144,7 @@ if {[info exists ::env(UPPER_SITE)]} {
 }
 
 # 2) Global net connections for *_upper instances
-set nets_top [list TOP_VDD BOT_VSS]
+set nets_top [list TOP_VDD TOP_VSS]
 
 set top_insts [get_upper_tier_insts]
 if {[llength $top_insts] == 0} {
@@ -151,23 +153,21 @@ if {[llength $top_insts] == 0} {
   puts "INFO: \[pdn_3d_stacked\] TOP tier instance count [llength $top_insts]"
   foreach inst $top_insts {
     globalNetConnect TOP_VDD -type pgpin -pin VDD -inst $inst -override
-    globalNetConnect BOT_VSS -type pgpin -pin VSS -inst $inst -override
+    globalNetConnect TOP_VSS -type pgpin -pin VSS -inst $inst -override
   }
 }
 
 globalNetConnect TOP_VDD -type tiehi -all -override
-# If you want explicit tielo for BOT_VSS on upper tier:
-globalNetConnect BOT_VSS -type tielo -all -override
-
+globalNetConnect TOP_VSS -type tielo -all -override
 puts "INFO: \[pdn_3d_stacked\] TOP globalNetConnect done."
 
 # 3a) Follow-pin rails for TOP on M1_m
-sroute -nets {TOP_VDD BOT_VSS} \
+sroute -nets $nets_top \
        -connect {corePin} \
        -corePinLayer {M1_m} \
        -corePinTarget {firstAfterRowEnd}
 
-# 3b) Duplicate M1_m rails to M2_m
+# 3b) Duplicate M1_m rails to M2_m (horizontal)
 deselectAll
 editSelect -layer M1_m -net $nets_top
 editDuplicate -layer_horizontal M2_m
@@ -179,23 +179,32 @@ editSelect -layer M2_m -net $nets_top
 editResize -to 0.018 -side high -direction y -keep_center_line 1
 deselectAll
 
-# 4) TOP mesh on M5_m / M6_m
+# 4) TOP mesh on M3_m (vertical) / M6_m (horizontal)
+# IMPORTANT:
+# - M6_m is a horizontal layer in ASAP7 (must be horizontal straps)
+# - The *_m stack is mirrored: M2_m is ABOVE M3_m, and M3_m is ABOVE M6_m.
+#   Therefore stacked_via_top_layer / bottom_layer must be set accordingly.
+
 setAddStripeMode -orthogonal_only true -ignore_DRC false
 setAddStripeMode -over_row_extension true
 setAddStripeMode -extend_to_closest_target area_boundary
 setAddStripeMode -inside_cell_only false
 setAddStripeMode -route_over_rows_only false
 
-addStripe -layer M5_m \
+# (a) M3_m vertical stripes: connect ONLY between M2_m and M3_m (mirrored stack)
+setAddStripeMode -stacked_via_top_layer M2_m -stacked_via_bottom_layer M3_m
+addStripe -layer M3_m \
           -direction vertical \
           -nets $nets_top \
-          -width 0.12 \
+          -width 0.234 \
           -spacing 0.072 \
           -start_offset 0.300 \
           -set_to_set_distance 5.4
 
+# (b) M6_m horizontal straps: connect ONLY between M3_m and M6_m (mirrored stack)
+setAddStripeMode -stacked_via_top_layer M3_m -stacked_via_bottom_layer M6_m
 addStripe -layer M6_m \
-          -direction vertical \
+          -direction horizontal \
           -nets $nets_top \
           -width 0.288 \
           -spacing 0.096 \
