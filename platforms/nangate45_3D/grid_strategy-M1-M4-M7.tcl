@@ -284,6 +284,3 @@ pdngen
 puts "INFO: PASS-2: pdngen (TOP) finished."
 
 puts "INFO: Done."
-
-gui::show
-gui::pause
