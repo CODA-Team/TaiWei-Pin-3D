@@ -28,7 +28,7 @@ if [[ -z "${FLOW_VARIANT:-}" ]]; then
 fi
 
 # ----------------- Tool binaries -----------------------------
-export OPENROAD_BIN=/scripts/ORFS-Research/tools/install/OpenROAD/bin/openroad
+export OPENROAD_BIN=../../../ORFS-Research/tools/install/OpenROAD/bin/openroad
 export CDS_BIN=$(which innovus)
 export NUM_CORES=16
 export CDS_RC_SETUP_TCL=""

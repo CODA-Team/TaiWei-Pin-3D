@@ -7,7 +7,14 @@ import subprocess
 import textwrap
 
 
-REPO = Path(__file__).resolve().parents[1]
+def repo_root():
+    for parent in Path(__file__).resolve().parents:
+        if (parent / "Makefile").exists() and (parent / "scripts_cadence").is_dir():
+            return parent
+    raise RuntimeError("could not find repository root")
+
+
+REPO = repo_root()
 
 
 def read(relpath):
