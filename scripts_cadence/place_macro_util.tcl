@@ -118,12 +118,19 @@ proc pmu::set_all_tier_macros_fixed {} {
 }
 
 proc pmu::run_tier_macro_place {tier halo_x halo_y} {
+  set tier_macros [pmu::get_tier_macro_insts $tier]
+  if {![llength $tier_macros]} {
+    puts "INFO(PMU): No ${tier} macros found; skipping macro placement."
+    return 0
+  }
+
   puts "INFO(PMU): run_tier_macro_place tier=$tier halo_x=$halo_x halo_y=$halo_y"
   addHaloToBlock -allMacro $halo_x $halo_y $halo_x $halo_y
   place_design -concurrent_macros
   refine_macro_place
   pmu::set_tier_macro_status $tier fixed
   puts "INFO(PMU): ${tier} macro placement done."
+  return [llength $tier_macros]
 }
 
 proc pmu::save_stage {def_out v_out png_out} {

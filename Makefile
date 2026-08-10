@@ -635,7 +635,10 @@ cds-3d-flow-2dpart:
 
 .PHONY: cds-tier-partition
 cds-tier-partition:
-	@echo "[CDS] Tier partition via ord-tier-partition"
+	@echo "[CDS] Build OpenDB handoff for TritonPart"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/2_2_cds_partition_handoff.log,$(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/cds_partition_handoff.tcl)
+	@echo "[CDS] Tier partition via OpenROAD/TritonPart"
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-tier-partition
 
 .PHONY: cds-pre

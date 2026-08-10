@@ -552,7 +552,11 @@ proc extract_drc {drc_rpt} {
   }
   set proc $::env(PROCESS)
   set node [dict get $node_map $proc]
-  setDesignMode -process $proc -node $node
+  set design_mode_args [list -process $proc]
+  if {$node ne ""} {
+    lappend design_mode_args -node $node
+  }
+  setDesignMode {*}$design_mode_args
   verify_drc -exclude_pg_net -limit 0 -report $drc_rpt
   # verify_drc -limit 0 -report $drc_rpt
   set v ""
@@ -566,7 +570,7 @@ proc extract_drc {drc_rpt} {
   }
   close $fp
   if {$v eq ""} { set v 0 }
-  setDesignMode -process 45 -node {}
+  setDesignMode -process 45
   return $v
 }
 
