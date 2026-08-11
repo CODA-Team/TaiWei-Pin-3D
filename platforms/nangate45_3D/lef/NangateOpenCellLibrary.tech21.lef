@@ -535,62 +535,6 @@ LAYER M1_m
   EDGECAPACITANCE 2.7365e-05 ;
 END M1_m
 
-LAYER via1_add
-  TYPE CUT ;
-  SPACING 0.08 ;
-  WIDTH 0.07 ;
-  RESISTANCE 5 ;
-END via1_add
-
-LAYER M2_add
-  TYPE ROUTING ;
-  SPACINGTABLE 
-    PARALLELRUNLENGTH    0.0000     0.3000     0.9000     1.8000     2.7000     4.0000     
-      WIDTH 0.0000       0.0700     0.0700     0.0700     0.0700     0.0700     0.0700     
-      WIDTH 0.0900       0.0700     0.0900     0.0900     0.0900     0.0900     0.0900     
-      WIDTH 0.2700       0.0700     0.0900     0.2700     0.2700     0.2700     0.2700     
-      WIDTH 0.5000       0.0700     0.0900     0.2700     0.5000     0.5000     0.5000     
-      WIDTH 0.9000       0.0700     0.0900     0.2700     0.5000     0.9000     0.9000     
-      WIDTH 1.5000       0.0700     0.0900     0.2700     0.5000     0.9000     1.5000      ;
-  WIDTH 0.07 ;
-  PITCH 0.19 ;
-  DIRECTION VERTICAL ;
-  OFFSET 0.095 0.07 ;
-  RESISTANCE RPERSQ 0.25 ;
-  THICKNESS 0.14 ;
-  HEIGHT 0.62 ;
-  CAPACITANCE CPERSQDIST 4.0896e-05 ;
-  EDGECAPACITANCE 2.5157e-05 ;
-END M2_add
-
-LAYER via2_add
-  TYPE CUT ;
-  SPACING 0.09 ;
-  WIDTH 0.07 ;
-  RESISTANCE 5 ;
-END via2_add
-
-LAYER M3_add
-  TYPE ROUTING ;
-  SPACINGTABLE 
-    PARALLELRUNLENGTH    0.0000     0.3000     0.9000     1.8000     2.7000     4.0000     
-      WIDTH 0.0000       0.0700     0.0700     0.0700     0.0700     0.0700     0.0700     
-      WIDTH 0.0900       0.0700     0.0900     0.0900     0.0900     0.0900     0.0900     
-      WIDTH 0.2700       0.0700     0.0900     0.2700     0.2700     0.2700     0.2700     
-      WIDTH 0.5000       0.0700     0.0900     0.2700     0.5000     0.5000     0.5000     
-      WIDTH 0.9000       0.0700     0.0900     0.2700     0.5000     0.9000     0.9000     
-      WIDTH 1.5000       0.0700     0.0900     0.2700     0.5000     0.9000     1.5000      ;
-  WIDTH 0.07 ;
-  PITCH 0.14 ;
-  DIRECTION HORIZONTAL ;
-  OFFSET 0.095 0.07 ;
-  RESISTANCE RPERSQ 0.25 ;
-  THICKNESS 0.14 ;
-  HEIGHT 0.88 ;
-  CAPACITANCE CPERSQDIST 2.7745e-05 ;
-  EDGECAPACITANCE 2.5157e-05 ;
-END M3_add
-
 LAYER OVERLAP
   TYPE OVERLAP ;
 END OVERLAP
@@ -1147,168 +1091,6 @@ VIA via8_m_0 DEFAULT
     RECT -0.4 -0.4 0.4 0.4 ;
 END via8_m_0
 
-VIA via1_add_4 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via1_add_4
-
-VIA via1_add_0 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via1_add_0
-
-VIA via1_add_1 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via1_add_1
-
-VIA via1_add_2 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via1_add_2
-
-VIA via1_add_3 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via1_add_3
-
-VIA via1_add_5 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via1_add_5
-
-VIA via1_add_6 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via1_add_6
-
-VIA via1_add_7 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via1_add_7
-
-VIA via1_add_8 DEFAULT
-  LAYER via1_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M1_m ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via1_add_8
-
-VIA via2_add_8 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via2_add_8
-
-VIA via2_add_4 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M3_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via2_add_4
-
-VIA via2_add_5 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via2_add_5
-
-VIA via2_add_7 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M3_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via2_add_7
-
-VIA via2_add_6 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via2_add_6
-
-VIA via2_add_0 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via2_add_0
-
-VIA via2_add_1 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M3_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-END via2_add_1
-
-VIA via2_add_2 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.035 0.07 0.035 ;
-END via2_add_2
-
-VIA via2_add_3 DEFAULT
-  LAYER via2_add ;
-    RECT -0.035 -0.035 0.035 0.035 ;
-  LAYER M2_add ;
-    RECT -0.035 -0.07 0.035 0.07 ;
-  LAYER M3_add ;
-    RECT -0.07 -0.07 0.07 0.07 ;
-END via2_add_3
-
 VIARULE Via1Array-0 GENERATE
   LAYER M1 ;
     ENCLOSURE 0.035 0.035 ;
@@ -1709,8 +1491,6 @@ SPACING
   SAMENET M3_m M3_m 0.07 ;
   SAMENET M2_m M2_m 0.07 ;
   SAMENET M1_m M1_m 0.065 ;
-  SAMENET M2_add M2_add 0.07 ;
-  SAMENET M3_add M3_add 0.07 ;
   SAMENET via1 via1 0.08 ;
   SAMENET via2 via2 0.09 ;
   SAMENET via3 via3 0.09 ;
@@ -1729,8 +1509,6 @@ SPACING
   SAMENET via3_m via3_m 0.09 ;
   SAMENET via2_m via2_m 0.09 ;
   SAMENET via1_m via1_m 0.08 ;
-  SAMENET via1_add via1_add 0.08 ;
-  SAMENET via2_add via2_add 0.09 ;
   SAMENET via1 via2 0.0 STACK ;
   SAMENET via2 via3 0.0 STACK ;
   SAMENET via3 via4 0.0 STACK ;
@@ -1748,7 +1526,6 @@ SPACING
   SAMENET via4_m via3_m 0.0 STACK ;
   SAMENET via3_m via2_m 0.0 STACK ;
   SAMENET via2_m via1_m 0.0 STACK ;
-  SAMENET via1_add via2_add 0.0 STACK ;
 END SPACING
 
 END LIBRARY

@@ -8,9 +8,9 @@ export PROCESS ?= 7
 # -------- Tech / Libs --------
 ifneq (,$(filter $(USE_FLOW),openroad OpenROAD))
   export TECH_LEF  ?= $(PLATFORM_DIR)/lef/asap7_tech_1x_2A6M7M.lef
-  export RCX_RULES         ?= $(PLATFORM_DIR)/asap7_tech_1x_2A6M7M.rcx_patterns.rules
+  export RCX_RULES         ?= $(PLATFORM_DIR)/asap7_tech_1x_6M7M.rcx_patterns.rules
   export MIN_ROUTING_LAYER ?= M2
-  export MAX_ROUTING_LAYER ?= M3_add
+  export MAX_ROUTING_LAYER ?= M2_m
   export SET_RC_TCL               ?= $(PLATFORM_DIR)/setRC_2A6M7M.tcl
   export MAKE_TRACKS       ?= $(PLATFORM_DIR)/openRoad/make_tracks.2A6M7M.tcl
 endif

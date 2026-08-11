@@ -19,8 +19,6 @@ set_layer_rc -via V5 -resistance 1.18E-02
 set_layer_rc -via V6 -resistance 8.20E-03
 set_layer_rc -via hb_layer -resistance 6.30E-02
 
-set_layer_rc -layer M2_add -resistance 4.62311E-02 -capacitance 1.84542E-01
-set_layer_rc -layer M3_add -resistance 3.63251E-02 -capacitance 1.53955E-01
 set_layer_rc -layer M1_m -resistance 7.04175E-02 -capacitance 1e-10
 set_layer_rc -layer M2_m -resistance 4.62311E-02 -capacitance 1.84542E-01
 set_layer_rc -layer M3_m -resistance 3.63251E-02 -capacitance 1.53955E-01
@@ -28,8 +26,6 @@ set_layer_rc -layer M4_m -resistance 2.03083E-02 -capacitance 1.89434E-01
 set_layer_rc -layer M5_m -resistance 1.93005E-02 -capacitance 1.71593E-01
 set_layer_rc -layer M6_m -resistance 1.18619E-02 -capacitance 1.76146E-01
 
-set_layer_rc -via V1_add -resistance 1.72E-02
-set_layer_rc -via V2_add -resistance 1.72E-02
 set_layer_rc -via V1_m -resistance 1.72E-02
 set_layer_rc -via V2_m -resistance 1.72E-02
 set_layer_rc -via V3_m -resistance 1.72E-02

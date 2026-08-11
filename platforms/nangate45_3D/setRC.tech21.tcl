@@ -18,8 +18,7 @@ set_layer_rc -layer M5_m -resistance 1.5000e-03 -capacitance 1.08964E-01
 set_layer_rc -layer M6_m -resistance 1.5000e-03 -capacitance 1.02044E-01
 set_layer_rc -layer M7_m -resistance 1.8750e-04 -capacitance 1.10436E-01
 set_layer_rc -layer M8_m -resistance 1.8750e-04 -capacitance 9.69714E-02
-set_layer_rc -layer M2_add -resistance 3.5714e-03 -capacitance 6.74606E-02
-set_layer_rc -layer M3_add -resistance 3.5714e-03 -capacitance 8.88758E-02
+set_layer_rc -layer M9_m -resistance 3.7500e-05 -capacitance 3.6864e-02
 
 set_wire_rc -signal -layer M1
 set_wire_rc -signal -layer M3

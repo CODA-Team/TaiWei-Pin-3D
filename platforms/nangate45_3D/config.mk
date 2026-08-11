@@ -8,10 +8,10 @@ export PROCESS = 45
 # -------- Tech / Libs --------
 ifneq (,$(filter $(USE_FLOW),openroad OpenROAD))
   export TECH_LEF ?= $(PLATFORM_DIR)/lef/NangateOpenCellLibrary.tech21.lef
-  export RCX_RULES         ?= $(PLATFORM_DIR)/NangateOpenCellLibrary.tech21.rcx_patterns.rules
+  export RCX_RULES         ?= $(PLATFORM_DIR)/NangateOpenCellLibrary.tech.rcx_patterns.rules
   export SET_RC_TCL  ?= $(PLATFORM_DIR)/setRC.tech21.tcl
   export MIN_ROUTING_LAYER ?= M2
-  export MAX_ROUTING_LAYER ?= M3_add
+  export MAX_ROUTING_LAYER ?= M2_m
   export MAKE_TRACKS ?= $(PLATFORM_DIR)/make_tracks.tech21.tcl
 endif
 export MIN_CLK_ROUTING_LAYER ?= M2
@@ -121,7 +121,7 @@ export GDS_ALLOW_EMPTY ?= fakeram.*
 # -------- Signoff / RCX / IR --------
 export CDL_FILE           = $(PLATFORM_DIR)/cdl/NangateOpenCellLibrary.cdl
 export TEMPLATE_PGA_CFG  ?= $(PLATFORM_DIR)/template_pga.cfg
-export RCX_RULES          = $(PLATFORM_DIR)/NangateOpenCellLibrary.tech21.rcx_patterns.rules
+export RCX_RULES          = $(PLATFORM_DIR)/NangateOpenCellLibrary.tech.rcx_patterns.rules
 
 # IR drop settings (consistent for both tiers)
 export PWR_NETS_VOLTAGES ?= "VDD 1.1"
