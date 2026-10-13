@@ -14,7 +14,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 0.035 0.07 0.105 ;
     END
   END rw0_wmask_in[0]
@@ -23,7 +23,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 2.135 0.07 2.205 ;
     END
   END rw0_wmask_in[1]
@@ -32,7 +32,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 4.235 0.07 4.305 ;
     END
   END rw0_wmask_in[2]
@@ -41,7 +41,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 6.335 0.07 6.405 ;
     END
   END rw0_wmask_in[3]
@@ -50,7 +50,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 8.435 0.07 8.505 ;
     END
   END rw0_wd_in[0]
@@ -59,7 +59,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 10.535 0.07 10.605 ;
     END
   END rw0_wd_in[1]
@@ -68,7 +68,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 12.635 0.07 12.705 ;
     END
   END rw0_wd_in[2]
@@ -77,7 +77,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 14.735 0.07 14.805 ;
     END
   END rw0_wd_in[3]
@@ -86,7 +86,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 16.835 0.07 16.905 ;
     END
   END rw0_wd_in[4]
@@ -95,7 +95,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 18.935 0.07 19.005 ;
     END
   END rw0_wd_in[5]
@@ -104,7 +104,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 21.035 0.07 21.105 ;
     END
   END rw0_wd_in[6]
@@ -113,7 +113,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 23.135 0.07 23.205 ;
     END
   END rw0_wd_in[7]
@@ -122,7 +122,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 25.235 0.07 25.305 ;
     END
   END rw0_wd_in[8]
@@ -131,7 +131,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 27.335 0.07 27.405 ;
     END
   END rw0_wd_in[9]
@@ -140,7 +140,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 29.435 0.07 29.505 ;
     END
   END rw0_wd_in[10]
@@ -149,7 +149,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 31.535 0.07 31.605 ;
     END
   END rw0_wd_in[11]
@@ -158,7 +158,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 33.635 0.07 33.705 ;
     END
   END rw0_wd_in[12]
@@ -167,7 +167,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 35.735 0.07 35.805 ;
     END
   END rw0_wd_in[13]
@@ -176,7 +176,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 37.835 0.07 37.905 ;
     END
   END rw0_wd_in[14]
@@ -185,7 +185,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 39.935 0.07 40.005 ;
     END
   END rw0_wd_in[15]
@@ -194,7 +194,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 42.035 0.07 42.105 ;
     END
   END rw0_wd_in[16]
@@ -203,7 +203,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 44.135 0.07 44.205 ;
     END
   END rw0_wd_in[17]
@@ -212,7 +212,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 46.235 0.07 46.305 ;
     END
   END rw0_wd_in[18]
@@ -221,7 +221,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 48.335 0.07 48.405 ;
     END
   END rw0_wd_in[19]
@@ -230,7 +230,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 50.435 0.07 50.505 ;
     END
   END rw0_wd_in[20]
@@ -239,7 +239,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 52.535 0.07 52.605 ;
     END
   END rw0_wd_in[21]
@@ -248,7 +248,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 54.635 0.07 54.705 ;
     END
   END rw0_wd_in[22]
@@ -257,7 +257,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 56.735 0.07 56.805 ;
     END
   END rw0_wd_in[23]
@@ -266,7 +266,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 58.835 0.07 58.905 ;
     END
   END rw0_wd_in[24]
@@ -275,7 +275,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 60.935 0.07 61.005 ;
     END
   END rw0_wd_in[25]
@@ -284,7 +284,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 63.035 0.07 63.105 ;
     END
   END rw0_wd_in[26]
@@ -293,7 +293,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 65.135 0.07 65.205 ;
     END
   END rw0_wd_in[27]
@@ -302,7 +302,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 67.235 0.07 67.305 ;
     END
   END rw0_wd_in[28]
@@ -311,7 +311,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 69.335 0.07 69.405 ;
     END
   END rw0_wd_in[29]
@@ -320,7 +320,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 71.435 0.07 71.505 ;
     END
   END rw0_wd_in[30]
@@ -329,7 +329,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 73.535 0.07 73.605 ;
     END
   END rw0_wd_in[31]
@@ -338,7 +338,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 75.635 0.07 75.705 ;
     END
   END rw0_rd_out[0]
@@ -347,7 +347,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 77.735 0.07 77.805 ;
     END
   END rw0_rd_out[1]
@@ -356,7 +356,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 79.835 0.07 79.905 ;
     END
   END rw0_rd_out[2]
@@ -365,7 +365,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 81.935 0.07 82.005 ;
     END
   END rw0_rd_out[3]
@@ -374,7 +374,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 84.035 0.07 84.105 ;
     END
   END rw0_rd_out[4]
@@ -383,7 +383,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 86.135 0.07 86.205 ;
     END
   END rw0_rd_out[5]
@@ -392,7 +392,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 88.235 0.07 88.305 ;
     END
   END rw0_rd_out[6]
@@ -401,7 +401,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 90.335 0.07 90.405 ;
     END
   END rw0_rd_out[7]
@@ -410,7 +410,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 92.435 0.07 92.505 ;
     END
   END rw0_rd_out[8]
@@ -419,7 +419,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 94.535 0.07 94.605 ;
     END
   END rw0_rd_out[9]
@@ -428,7 +428,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 96.635 0.07 96.705 ;
     END
   END rw0_rd_out[10]
@@ -437,7 +437,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 98.735 0.07 98.805 ;
     END
   END rw0_rd_out[11]
@@ -446,7 +446,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 100.835 0.07 100.905 ;
     END
   END rw0_rd_out[12]
@@ -455,7 +455,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 102.935 0.07 103.005 ;
     END
   END rw0_rd_out[13]
@@ -464,7 +464,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 105.035 0.07 105.105 ;
     END
   END rw0_rd_out[14]
@@ -473,7 +473,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 107.135 0.07 107.205 ;
     END
   END rw0_rd_out[15]
@@ -482,7 +482,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 109.235 0.07 109.305 ;
     END
   END rw0_rd_out[16]
@@ -491,7 +491,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 111.335 0.07 111.405 ;
     END
   END rw0_rd_out[17]
@@ -500,7 +500,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 113.435 0.07 113.505 ;
     END
   END rw0_rd_out[18]
@@ -509,7 +509,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 115.535 0.07 115.605 ;
     END
   END rw0_rd_out[19]
@@ -518,7 +518,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 117.635 0.07 117.705 ;
     END
   END rw0_rd_out[20]
@@ -527,7 +527,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 119.735 0.07 119.805 ;
     END
   END rw0_rd_out[21]
@@ -536,7 +536,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 121.835 0.07 121.905 ;
     END
   END rw0_rd_out[22]
@@ -545,7 +545,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 123.935 0.07 124.005 ;
     END
   END rw0_rd_out[23]
@@ -554,7 +554,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 126.035 0.07 126.105 ;
     END
   END rw0_rd_out[24]
@@ -563,7 +563,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 128.135 0.07 128.205 ;
     END
   END rw0_rd_out[25]
@@ -572,7 +572,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 130.235 0.07 130.305 ;
     END
   END rw0_rd_out[26]
@@ -581,7 +581,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 132.335 0.07 132.405 ;
     END
   END rw0_rd_out[27]
@@ -590,7 +590,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 134.435 0.07 134.505 ;
     END
   END rw0_rd_out[28]
@@ -599,7 +599,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 136.535 0.07 136.605 ;
     END
   END rw0_rd_out[29]
@@ -608,7 +608,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 138.635 0.07 138.705 ;
     END
   END rw0_rd_out[30]
@@ -617,7 +617,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 140.735 0.07 140.805 ;
     END
   END rw0_rd_out[31]
@@ -626,7 +626,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 142.835 0.07 142.905 ;
     END
   END rw0_addr_in[0]
@@ -635,7 +635,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 144.935 0.07 145.005 ;
     END
   END rw0_addr_in[1]
@@ -644,7 +644,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 147.035 0.07 147.105 ;
     END
   END rw0_addr_in[2]
@@ -653,7 +653,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 149.135 0.07 149.205 ;
     END
   END rw0_addr_in[3]
@@ -662,7 +662,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 151.235 0.07 151.305 ;
     END
   END rw0_addr_in[4]
@@ -671,7 +671,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 153.335 0.07 153.405 ;
     END
   END rw0_addr_in[5]
@@ -680,7 +680,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 155.435 0.07 155.505 ;
     END
   END rw0_addr_in[6]
@@ -689,7 +689,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 157.535 0.07 157.605 ;
     END
   END rw0_addr_in[7]
@@ -698,7 +698,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 159.635 0.07 159.705 ;
     END
   END rw0_we_in
@@ -707,7 +707,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 161.735 0.07 161.805 ;
     END
   END rw0_ce_in
@@ -716,7 +716,7 @@ MACRO ht45_mempoolgroup_32x256
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 163.835 0.07 163.905 ;
     END
   END rw0_clk
@@ -724,7 +724,7 @@ MACRO ht45_mempoolgroup_32x256
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1 0.84 1.28 168.56 ;
       RECT 3.24 0.84 3.52 168.56 ;
       RECT 5.48 0.84 5.76 168.56 ;
@@ -758,7 +758,7 @@ MACRO ht45_mempoolgroup_32x256
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 2.12 0.84 2.4 168.56 ;
       RECT 4.36 0.84 4.64 168.56 ;
       RECT 6.6 0.84 6.88 168.56 ;
@@ -788,9 +788,9 @@ MACRO ht45_mempoolgroup_32x256
     END
   END VDD
   OBS
-    LAYER metal1 ;
+    LAYER M1 ;
     RECT 0 0 60.61 169.4 ;
-    LAYER metal2 ;
+    LAYER M2 ;
     RECT 0 0 60.61 169.4 ;
   END
 END ht45_mempoolgroup_32x256

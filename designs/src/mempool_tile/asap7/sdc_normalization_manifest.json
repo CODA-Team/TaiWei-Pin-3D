@@ -1,0 +1,16 @@
+{
+  "case": "mempool_tile",
+  "pdk": "asap7",
+  "schema_version": 1,
+  "sdc_normalization": {
+    "clock_name": "clk_i",
+    "clock_port": "clk_i",
+    "io_pct": 0,
+    "period": 4000.0,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ps"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "278c468dfb0bf9eccdd54c2f9b7f1bbeea7e74515b4bfa557eb6c7b36b75cc12",
+  "sdc_source_sha256": "317be7084a294717a5fcdd2b7edfd8df222b433748e926bb80ae8d48d175c74e"
+}

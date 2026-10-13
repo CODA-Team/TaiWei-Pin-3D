@@ -1,0 +1,53 @@
+{
+  "case": "mempool_tile",
+  "macro_2d_normalization": {
+    "layer_policy": "nangate45 metalN -> MN; other canonical layers unchanged",
+    "pdk": "nangate45",
+    "tech_lef": "/export/home/wza_bs/yangzehao/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/NangateOpenCellLibrary.tech.lef"
+  },
+  "macros": [
+    {
+      "layer_replacements": 83,
+      "lef_sha256": "27c925e0c1dc8a308d3065d9d6763c0ff2cdc67880ee9a6a495051ccb2d04305",
+      "lef_source_sha256": "95a62872da00a9ce236a9f6f17c2cbf9a16538cddb90d2bf994e45d03862e2f9",
+      "lib_sha256": "14f8e66f474282cba080c918c9a2af10bb926b475bb59e304101dde62d40610f",
+      "lib_source_sha256": "14f8e66f474282cba080c918c9a2af10bb926b475bb59e304101dde62d40610f",
+      "master": "ht45_mempoolgroup_32x256",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ]
+    },
+    {
+      "layer_replacements": 149,
+      "lef_sha256": "ff987151d19b506496f646797f1bab486d1141e21b069a59f3ea4edea05a274f",
+      "lef_source_sha256": "68aa3197c6245c3637756120a39e97ee688e902907c2a093d700c2623b2239c5",
+      "lib_sha256": "ffd6d8fe9ad6207de140f647ad72d15a4205217bd022c90f84f948797e23d187",
+      "lib_source_sha256": "ffd6d8fe9ad6207de140f647ad72d15a4205217bd022c90f84f948797e23d187",
+      "master": "ht45_mempoolgroup_64x64",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ]
+    }
+  ],
+  "master_source": "/export/home/wza_bs/yangzehao/TaiWei-Integration/TaiWei-Pin-3D/designs/nangate45_3D/mempool_tile/import_3d_manifest.json",
+  "pdk": "nangate45",
+  "schema_version": 1
+}

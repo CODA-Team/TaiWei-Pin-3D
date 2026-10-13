@@ -1,0 +1,16 @@
+{
+  "case": "picorv32",
+  "pdk": "nangate45",
+  "schema_version": 1,
+  "sdc_normalization": {
+    "clock_name": "core_clock",
+    "clock_port": "clk",
+    "io_pct": 0.2,
+    "period": 0.9,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ns"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "c0a7c61721654d353acd28cadb5905a7e1ecf9f47fd31dfdbfeb6bbf247094cc",
+  "sdc_source_sha256": "64503b44f0a7aceb5da5a8f6eabd9c3ae0511e1b04a60709e8ff750f168725a9"
+}

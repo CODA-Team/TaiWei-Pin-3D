@@ -14,7 +14,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 0.035 0.07 0.105 ;
     END
   END rw0_wmask_in[0]
@@ -23,7 +23,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 2.275 0.07 2.345 ;
     END
   END rw0_wmask_in[1]
@@ -32,7 +32,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 4.515 0.07 4.585 ;
     END
   END rw0_wmask_in[2]
@@ -41,7 +41,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 6.755 0.07 6.825 ;
     END
   END rw0_wmask_in[3]
@@ -50,7 +50,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 8.995 0.07 9.065 ;
     END
   END rw0_wmask_in[4]
@@ -59,7 +59,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 11.235 0.07 11.305 ;
     END
   END rw0_wmask_in[5]
@@ -68,7 +68,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 13.475 0.07 13.545 ;
     END
   END rw0_wmask_in[6]
@@ -77,7 +77,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 15.715 0.07 15.785 ;
     END
   END rw0_wmask_in[7]
@@ -86,7 +86,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 17.955 0.07 18.025 ;
     END
   END rw0_wmask_in[8]
@@ -95,7 +95,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 20.195 0.07 20.265 ;
     END
   END rw0_wmask_in[9]
@@ -104,7 +104,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 22.435 0.07 22.505 ;
     END
   END rw0_wmask_in[10]
@@ -113,7 +113,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 24.675 0.07 24.745 ;
     END
   END rw0_wmask_in[11]
@@ -122,7 +122,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 26.915 0.07 26.985 ;
     END
   END rw0_wmask_in[12]
@@ -131,7 +131,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 29.155 0.07 29.225 ;
     END
   END rw0_wmask_in[13]
@@ -140,7 +140,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 31.395 0.07 31.465 ;
     END
   END rw0_wmask_in[14]
@@ -149,7 +149,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 33.635 0.07 33.705 ;
     END
   END rw0_wmask_in[15]
@@ -158,7 +158,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 35.875 0.07 35.945 ;
     END
   END rw0_wd_in[0]
@@ -167,7 +167,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 38.115 0.07 38.185 ;
     END
   END rw0_wd_in[1]
@@ -176,7 +176,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 40.355 0.07 40.425 ;
     END
   END rw0_wd_in[2]
@@ -185,7 +185,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 42.595 0.07 42.665 ;
     END
   END rw0_wd_in[3]
@@ -194,7 +194,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 44.835 0.07 44.905 ;
     END
   END rw0_wd_in[4]
@@ -203,7 +203,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 47.075 0.07 47.145 ;
     END
   END rw0_wd_in[5]
@@ -212,7 +212,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 49.315 0.07 49.385 ;
     END
   END rw0_wd_in[6]
@@ -221,7 +221,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 51.555 0.07 51.625 ;
     END
   END rw0_wd_in[7]
@@ -230,7 +230,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 53.795 0.07 53.865 ;
     END
   END rw0_wd_in[8]
@@ -239,7 +239,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 56.035 0.07 56.105 ;
     END
   END rw0_wd_in[9]
@@ -248,7 +248,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 58.275 0.07 58.345 ;
     END
   END rw0_wd_in[10]
@@ -257,7 +257,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 60.515 0.07 60.585 ;
     END
   END rw0_wd_in[11]
@@ -266,7 +266,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 62.755 0.07 62.825 ;
     END
   END rw0_wd_in[12]
@@ -275,7 +275,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 64.995 0.07 65.065 ;
     END
   END rw0_wd_in[13]
@@ -284,7 +284,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 67.235 0.07 67.305 ;
     END
   END rw0_wd_in[14]
@@ -293,7 +293,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 69.475 0.07 69.545 ;
     END
   END rw0_wd_in[15]
@@ -302,7 +302,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 71.715 0.07 71.785 ;
     END
   END rw0_rd_out[0]
@@ -311,7 +311,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 73.955 0.07 74.025 ;
     END
   END rw0_rd_out[1]
@@ -320,7 +320,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 76.195 0.07 76.265 ;
     END
   END rw0_rd_out[2]
@@ -329,7 +329,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 78.435 0.07 78.505 ;
     END
   END rw0_rd_out[3]
@@ -338,7 +338,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 80.675 0.07 80.745 ;
     END
   END rw0_rd_out[4]
@@ -347,7 +347,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 82.915 0.07 82.985 ;
     END
   END rw0_rd_out[5]
@@ -356,7 +356,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 85.155 0.07 85.225 ;
     END
   END rw0_rd_out[6]
@@ -365,7 +365,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 87.395 0.07 87.465 ;
     END
   END rw0_rd_out[7]
@@ -374,7 +374,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 89.635 0.07 89.705 ;
     END
   END rw0_rd_out[8]
@@ -383,7 +383,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 91.875 0.07 91.945 ;
     END
   END rw0_rd_out[9]
@@ -392,7 +392,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 94.115 0.07 94.185 ;
     END
   END rw0_rd_out[10]
@@ -401,7 +401,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 96.355 0.07 96.425 ;
     END
   END rw0_rd_out[11]
@@ -410,7 +410,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 98.595 0.07 98.665 ;
     END
   END rw0_rd_out[12]
@@ -419,7 +419,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 100.835 0.07 100.905 ;
     END
   END rw0_rd_out[13]
@@ -428,7 +428,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 103.075 0.07 103.145 ;
     END
   END rw0_rd_out[14]
@@ -437,7 +437,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 105.315 0.07 105.385 ;
     END
   END rw0_rd_out[15]
@@ -446,7 +446,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 107.555 0.07 107.625 ;
     END
   END rw0_addr_in[0]
@@ -455,7 +455,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 109.795 0.07 109.865 ;
     END
   END rw0_addr_in[1]
@@ -464,7 +464,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 112.035 0.07 112.105 ;
     END
   END rw0_addr_in[2]
@@ -473,7 +473,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 114.275 0.07 114.345 ;
     END
   END rw0_addr_in[3]
@@ -482,7 +482,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 116.515 0.07 116.585 ;
     END
   END rw0_addr_in[4]
@@ -491,7 +491,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 118.755 0.07 118.825 ;
     END
   END rw0_addr_in[5]
@@ -500,7 +500,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 120.995 0.07 121.065 ;
     END
   END rw0_addr_in[6]
@@ -509,7 +509,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 123.235 0.07 123.305 ;
     END
   END rw0_addr_in[7]
@@ -518,7 +518,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 125.475 0.07 125.545 ;
     END
   END rw0_we_in
@@ -527,7 +527,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 127.715 0.07 127.785 ;
     END
   END rw0_ce_in
@@ -536,7 +536,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 129.955 0.07 130.025 ;
     END
   END rw0_clk
@@ -544,7 +544,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1 0.84 1.28 132.16 ;
       RECT 3.24 0.84 3.52 132.16 ;
       RECT 5.48 0.84 5.76 132.16 ;
@@ -577,7 +577,7 @@ MACRO ht45_leon3vtabus_256x16_1rw
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 2.12 0.84 2.4 132.16 ;
       RECT 4.36 0.84 4.64 132.16 ;
       RECT 6.6 0.84 6.88 132.16 ;
@@ -606,9 +606,9 @@ MACRO ht45_leon3vtabus_256x16_1rw
     END
   END VDD
   OBS
-    LAYER metal1 ;
+    LAYER M1 ;
     RECT 0 0 57.57 133 ;
-    LAYER metal2 ;
+    LAYER M2 ;
     RECT 0 0 57.57 133 ;
   END
 END ht45_leon3vtabus_256x16_1rw

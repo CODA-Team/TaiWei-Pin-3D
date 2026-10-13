@@ -1876,41 +1876,121 @@
     }
   ],
   "include_source_parents": true,
+  "macro_2d_normalization": {
+    "layer_policy": "nangate45 metalN -> MN; other canonical layers unchanged",
+    "pdk": "asap7",
+    "tech_lef": "/export/home/wza_bs/yangzehao/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/asap7_tech_1x_201209.lef"
+  },
   "macros": [
     {
+      "layer_replacements": 0,
       "lef_sha256": "4e83bf47a2f95d6da7e3d9d07965c81246661d92e367abfbf953ae83a2b0841f",
       "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LEF/blackparrot_2/ht_asap7_blackparrot_256x95.lef",
+      "lef_source_sha256": "4e83bf47a2f95d6da7e3d9d07965c81246661d92e367abfbf953ae83a2b0841f",
       "lib_sha256": "e5082e96a443810830d412de1879eeda617bdd57bf9d7a43084b0e380ef5a0ae",
       "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LIB/blackparrot_2/ht_asap7_blackparrot_256x95.lib",
-      "master": "ht_asap7_blackparrot_256x95"
+      "lib_source_sha256": "e5082e96a443810830d412de1879eeda617bdd57bf9d7a43084b0e380ef5a0ae",
+      "master": "ht_asap7_blackparrot_256x95",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
     },
     {
+      "layer_replacements": 0,
       "lef_sha256": "51980b163feceef5ceb3e9f5fda98c415325ef768b96b98487d3d6d5506f616c",
       "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LEF/blackparrot_2/ht_asap7_blackparrot_512x64.lef",
+      "lef_source_sha256": "51980b163feceef5ceb3e9f5fda98c415325ef768b96b98487d3d6d5506f616c",
       "lib_sha256": "56399c78a83eaa1b020c8276c39818b01987301a4a06cb2f78acbd35da109227",
       "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LIB/blackparrot_2/ht_asap7_blackparrot_512x64.lib",
-      "master": "ht_asap7_blackparrot_512x64"
+      "lib_source_sha256": "56399c78a83eaa1b020c8276c39818b01987301a4a06cb2f78acbd35da109227",
+      "master": "ht_asap7_blackparrot_512x64",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
     },
     {
+      "layer_replacements": 0,
       "lef_sha256": "af76781e9073d5902bc7d24ce2a32bbd36ab417675132b9d4538d603f3fbda50",
       "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LEF/blackparrot_2/ht_asap7_blackparrot_64x15.lef",
+      "lef_source_sha256": "af76781e9073d5902bc7d24ce2a32bbd36ab417675132b9d4538d603f3fbda50",
       "lib_sha256": "55edfc1296a315174e390eea5369d7ff80acd5f35c6cecd153e0f12c5d62336f",
       "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LIB/blackparrot_2/ht_asap7_blackparrot_64x15.lib",
-      "master": "ht_asap7_blackparrot_64x15"
+      "lib_source_sha256": "55edfc1296a315174e390eea5369d7ff80acd5f35c6cecd153e0f12c5d62336f",
+      "master": "ht_asap7_blackparrot_64x15",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
     },
     {
+      "layer_replacements": 0,
       "lef_sha256": "fe0241c3b3130d964721aeb98d01e71db649eb0ad47b33194d1dd2f57af853a8",
       "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LEF/blackparrot_2/ht_asap7_blackparrot_64x7.lef",
+      "lef_source_sha256": "fe0241c3b3130d964721aeb98d01e71db649eb0ad47b33194d1dd2f57af853a8",
       "lib_sha256": "2bf6628cdb125c673ecd3a820fff9ba41be22a394d142e2230fef3cde7b7bd91",
       "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LIB/blackparrot_2/ht_asap7_blackparrot_64x7.lib",
-      "master": "ht_asap7_blackparrot_64x7"
+      "lib_source_sha256": "2bf6628cdb125c673ecd3a820fff9ba41be22a394d142e2230fef3cde7b7bd91",
+      "master": "ht_asap7_blackparrot_64x7",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
     },
     {
+      "layer_replacements": 0,
       "lef_sha256": "addacaf3519a0eb0a58dc81e719a48804fdc623a671751f33502d32e70fa0fb9",
       "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LEF/blackparrot_2/ht_asap7_blackparrot_64x96.lef",
+      "lef_source_sha256": "addacaf3519a0eb0a58dc81e719a48804fdc623a671751f33502d32e70fa0fb9",
       "lib_sha256": "bc1a9b608fdc83f2bd9f266f6fd3d384eba0e15cb2c70f4b963ff8dd710993e8",
       "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/LIB/blackparrot_2/ht_asap7_blackparrot_64x96.lib",
-      "master": "ht_asap7_blackparrot_64x96"
+      "lib_source_sha256": "bc1a9b608fdc83f2bd9f266f6fd3d384eba0e15cb2c70f4b963ff8dd710993e8",
+      "master": "ht_asap7_blackparrot_64x96",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
     }
   ],
   "pdk": "asap7",
@@ -1919,8 +1999,18 @@
   ],
   "rtl_filelist_tcl": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/RTL/blackparrot_2/rtl/rtl_filelist.tcl",
   "schema_version": 1,
-  "sdc_sha256": "7b62eab1cefdeaed4010fc079b0b7475c080e57f458003d62cbafa792104aba9",
+  "sdc_normalization": {
+    "clock_name": "clk_i",
+    "clock_port": "clk_i",
+    "io_pct": 0.2,
+    "period": 850.0,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ps"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "fbe1b71973790ac396d4702d0c1a8ebc7e3932be8d6ed00c0c8291816539e02d",
   "sdc_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/SDC/blackparrot_2/blackparrot-2_asap7.sdc",
+  "sdc_source_sha256": "7b62eab1cefdeaed4010fc079b0b7475c080e57f458003d62cbafa792104aba9",
   "single_compilation_unit": true,
   "source_root": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/RTL/blackparrot_2",
   "top": "black_parrot"

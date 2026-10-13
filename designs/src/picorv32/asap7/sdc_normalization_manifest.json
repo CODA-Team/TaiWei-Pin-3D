@@ -1,0 +1,16 @@
+{
+  "case": "picorv32",
+  "pdk": "asap7",
+  "schema_version": 1,
+  "sdc_normalization": {
+    "clock_name": "core_clock",
+    "clock_port": "clk",
+    "io_pct": 0.2,
+    "period": 300.0,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ps"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "c1bab7973afae3f18fe9e322a63d68fb3cf081e4063d4d68d0fb21665d2a2588",
+  "sdc_source_sha256": "54ef6069114b29365303b4c70855d413f07f458f23f9aece4d1b09a7f5aca0fe"
+}

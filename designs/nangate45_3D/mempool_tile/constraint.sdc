@@ -16,7 +16,8 @@ set sdc_version 2.0
 set_units -time ns -resistance kOhm -capacitance fF -power nW -voltage V -current mA
 current_design mempool_tile
 
-set clock_cycle 6.8
+set clk_period 6.8
+set clock_cycle $clk_period
 set uncertainty 0.08
 set io_delay 0
 set maxFanout 16
@@ -24,7 +25,13 @@ set maxTransition 0.040
 set pre_cts_clock_latency_estimate 0.070
 set clock_port_mempool_tile clk_i
 
-create_clock -name clk_i -period $clock_cycle [get_ports $clock_port_mempool_tile]
+set clk_name clk_i
+set clk_port_name clk_i
+# Metadata only: dedicated TCDM and virtual-clock I/O delays below are preserved.
+set clk_io_pct 0
+set clk_port [get_ports $clk_port_name]
+if {[llength $clk_port] != 1} { error "Expected one clock port: $clk_port_name" }
+create_clock -name $clk_name -period $clk_period $clk_port
 set_clock_uncertainty $uncertainty [all_clocks]
 set clk_port [get_ports $clock_port_mempool_tile]
 set non_clock_inputs [all_inputs]

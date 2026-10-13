@@ -14,7 +14,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 0.035 0.07 0.105 ;
     END
   END RW0_wdata[0]
@@ -23,7 +23,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 3.535 0.07 3.605 ;
     END
   END RW0_wdata[1]
@@ -32,7 +32,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 7.035 0.07 7.105 ;
     END
   END RW0_wdata[2]
@@ -41,7 +41,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 10.535 0.07 10.605 ;
     END
   END RW0_wdata[3]
@@ -50,7 +50,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 14.035 0.07 14.105 ;
     END
   END RW0_wdata[4]
@@ -59,7 +59,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 17.535 0.07 17.605 ;
     END
   END RW0_wdata[5]
@@ -68,7 +68,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 21.035 0.07 21.105 ;
     END
   END RW0_wdata[6]
@@ -77,7 +77,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 24.535 0.07 24.605 ;
     END
   END RW0_wdata[7]
@@ -86,7 +86,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 28.035 0.07 28.105 ;
     END
   END RW0_wdata[8]
@@ -95,7 +95,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 31.535 0.07 31.605 ;
     END
   END RW0_wdata[9]
@@ -104,7 +104,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 35.035 0.07 35.105 ;
     END
   END RW0_wdata[10]
@@ -113,7 +113,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 38.535 0.07 38.605 ;
     END
   END RW0_wdata[11]
@@ -122,7 +122,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 42.035 0.07 42.105 ;
     END
   END RW0_wdata[12]
@@ -131,7 +131,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 45.535 0.07 45.605 ;
     END
   END RW0_rdata[0]
@@ -140,7 +140,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 49.035 0.07 49.105 ;
     END
   END RW0_rdata[1]
@@ -149,7 +149,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 52.535 0.07 52.605 ;
     END
   END RW0_rdata[2]
@@ -158,7 +158,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 56.035 0.07 56.105 ;
     END
   END RW0_rdata[3]
@@ -167,7 +167,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 59.535 0.07 59.605 ;
     END
   END RW0_rdata[4]
@@ -176,7 +176,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 63.035 0.07 63.105 ;
     END
   END RW0_rdata[5]
@@ -185,7 +185,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 66.535 0.07 66.605 ;
     END
   END RW0_rdata[6]
@@ -194,7 +194,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 70.035 0.07 70.105 ;
     END
   END RW0_rdata[7]
@@ -203,7 +203,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 73.535 0.07 73.605 ;
     END
   END RW0_rdata[8]
@@ -212,7 +212,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 77.035 0.07 77.105 ;
     END
   END RW0_rdata[9]
@@ -221,7 +221,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 80.535 0.07 80.605 ;
     END
   END RW0_rdata[10]
@@ -230,7 +230,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 84.035 0.07 84.105 ;
     END
   END RW0_rdata[11]
@@ -239,7 +239,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 87.535 0.07 87.605 ;
     END
   END RW0_rdata[12]
@@ -248,7 +248,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 91.035 0.07 91.105 ;
     END
   END RW0_addr[0]
@@ -257,7 +257,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 94.535 0.07 94.605 ;
     END
   END RW0_addr[1]
@@ -266,7 +266,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 98.035 0.07 98.105 ;
     END
   END RW0_addr[2]
@@ -275,7 +275,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 101.535 0.07 101.605 ;
     END
   END RW0_addr[3]
@@ -284,7 +284,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 105.035 0.07 105.105 ;
     END
   END RW0_addr[4]
@@ -293,7 +293,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 108.535 0.07 108.605 ;
     END
   END RW0_addr[5]
@@ -302,7 +302,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 112.035 0.07 112.105 ;
     END
   END RW0_addr[6]
@@ -311,7 +311,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 115.535 0.07 115.605 ;
     END
   END RW0_addr[7]
@@ -320,7 +320,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 119.035 0.07 119.105 ;
     END
   END RW0_wmode
@@ -329,7 +329,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 122.535 0.07 122.605 ;
     END
   END RW0_en
@@ -338,7 +338,7 @@ MACRO array_256x13
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 126.035 0.07 126.105 ;
     END
   END RW0_clk
@@ -346,7 +346,7 @@ MACRO array_256x13
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1 0.84 1.28 132.16 ;
       RECT 3.24 0.84 3.52 132.16 ;
       RECT 5.48 0.84 5.76 132.16 ;
@@ -379,7 +379,7 @@ MACRO array_256x13
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 2.12 0.84 2.4 132.16 ;
       RECT 4.36 0.84 4.64 132.16 ;
       RECT 6.6 0.84 6.88 132.16 ;
@@ -408,9 +408,9 @@ MACRO array_256x13
     END
   END VDD
   OBS
-    LAYER metal1 ;
+    LAYER M1 ;
     RECT 0 0 57.57 133 ;
-    LAYER metal2 ;
+    LAYER M2 ;
     RECT 0 0 57.57 133 ;
   END
 END array_256x13

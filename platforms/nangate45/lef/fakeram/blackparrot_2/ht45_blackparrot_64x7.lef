@@ -10,7 +10,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 0.805 0.210 0.875 ;
     END
   END rw0_wmask_in[0]
@@ -19,7 +19,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 8.505 0.210 8.575 ;
     END
   END rw0_wmask_in[1]
@@ -28,7 +28,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 0.805 53.770 0.875 ;
     END
   END rw0_wmask_in[2]
@@ -37,7 +37,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 8.505 53.770 8.575 ;
     END
   END rw0_wmask_in[3]
@@ -46,7 +46,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 1.105 55.790 1.175 56.000 ;
     END
   END rw0_wmask_in[4]
@@ -55,7 +55,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 5.665 55.790 5.735 56.000 ;
     END
   END rw0_wmask_in[5]
@@ -64,7 +64,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 10.225 55.790 10.295 56.000 ;
     END
   END rw0_wmask_in[6]
@@ -73,7 +73,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 16.205 0.210 16.275 ;
     END
   END rw0_wd_in[0]
@@ -82,7 +82,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 23.905 0.210 23.975 ;
     END
   END rw0_wd_in[1]
@@ -91,7 +91,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 16.205 53.770 16.275 ;
     END
   END rw0_wd_in[2]
@@ -100,7 +100,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 23.905 53.770 23.975 ;
     END
   END rw0_wd_in[3]
@@ -109,7 +109,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 1.105 0.000 1.175 0.210 ;
     END
   END rw0_wd_in[4]
@@ -118,7 +118,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 7.375 0.000 7.445 0.210 ;
     END
   END rw0_wd_in[5]
@@ -127,7 +127,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 13.645 0.000 13.715 0.210 ;
     END
   END rw0_wd_in[6]
@@ -136,7 +136,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 19.915 0.000 19.985 0.210 ;
     END
   END rw0_rd_out[0]
@@ -145,7 +145,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 26.185 0.000 26.255 0.210 ;
     END
   END rw0_rd_out[1]
@@ -154,7 +154,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 32.455 0.000 32.525 0.210 ;
     END
   END rw0_rd_out[2]
@@ -163,7 +163,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 38.725 0.000 38.795 0.210 ;
     END
   END rw0_rd_out[3]
@@ -172,7 +172,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 14.785 55.790 14.855 56.000 ;
     END
   END rw0_rd_out[4]
@@ -181,7 +181,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 19.345 55.790 19.415 56.000 ;
     END
   END rw0_rd_out[5]
@@ -190,7 +190,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 23.905 55.790 23.975 56.000 ;
     END
   END rw0_rd_out[6]
@@ -199,7 +199,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 31.605 0.210 31.675 ;
     END
   END rw0_addr_in[0]
@@ -208,7 +208,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 39.305 0.210 39.375 ;
     END
   END rw0_addr_in[1]
@@ -217,7 +217,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0.000 47.005 0.210 47.075 ;
     END
   END rw0_addr_in[2]
@@ -226,7 +226,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 31.605 53.770 31.675 ;
     END
   END rw0_addr_in[3]
@@ -235,7 +235,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 39.305 53.770 39.375 ;
     END
   END rw0_addr_in[4]
@@ -244,7 +244,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 53.560 47.005 53.770 47.075 ;
     END
   END rw0_addr_in[5]
@@ -253,7 +253,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 28.465 55.790 28.535 56.000 ;
     END
   END rw0_we_in
@@ -262,7 +262,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 33.025 55.790 33.095 56.000 ;
     END
   END rw0_ce_in
@@ -271,7 +271,7 @@ MACRO ht45_blackparrot_64x7
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal2 ;
+      LAYER M2 ;
       RECT 37.585 55.790 37.655 56.000 ;
     END
   END rw0_clk
@@ -279,7 +279,7 @@ MACRO ht45_blackparrot_64x7
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1.000 0.840 1.280 55.160 ;
       RECT 3.240 0.840 3.520 55.160 ;
       RECT 5.480 0.840 5.760 55.160 ;
@@ -310,7 +310,7 @@ MACRO ht45_blackparrot_64x7
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1.000 0.840 1.280 55.160 ;
       RECT 3.240 0.840 3.520 55.160 ;
       RECT 5.480 0.840 5.760 55.160 ;
@@ -338,13 +338,13 @@ MACRO ht45_blackparrot_64x7
     END
   END VDD
   OBS
-    LAYER metal1 ;
+    LAYER M1 ;
     RECT 0 0 53.770 56.000 ;
-    LAYER metal2 ;
+    LAYER M2 ;
     RECT 0 0 53.770 56.000 ;
-    LAYER metal3 ;
+    LAYER M3 ;
     RECT 0 0 53.770 56.000 ;
-    LAYER metal4 ;
+    LAYER M4 ;
     RECT 0 0 53.770 56.000 ;
     LAYER OVERLAP ;
     RECT 0 0 53.770 56.000 ;

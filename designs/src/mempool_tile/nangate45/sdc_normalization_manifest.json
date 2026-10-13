@@ -1,0 +1,16 @@
+{
+  "case": "mempool_tile",
+  "pdk": "nangate45",
+  "schema_version": 1,
+  "sdc_normalization": {
+    "clock_name": "clk_i",
+    "clock_port": "clk_i",
+    "io_pct": 0,
+    "period": 6.8,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ns"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "bc78f7175101cedebaf7bd976b1cb7bcce25de4439b45c2c5d0a2e910fdd3766",
+  "sdc_source_sha256": "a809b55e2ed53ef454beb3f4020e13f2abf86da3c9bfe3543128a63052b60ca5"
+}

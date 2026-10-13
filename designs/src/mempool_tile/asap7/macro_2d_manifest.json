@@ -1,0 +1,53 @@
+{
+  "case": "mempool_tile",
+  "macro_2d_normalization": {
+    "layer_policy": "nangate45 metalN -> MN; other canonical layers unchanged",
+    "pdk": "asap7",
+    "tech_lef": "/export/home/wza_bs/yangzehao/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/asap7_tech_1x_201209.lef"
+  },
+  "macros": [
+    {
+      "layer_replacements": 0,
+      "lef_sha256": "9d1c59ecd25d415147970015e26fcad3c5f2415d3a50412ad229d8fa5effa7c6",
+      "lef_source_sha256": "9d1c59ecd25d415147970015e26fcad3c5f2415d3a50412ad229d8fa5effa7c6",
+      "lib_sha256": "8f5882031dd486bbc0a7c4da92ea4dd6b51ab3e007bcf66dbcc34c03a44952bb",
+      "lib_source_sha256": "8f5882031dd486bbc0a7c4da92ea4dd6b51ab3e007bcf66dbcc34c03a44952bb",
+      "master": "ht_asap7_mempoolgroup_32x256",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
+    },
+    {
+      "layer_replacements": 0,
+      "lef_sha256": "0f797ff9308c18d622d15b6279593caa2a07dfaeb64ae9569e788823c9fca1c0",
+      "lef_source_sha256": "0f797ff9308c18d622d15b6279593caa2a07dfaeb64ae9569e788823c9fca1c0",
+      "lib_sha256": "c58e3671f0f36ffa46e29ce92f8d30dfb56b741be4e450e1feb6d90630cdb204",
+      "lib_source_sha256": "c58e3671f0f36ffa46e29ce92f8d30dfb56b741be4e450e1feb6d90630cdb204",
+      "master": "ht_asap7_mempoolgroup_64x64",
+      "output_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ]
+    }
+  ],
+  "master_source": "/export/home/wza_bs/yangzehao/TaiWei-Integration/TaiWei-Pin-3D/designs/asap7_3D/mempool_tile/import_3d_manifest.json",
+  "pdk": "asap7",
+  "schema_version": 1
+}

@@ -14,7 +14,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 0.035 0.07 0.105 ;
     END
   END w0_wd_in[0]
@@ -23,7 +23,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 5.355 0.07 5.425 ;
     END
   END w0_wd_in[1]
@@ -32,7 +32,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 10.675 0.07 10.745 ;
     END
   END w0_wd_in[2]
@@ -41,7 +41,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 15.995 0.07 16.065 ;
     END
   END w0_wd_in[3]
@@ -50,7 +50,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 21.315 0.07 21.385 ;
     END
   END w0_wd_in[4]
@@ -59,7 +59,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 26.635 0.07 26.705 ;
     END
   END w0_wd_in[5]
@@ -68,7 +68,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 31.955 0.07 32.025 ;
     END
   END w0_wd_in[6]
@@ -77,7 +77,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 37.275 0.07 37.345 ;
     END
   END w0_wd_in[7]
@@ -86,7 +86,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 42.595 0.07 42.665 ;
     END
   END w0_wd_in[8]
@@ -95,7 +95,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 47.915 0.07 47.985 ;
     END
   END w0_wd_in[9]
@@ -104,7 +104,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 53.235 0.07 53.305 ;
     END
   END w0_wd_in[10]
@@ -113,7 +113,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 58.555 0.07 58.625 ;
     END
   END w0_wd_in[11]
@@ -122,7 +122,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 63.875 0.07 63.945 ;
     END
   END w0_wd_in[12]
@@ -131,7 +131,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 69.195 0.07 69.265 ;
     END
   END w0_wd_in[13]
@@ -140,7 +140,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 74.515 0.07 74.585 ;
     END
   END w0_wd_in[14]
@@ -149,7 +149,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 79.835 0.07 79.905 ;
     END
   END w0_wd_in[15]
@@ -158,7 +158,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 85.155 0.07 85.225 ;
     END
   END w0_wd_in[16]
@@ -167,7 +167,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 90.475 0.07 90.545 ;
     END
   END w0_wd_in[17]
@@ -176,7 +176,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 95.795 0.07 95.865 ;
     END
   END w0_wd_in[18]
@@ -185,7 +185,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 101.115 0.07 101.185 ;
     END
   END w0_wd_in[19]
@@ -194,7 +194,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 106.435 0.07 106.505 ;
     END
   END w0_wd_in[20]
@@ -203,7 +203,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 111.755 0.07 111.825 ;
     END
   END w0_wd_in[21]
@@ -212,7 +212,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 117.075 0.07 117.145 ;
     END
   END w0_wd_in[22]
@@ -221,7 +221,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 122.395 0.07 122.465 ;
     END
   END w0_wd_in[23]
@@ -230,7 +230,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 127.715 0.07 127.785 ;
     END
   END w0_wd_in[24]
@@ -239,7 +239,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 133.035 0.07 133.105 ;
     END
   END w0_wd_in[25]
@@ -248,7 +248,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 138.355 0.07 138.425 ;
     END
   END w0_wd_in[26]
@@ -257,7 +257,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 143.675 0.07 143.745 ;
     END
   END w0_wd_in[27]
@@ -266,7 +266,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 148.995 0.07 149.065 ;
     END
   END w0_wd_in[28]
@@ -275,7 +275,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 154.315 0.07 154.385 ;
     END
   END w0_wd_in[29]
@@ -284,7 +284,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 159.635 0.07 159.705 ;
     END
   END w0_wd_in[30]
@@ -293,7 +293,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 164.955 0.07 165.025 ;
     END
   END w0_wd_in[31]
@@ -302,7 +302,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 170.275 0.07 170.345 ;
     END
   END r0_rd_out[0]
@@ -311,7 +311,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 175.595 0.07 175.665 ;
     END
   END r0_rd_out[1]
@@ -320,7 +320,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 180.915 0.07 180.985 ;
     END
   END r0_rd_out[2]
@@ -329,7 +329,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 186.235 0.07 186.305 ;
     END
   END r0_rd_out[3]
@@ -338,7 +338,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 191.555 0.07 191.625 ;
     END
   END r0_rd_out[4]
@@ -347,7 +347,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 196.875 0.07 196.945 ;
     END
   END r0_rd_out[5]
@@ -356,7 +356,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 202.195 0.07 202.265 ;
     END
   END r0_rd_out[6]
@@ -365,7 +365,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 207.515 0.07 207.585 ;
     END
   END r0_rd_out[7]
@@ -374,7 +374,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 212.835 0.07 212.905 ;
     END
   END r0_rd_out[8]
@@ -383,7 +383,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 218.155 0.07 218.225 ;
     END
   END r0_rd_out[9]
@@ -392,7 +392,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 223.475 0.07 223.545 ;
     END
   END r0_rd_out[10]
@@ -401,7 +401,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 228.795 0.07 228.865 ;
     END
   END r0_rd_out[11]
@@ -410,7 +410,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 234.115 0.07 234.185 ;
     END
   END r0_rd_out[12]
@@ -419,7 +419,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 239.435 0.07 239.505 ;
     END
   END r0_rd_out[13]
@@ -428,7 +428,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 244.755 0.07 244.825 ;
     END
   END r0_rd_out[14]
@@ -437,7 +437,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 250.075 0.07 250.145 ;
     END
   END r0_rd_out[15]
@@ -446,7 +446,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 255.395 0.07 255.465 ;
     END
   END r0_rd_out[16]
@@ -455,7 +455,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 260.715 0.07 260.785 ;
     END
   END r0_rd_out[17]
@@ -464,7 +464,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 266.035 0.07 266.105 ;
     END
   END r0_rd_out[18]
@@ -473,7 +473,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 271.355 0.07 271.425 ;
     END
   END r0_rd_out[19]
@@ -482,7 +482,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 276.675 0.07 276.745 ;
     END
   END r0_rd_out[20]
@@ -491,7 +491,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 281.995 0.07 282.065 ;
     END
   END r0_rd_out[21]
@@ -500,7 +500,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 287.315 0.07 287.385 ;
     END
   END r0_rd_out[22]
@@ -509,7 +509,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 292.635 0.07 292.705 ;
     END
   END r0_rd_out[23]
@@ -518,7 +518,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 297.955 0.07 298.025 ;
     END
   END r0_rd_out[24]
@@ -527,7 +527,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 303.275 0.07 303.345 ;
     END
   END r0_rd_out[25]
@@ -536,7 +536,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 308.595 0.07 308.665 ;
     END
   END r0_rd_out[26]
@@ -545,7 +545,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 313.915 0.07 313.985 ;
     END
   END r0_rd_out[27]
@@ -554,7 +554,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 319.235 0.07 319.305 ;
     END
   END r0_rd_out[28]
@@ -563,7 +563,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 324.555 0.07 324.625 ;
     END
   END r0_rd_out[29]
@@ -572,7 +572,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 329.875 0.07 329.945 ;
     END
   END r0_rd_out[30]
@@ -581,7 +581,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 335.195 0.07 335.265 ;
     END
   END r0_rd_out[31]
@@ -590,7 +590,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 340.515 0.07 340.585 ;
     END
   END w0_addr_in[0]
@@ -599,7 +599,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 345.835 0.07 345.905 ;
     END
   END w0_addr_in[1]
@@ -608,7 +608,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 351.155 0.07 351.225 ;
     END
   END w0_addr_in[2]
@@ -617,7 +617,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 356.475 0.07 356.545 ;
     END
   END w0_addr_in[3]
@@ -626,7 +626,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 361.795 0.07 361.865 ;
     END
   END w0_addr_in[4]
@@ -635,7 +635,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 367.115 0.07 367.185 ;
     END
   END w0_addr_in[5]
@@ -644,7 +644,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 372.435 0.07 372.505 ;
     END
   END w0_addr_in[6]
@@ -653,7 +653,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 377.755 0.07 377.825 ;
     END
   END w0_addr_in[7]
@@ -662,7 +662,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 383.075 0.07 383.145 ;
     END
   END w0_addr_in[8]
@@ -671,7 +671,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 388.395 0.07 388.465 ;
     END
   END w0_addr_in[9]
@@ -680,7 +680,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 393.715 0.07 393.785 ;
     END
   END r0_addr_in[0]
@@ -689,7 +689,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 399.035 0.07 399.105 ;
     END
   END r0_addr_in[1]
@@ -698,7 +698,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 404.355 0.07 404.425 ;
     END
   END r0_addr_in[2]
@@ -707,7 +707,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 409.675 0.07 409.745 ;
     END
   END r0_addr_in[3]
@@ -716,7 +716,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 414.995 0.07 415.065 ;
     END
   END r0_addr_in[4]
@@ -725,7 +725,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 420.315 0.07 420.385 ;
     END
   END r0_addr_in[5]
@@ -734,7 +734,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 425.635 0.07 425.705 ;
     END
   END r0_addr_in[6]
@@ -743,7 +743,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 430.955 0.07 431.025 ;
     END
   END r0_addr_in[7]
@@ -752,7 +752,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 436.275 0.07 436.345 ;
     END
   END r0_addr_in[8]
@@ -761,7 +761,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 441.595 0.07 441.665 ;
     END
   END r0_addr_in[9]
@@ -770,7 +770,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 446.915 0.07 446.985 ;
     END
   END w0_we_in
@@ -779,7 +779,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 452.235 0.07 452.305 ;
     END
   END w0_ce_in
@@ -788,7 +788,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 457.555 0.07 457.625 ;
     END
   END w0_clk
@@ -797,7 +797,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 462.875 0.07 462.945 ;
     END
   END r0_ce_in
@@ -806,7 +806,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     USE SIGNAL ;
     SHAPE ABUTMENT ;
     PORT
-      LAYER metal3 ;
+      LAYER M3 ;
       RECT 0 468.195 0.07 468.265 ;
     END
   END r0_clk
@@ -814,7 +814,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     DIRECTION INOUT ;
     USE GROUND ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 1 0.84 1.28 484.96 ;
       RECT 3.24 0.84 3.52 484.96 ;
       RECT 5.48 0.84 5.76 484.96 ;
@@ -892,7 +892,7 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     DIRECTION INOUT ;
     USE POWER ;
     PORT
-      LAYER metal4 ;
+      LAYER M4 ;
       RECT 2.12 0.84 2.4 484.96 ;
       RECT 4.36 0.84 4.64 484.96 ;
       RECT 6.6 0.84 6.88 484.96 ;
@@ -967,9 +967,9 @@ MACRO ht45_leon3vtabus_tensorFile_0_1_ext
     END
   END VDD
   OBS
-    LAYER metal1 ;
+    LAYER M1 ;
     RECT 0 0 159.98 485.8 ;
-    LAYER metal2 ;
+    LAYER M2 ;
     RECT 0 0 159.98 485.8 ;
   END
 END ht45_leon3vtabus_tensorFile_0_1_ext

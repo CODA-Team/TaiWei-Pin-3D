@@ -47,8 +47,18 @@
   "prepend_rtl": [],
   "rtl_filelist_tcl": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/RTL/tpu/rtl/rtl_filelist.tcl",
   "schema_version": 1,
-  "sdc_sha256": "253cb61b8f84a0f9ac9ba6af334186cce3df32bc89b67c1797b72c1bab3cb1d4",
+  "sdc_normalization": {
+    "clock_name": "core_clock",
+    "clock_port": "clk",
+    "io_pct": 0.2,
+    "period": 200.0,
+    "policy": "TaiWei clock metadata; ordinary I/O fraction 0.2; mempool_tile dedicated I/O preserved",
+    "unit": "ps"
+  },
+  "sdc_original_relative": "constraint.source.sdc",
+  "sdc_sha256": "bf4da3809d2fecc136b71952aa43637b3106395180549bda300eaaea6970318f",
   "sdc_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/SDC/tpu/tpu_asap7.sdc",
+  "sdc_source_sha256": "253cb61b8f84a0f9ac9ba6af334186cce3df32bc89b67c1797b72c1bab3cb1d4",
   "single_compilation_unit": false,
   "source_root": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/asap7/RTL/tpu",
   "top": "tpu"
