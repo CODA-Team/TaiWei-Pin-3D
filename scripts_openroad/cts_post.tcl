@@ -83,7 +83,7 @@ if {[info exists ::env(SKIP_CTS_POST_REPAIR_TIMING)]} {
   set skip_cts_post_repair $::env(SKIP_CTS_REPAIR_TIMING)
 }
 if {!$skip_cts_post_repair} {
-  repair_timing_helper
+  pin3d_repair_timing_helper
   set result [catch {detailed_placement} msg]
   if {$result != 0} {
     save_progress 4_cts_error

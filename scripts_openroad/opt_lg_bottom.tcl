@@ -39,6 +39,15 @@ set attribution_report [file join $LOG_DIR "legalize_bottom.cross_tier.delta.rpt
 # mark_insts_by_master "*upper*" FIRM
 
 apply_tier_policy bottom -fixlib 1 -allow_net bottom-only
+source $::env(OPENROAD_SCRIPTS_DIR)/tier_local_tree.tcl
+set local_tree_stats [pin3d_build_local_trees_for_tier bottom -report [file join $LOG_DIR "legalize_bottom.local_tree.rpt"]]
+if {[dict get $local_tree_stats buffers] > 0} {
+  log_cmd detailed_placement
+  set local_tree_topology [pin3d_validate_and_repair_split_topology "3_4_lg_bottom_local_tree" $LOG_DIR $RESULTS_DIR 0]
+  if {[dict get $local_tree_topology violated] > 0} {
+    error "PIN3D split topology validation failed after bottom local-tree construction"
+  }
+}
 report_cross_tier_snapshot $before_report -label "legalize_bottom before"
 report_mixed_fanout_snapshot $mixed_before_report -label "legalize_bottom before"
 report_split_structure_snapshot $split_before_report -label "legalize_bottom before"

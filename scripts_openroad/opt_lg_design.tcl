@@ -21,7 +21,7 @@ set enable_tie_fanout [_opt_lg_env_flag OPENROAD_OPT_LG_ENABLE_TIE_FANOUT 1]
 puts "Perform buffer insertion..."
 
 if {$enable_repair_design} {
-  repair_timing_helper
+  pin3d_repair_timing_helper
 } else {
   puts "Skip repair_design because OPENROAD_OPT_LG_ENABLE_REPAIR_DESIGN=off"
 }

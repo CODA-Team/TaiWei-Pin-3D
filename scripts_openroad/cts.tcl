@@ -109,7 +109,7 @@ if {[info exists ::env(OPENROAD_CTS_OWNER_REPAIR_TIMING)]} {
   set skip_cts_post_repair $::env(OPENROAD_CTS_OWNER_REPAIR_TIMING)
 }
 if {!$skip_cts_post_repair} {
-  repair_timing_helper
+  pin3d_repair_timing_helper
   set result [catch {detailed_placement} msg]
   if {$result != 0} {
     save_progress 4_0_cts_error

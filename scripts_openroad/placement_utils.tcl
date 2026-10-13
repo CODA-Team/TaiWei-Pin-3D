@@ -246,6 +246,36 @@ proc _set_dont_use {cells} {
   }
 }
 
+# A full 3D optimization stage may switch between upper and bottom inside one
+# OpenROAD process. Clear the previous tier's library mask before installing
+# the next one; otherwise the second repair pass has no legal tier cell left.
+proc _unset_dont_use {cells} {
+  if {![llength $cells]} { return }
+  if {![llength [info commands unset_dont_use]]} {
+    error "OpenROAD does not provide unset_dont_use; cannot switch tier repair libraries safely"
+  }
+  foreach c $cells {
+    unset_dont_use $c
+  }
+}
+
+proc _configure_tier_dont_use {tier dnu_up dnu_bottom} {
+  set tier [string tolower $tier]
+  if {$tier ni {upper bottom}} {
+    error "_configure_tier_dont_use: tier must be upper or bottom"
+  }
+
+  _unset_dont_use [lsort -unique [concat $dnu_up $dnu_bottom]]
+  if {[info exists ::env(DONT_USE_CELLS)] && $::env(DONT_USE_CELLS) ne ""} {
+    _set_dont_use [_expand_libcells $::env(DONT_USE_CELLS)]
+  }
+  if {$tier eq "upper"} {
+    _set_dont_use $dnu_up
+  } else {
+    _set_dont_use $dnu_bottom
+  }
+}
+
 # FastRoute fallback setup (can be overridden by external Tcl)
 proc fastroute_setup {} {
   # Prefer user-provided external script
@@ -1886,6 +1916,127 @@ proc _protect_pin3d_split_buffers {quiet {protect 1}} {
     }
   }
   return $touched
+}
+
+# OpenROAD's hold repair first collects timing-violating fanouts and only
+# afterwards removes dont_touch loads.  A BTerm-driven dual-boundary net can
+# therefore reach insertBufferBeforeLoads with an empty load set when the
+# selected fanout is a protected split buffer (RSZ-3015/RSZ-3009).  Keep setup
+# repair fully enabled, but guard the immutable port-root nets during the hold
+# pass so repair continues below the already-built tier-local tree instead of
+# trying to alter the cross-tier boundary.
+proc _pin3d_bterm_crossing_root_net_names {} {
+  array set seen {}
+  set net_names {}
+  foreach record [pin3d_read_split_manifest] {
+    if {![dict exists $record record_type] ||
+        [dict get $record record_type] ne "dual_boundary" ||
+        ![dict exists $record driver_kind] ||
+        [dict get $record driver_kind] ne "bterm" ||
+        ![dict exists $record original_net]} {
+      continue
+    }
+    set net_name [dict get $record original_net]
+    if {$net_name eq "" || [info exists seen($net_name)]} {
+      continue
+    }
+    set seen($net_name) 1
+    lappend net_names $net_name
+  }
+  return [lsort $net_names]
+}
+
+proc _pin3d_begin_bterm_hold_guard {net_names} {
+  set saved_states [dict create]
+  set protected 0
+  set already_protected 0
+  set failures 0
+  foreach net_name $net_names {
+    set net_obj [_pin3d_find_net_by_name $net_name]
+    if {$net_obj eq "" || $net_obj eq "NULL"} {
+      incr failures
+      puts "WARN(OR): cannot resolve PIN3D BTerm port-root net $net_name"
+      continue
+    }
+    if {[catch {set original_state [$net_obj isDoNotTouch]} err]} {
+      incr failures
+      puts "WARN(OR): cannot read dont_touch state for port-root net $net_name : $err"
+      continue
+    }
+    dict set saved_states $net_name $original_state
+    if {$original_state} {
+      incr already_protected
+      continue
+    }
+    if {[catch {$net_obj setDoNotTouch 1} err]} {
+      incr failures
+      puts "WARN(OR): cannot enable hold guard for port-root net $net_name : $err"
+    } else {
+      incr protected
+    }
+  }
+  puts "INFO(OR): PIN3D BTerm hold guard enabled protected=$protected already_protected=$already_protected failures=$failures nets=[join $net_names ,]"
+  if {$failures > 0} {
+    error "Failed to protect one or more PIN3D BTerm port-root nets for hold repair"
+  }
+  return $saved_states
+}
+
+proc _pin3d_end_bterm_hold_guard {saved_states} {
+  set restored 0
+  set failures 0
+  dict for {net_name original_state} $saved_states {
+    set net_obj [_pin3d_find_net_by_name $net_name]
+    if {$net_obj eq "" || $net_obj eq "NULL"} {
+      incr failures
+      puts "WARN(OR): cannot resolve guarded port-root net $net_name during restore"
+      continue
+    }
+    if {[catch {$net_obj setDoNotTouch $original_state} err]} {
+      incr failures
+      puts "WARN(OR): cannot restore port-root net $net_name dont_touch=$original_state : $err"
+    } else {
+      incr restored
+    }
+  }
+  puts "INFO(OR): PIN3D BTerm hold guard released restored=$restored failures=$failures"
+  if {$failures > 0} {
+    error "Failed to restore one or more PIN3D BTerm port-root nets after hold repair"
+  }
+}
+
+proc pin3d_repair_timing_helper {args} {
+  if {[llength [info commands _pin3d_boolean_env]] &&
+      ![_pin3d_boolean_env PIN3D_PORT_ROOT_HOLD_GUARD 1]} {
+    return [repair_timing_helper {*}$args]
+  }
+
+  set port_root_nets [_pin3d_bterm_crossing_root_net_names]
+  if {[llength $port_root_nets] == 0} {
+    return [repair_timing_helper {*}$args]
+  }
+
+  # Explicit one-phase requests retain their requested behavior.  Current
+  # Pin3D stages call this helper without -setup/-hold and take the guarded
+  # split path below.
+  if {[lsearch -exact $args -setup] >= 0 ||
+      [lsearch -exact $args -hold] >= 0} {
+    return [repair_timing_helper {*}$args]
+  }
+
+  puts "INFO(OR): PIN3D timing repair split into setup/hold port_root_guard_nets=[llength $port_root_nets]"
+  repair_timing_helper {*}$args -setup
+
+  set saved_states [_pin3d_begin_bterm_hold_guard $port_root_nets]
+  set code [catch {repair_timing_helper {*}$args -hold} result options]
+  set restore_code [catch {_pin3d_end_bterm_hold_guard $saved_states} restore_result restore_options]
+  if {$restore_code} {
+    return -options $restore_options $restore_result
+  }
+  if {$code} {
+    return -options $options $result
+  }
+  return $result
 }
 
 

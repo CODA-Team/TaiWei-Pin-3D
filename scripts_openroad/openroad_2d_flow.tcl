@@ -131,7 +131,8 @@ proc global_route_helper { } {
     set_dont_use $::env(DONT_USE_CELLS)
   }
 
-  if {[env_var_exists_and_non_empty SKIP_INCREMENTAL_REPAIR] && !$::env(SKIP_INCREMENTAL_REPAIR) } {
+  set skip_incremental_repair [_pin3d_boolean_env SKIP_INCREMENTAL_REPAIR 0]
+  if {!$skip_incremental_repair} {
 
     # Repair design using global route parasitics
     repair_design_helper

@@ -77,7 +77,7 @@ if { ![info exists ::env(SKIP_CTS_REPAIR_TIMING)] } {
 }
 if { $::env(SKIP_CTS_REPAIR_TIMING) } {
 
-  repair_timing_helper
+  pin3d_repair_timing_helper
 
   set result [catch { detailed_placement } msg]
   if { $result != 0 } {

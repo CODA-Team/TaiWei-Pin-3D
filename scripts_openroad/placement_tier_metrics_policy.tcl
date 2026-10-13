@@ -1672,12 +1672,12 @@ proc apply_tier_policy {tier args} {
   set total_start_ms [clock milliseconds]
   set fixlib_start_ms $total_start_ms
 
+  if {$opt(-fixlib)} {
+    _configure_tier_dont_use $tier [_expand_libcells $dnu_up] [_expand_libcells $dnu_bot]
+  }
+
   if {$tier eq "upper"} {
     # dont_use for synthesis/placement choices
-    if {$opt(-fixlib)} { 
-      _set_dont_use [_expand_libcells $dnu_up] 
-    }
-
     set ::env(TIEHI_CELL_AND_PORT) $::env(UPPER_TIEHI_CELL_AND_PORT)
     set ::env(TIELO_CELL_AND_PORT) $::env(UPPER_TIELO_CELL_AND_PORT)
     if {[info exists ::env(UPPER_SITE)]} { set ::env(PLACE_SITE) $::env(UPPER_SITE) }
@@ -1686,10 +1686,6 @@ proc apply_tier_policy {tier args} {
       puts "INFO(OR): Tier=UPPER applied."
     }
   } else {
-    if {$opt(-fixlib)} { 
-      _set_dont_use [_expand_libcells $dnu_bot] 
-    }
-
     set ::env(TIEHI_CELL_AND_PORT) $::env(BOTTOM_TIEHI_CELL_AND_PORT)
     set ::env(TIELO_CELL_AND_PORT) $::env(BOTTOM_TIELO_CELL_AND_PORT)
     if {[info exists ::env(BOTTOM_SITE)]} { set ::env(PLACE_SITE) $::env(BOTTOM_SITE) }

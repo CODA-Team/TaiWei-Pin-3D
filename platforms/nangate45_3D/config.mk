@@ -100,6 +100,11 @@ export TAP_CELL_NAME = TAPCELL_X1_bottom
 export CELL_PAD_IN_SITES_GLOBAL_PLACEMENT ?= 0
 export CELL_PAD_IN_SITES_DETAIL_PLACEMENT ?= 0
 export PLACE_DENSITY ?= 0.30
+export PIN3D_LOCAL_TREE_ENABLE ?= 1
+export PIN3D_LOCAL_TREE_MIN_FANOUT ?= 32
+export PIN3D_PORT_ROOT_MIN_FANOUT ?= 32
+export PIN3D_LOCAL_TREE_BRANCH_FACTOR ?= 32
+export PIN3D_PORT_ROOT_HOLD_GUARD ?= 1
 
 # 3D tier-related (based on Cadence structured variables)
 export FILL_CELLS_UPPER  ?= FILLCELL_X1_upper  FILLCELL_X2_upper  FILLCELL_X4_upper  \
@@ -121,6 +126,10 @@ export CTS_BUF_CELL ?= BUF_X4_bottom
 # -------- Route --------
 export MIN_ROUTING_LAYER ?= M2
 export MAX_ROUTING_LAYER ?= M2_m
+# The global-route ODB contains upper M1_m pin-access guide stubs even though
+# M1_m is intentionally outside the M2-M2_m global-routing range.  Include it
+# only while detail_route.tcl reconstructs GRT edge usage from that ODB.
+export PIN3D_GRT_RELOAD_MAX_ROUTING_LAYER ?= M1_m
 
 # OpenROAD specific script (kept for mixed-flow)
 export FASTROUTE_TCL ?= $(PLATFORM_DIR)/fastroute.tcl

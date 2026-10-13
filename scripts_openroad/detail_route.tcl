@@ -36,6 +36,20 @@ apply_tier_policy [or_cts_owner_tier] -fixlib 1 -allow_net all
 report_cross_tier_snapshot $before_report -label "route before"
 report_cross_tier_snapshot $clock_before_report -label "route clock before" -clock_only 1
 
+# A routed ODB can contain short pin-access guide stubs on a terminal routing
+# layer just outside the global-routing range.  The mirrored Nangate45 stack,
+# for example, routes signals on M2-M2_m but upper-die pins live on M1_m.  GRT
+# must include that terminal layer while reconstructing edge usage from the
+# persisted guides; otherwise grt::have_routes rejects the M1_m stub as layer
+# 19 when its FastRoute grid only spans layers 1-18.  This widens only the
+# detail-stage guide reload and leaves the global-route range unchanged.
+if {[env_var_exists_and_non_empty PIN3D_GRT_RELOAD_MAX_ROUTING_LAYER]} {
+  set reload_min_layer [_get MIN_ROUTING_LAYER]
+  set reload_max_layer $::env(PIN3D_GRT_RELOAD_MAX_ROUTING_LAYER)
+  puts "INFO(OR): Expanding GRT guide-reload layers to ${reload_min_layer}-${reload_max_layer}"
+  set_routing_layers -signal ${reload_min_layer}-${reload_max_layer}
+}
+
 if {![grt::have_routes]} {
   error "Global routing failed, run `make gui_grt` and inspect $::global_route_congestion_report"
 }
