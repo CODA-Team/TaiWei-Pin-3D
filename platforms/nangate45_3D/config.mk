@@ -75,8 +75,18 @@ export ABC_LOAD_IN_FF    = 3.898
 export PLACE_SITE   = FreePDK45_38x28_10R_NP_162NW_34O
 export UPPER_SITE   = FreePDK45_38x28_10R_NP_162NW_34O
 export BOTTOM_SITE  = FreePDK45_38x28_10R_NP_162NW_34O
-export IO_PLACER_H ?= M5
-export IO_PLACER_V ?= M6
+# Keep legacy aliases on the bottom stack for 2D/fallback scripts. The 3D IO
+# stage uses the explicit per-tier layers below with TritonPart pin assignments.
+export IO_PLACER_H_BOTTOM ?= M5
+export IO_PLACER_V_BOTTOM ?= M6
+export IO_PLACER_H_UPPER  ?= M5_m
+export IO_PLACER_V_UPPER  ?= M6_m
+export IO_PLACER_H ?= $(IO_PLACER_H_BOTTOM)
+export IO_PLACER_V ?= $(IO_PLACER_V_BOTTOM)
+# Direct-cut HBT pitch: 0.8 + 0.2 = 1.0 um.
+export HB_CUT_LAYER ?= hb_layer
+export HB_LAYER_WIDTH_UM ?= 0.8
+export HB_LAYER_SPACING_UM ?= 0.2
 export HBT_MAX_CORE_UTILIZATION ?= 0.8
 export MAKE_TRACKS ?= $(PLATFORM_DIR)/make_tracks.tcl
 # PDN / Endcap / Welltie (based on Cadence)

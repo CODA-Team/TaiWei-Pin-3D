@@ -31,7 +31,7 @@ fi
 export OPENROAD_BIN=../../../ORFS-Research/tools/install/OpenROAD/bin/openroad
 export CDS_BIN=$(which innovus)
 export NUM_CORES=16
-export CDS_RC_SETUP_TCL=""
+export CDS_RC_SETUP_TCL="${CDS_RC_SETUP_TCL:-}"
 
 # ----------------- Tcl scripts -------------------------------
 export TCL_GEN_PATTERNS="$PROJ_ROOT/script/01_gen_patterns.tcl"
@@ -39,7 +39,17 @@ export TCL_CDS_EXTRACT="$PROJ_ROOT/script/02_cds_extract.tcl"
 export TCL_GEN_RULES="$PROJ_ROOT/script/03_ord_gen_rules.tcl"
 
 # ----------------- 基于FLOW_VARIANT的路径 -----------------------
-export TECH_LEF="$PROJ_ROOT/input/${FLOW_VARIANT}.lef"
+if [[ "${FLOW_VARIANT}" == "asap7_tech_1x_2A6M7M_hbrdl" ]]; then
+    # Keep RC calibration tied to the exact technology LEF used by the
+    # optional HBT redistribution-layer routing flow.
+    export TECH_LEF="$PROJ_ROOT/../asap7_3D/lef/asap7_tech_1x_2A6M7M_hbrdl.lef"
+    # HBM_B/HBM_T use 0.032um wires on a 1.0um center pitch.  The final
+    # multiplier samples their actual 0.968um edge-to-edge wire spacing.
+    export RCX_PATTERN_S_LIST="1 2 2.5 3 3.5 4 4.5 5 6 8 10 12 30.25"
+else
+    export TECH_LEF="$PROJ_ROOT/input/${FLOW_VARIANT}.lef"
+    unset RCX_PATTERN_S_LIST
+fi
 export RCX_RULES="$PROJ_ROOT/output/${FLOW_VARIANT}.rcx_patterns.rules"
 
 # ----------------- Work / output paths -----------------------
@@ -53,7 +63,7 @@ export PATTERN_V="$WORK_DIR/patterns.v"
 export PATTERN_SPEF="$CDS_OUT_DIR/patterns.spef"
 
 # 创建目录
-mkdir -p "$WORK_DIR" "$CDS_OUT_DIR" "$ORD_OUT_DIR" "$LOG_DIR"
+mkdir -p "$WORK_DIR" "$CDS_OUT_DIR" "$ORD_OUT_DIR" "$LOG_DIR" "$(dirname "$RCX_RULES")"
 
 # 打印配置信息（可选）
 echo "[ENV] Config loaded: FLOW_VARIANT=$FLOW_VARIANT" >&2

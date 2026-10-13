@@ -8,6 +8,14 @@ if {![info exists ::env(IO_PLACER_H)] || ![info exists ::env(IO_PLACER_V)]} {
 set LAYER_H $::env(IO_PLACER_H)
 set LAYER_V $::env(IO_PLACER_V)
 
+proc io_port_names {port_objects} {
+  set names {}
+  foreach port $port_objects {
+    lappend names [get_full_name $port]
+  }
+  return [lsort -dictionary $names]
+}
+
 proc get_die_bbox {} {
   return [ord::get_die_area]
 }
@@ -114,4 +122,3 @@ proc sanitize_ports {ports all_ports} {
   }
   return [lsort -dictionary -unique $keep]
 }
-

@@ -33,9 +33,18 @@ read_lef $tech_lef
 set LEN     100
 
 puts "INFO: \[PATTERN\] Generating bench wires..."
-bench_wires \
-  -all \
-  -len $LEN
+if {[info exists ::env(RCX_PATTERN_S_LIST)] && $::env(RCX_PATTERN_S_LIST) ne ""} {
+  set pattern_s_list $::env(RCX_PATTERN_S_LIST)
+  puts "INFO: \[PATTERN\] Spacing multipliers = $pattern_s_list"
+  bench_wires \
+    -all \
+    -len $LEN \
+    -s_list $pattern_s_list
+} else {
+  bench_wires \
+    -all \
+    -len $LEN
+}
 
 puts "INFO: \[PATTERN\] Generating bench Verilog to $pattern_v"
 bench_verilog $pattern_v

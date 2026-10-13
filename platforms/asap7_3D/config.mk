@@ -6,13 +6,31 @@
 export PROCESS ?= 7
 
 # -------- Tech / Libs --------
+# Opt in with ASAP7_HBT_RDL=1.  The default direct M7/hb_layer/M6_m LEF is
+# unchanged.  The optional view inserts HBM_B/HBM_T and matching transition
+# cuts around hb_layer.
+export ASAP7_HBT_RDL ?= 0
+export ASAP7_HBT_RDL_GCELL_SIZE_UM ?= 1.1
+# A regenerated extraction deck may be supplied here.  The legacy 6M7M deck
+# is deliberately not reused when the two additional routing layers are on.
+export ASAP7_HBT_RDL_RCX_RULES ?= $(PLATFORM_DIR)/asap7_tech_1x_2A6M7M_hbrdl.rcx_patterns.rules
+ASAP7_OPENROAD_TECH_LEF := $(PLATFORM_DIR)/lef/asap7_tech_1x_2A6M7M.lef
+ASAP7_OPENROAD_SET_RC_TCL := $(PLATFORM_DIR)/setRC_2A6M7M.tcl
+ASAP7_OPENROAD_MAKE_TRACKS := $(PLATFORM_DIR)/openRoad/make_tracks.2A6M7M.tcl
+ifneq (,$(filter 1 yes true on,$(strip $(ASAP7_HBT_RDL))))
+  ASAP7_OPENROAD_TECH_LEF := $(PLATFORM_DIR)/lef/asap7_tech_1x_2A6M7M_hbrdl.lef
+  ASAP7_OPENROAD_SET_RC_TCL := $(PLATFORM_DIR)/setRC_2A6M7M_hbrdl.tcl
+  ASAP7_OPENROAD_MAKE_TRACKS := $(PLATFORM_DIR)/openRoad/make_tracks.2A6M7M_hbrdl.tcl
+  export GLOBAL_ROUTE_ARGS += -gcell_size $(ASAP7_HBT_RDL_GCELL_SIZE_UM)
+endif
+
 ifneq (,$(filter $(USE_FLOW),openroad OpenROAD))
-  export TECH_LEF  ?= $(PLATFORM_DIR)/lef/asap7_tech_1x_2A6M7M.lef
+  export TECH_LEF  ?= $(ASAP7_OPENROAD_TECH_LEF)
   export RCX_RULES         ?= $(PLATFORM_DIR)/asap7_tech_1x_6M7M.rcx_patterns.rules
   export MIN_ROUTING_LAYER ?= M2
   export MAX_ROUTING_LAYER ?= M2_m
-  export SET_RC_TCL               ?= $(PLATFORM_DIR)/setRC_2A6M7M.tcl
-  export MAKE_TRACKS       ?= $(PLATFORM_DIR)/openRoad/make_tracks.2A6M7M.tcl
+  export SET_RC_TCL        ?= $(ASAP7_OPENROAD_SET_RC_TCL)
+  export MAKE_TRACKS       ?= $(ASAP7_OPENROAD_MAKE_TRACKS)
 endif
 export MIN_CLK_ROUTING_LAYER ?= M2
 # export CREATE_OBS_STAGE?="1"
@@ -25,6 +43,14 @@ else
 endif
 # export DEFAULT_3D_TECH_LEF ?= $(PLATFORM_DIR)/lef/asap7_tech_1x_6M7M.lef
 export RCX_RULES         ?= $(PLATFORM_DIR)/asap7_tech_1x_6M7M.rcx_patterns.rules
+ifneq (,$(filter 1 yes true on,$(strip $(ASAP7_HBT_RDL))))
+  ifeq ($(strip $(ASAP7_HBT_RDL_RCX_RULES)),)
+    override RCX_RULES :=
+    unexport RCX_RULES
+  else
+    override export RCX_RULES := $(ASAP7_HBT_RDL_RCX_RULES)
+  endif
+endif
 export SET_RC_TCL               ?= $(PLATFORM_DIR)/setRC_6M7M.tcl
 # export MAKE_TRACKS       ?= $(PLATFORM_DIR)/make_tracks_cds.tcl
 # 标准单元 LEF（分层）
@@ -92,10 +118,18 @@ export ADDER_MAP_FILE  ?= $(PLATFORM_DIR)/yoSys/cells_adders_R.v
 export PLACE_SITE   = asap7sc7p5t
 export UPPER_SITE   = asap7sc7p5t
 export BOTTOM_SITE  = asap7sc7p5t
-# export IO_PLACER_H ?= M4
-# export IO_PLACER_V ?= M5
-export IO_PLACER_H ?= M4
-export IO_PLACER_V ?= M3
+# Keep legacy aliases on the bottom stack for 2D/fallback scripts. The 3D IO
+# stage uses the explicit per-tier layers below with TritonPart pin assignments.
+export IO_PLACER_H_BOTTOM ?= M4
+export IO_PLACER_V_BOTTOM ?= M3
+export IO_PLACER_H_UPPER  ?= M4_m
+export IO_PLACER_V_UPPER  ?= M3_m
+export IO_PLACER_H ?= $(IO_PLACER_H_BOTTOM)
+export IO_PLACER_V ?= $(IO_PLACER_V_BOTTOM)
+# Direct-cut HBT pitch: 0.032 + 0.968 = 1.0 um.
+export HB_CUT_LAYER ?= hb_layer
+export HB_LAYER_WIDTH_UM ?= 0.032
+export HB_LAYER_SPACING_UM ?= 0.968
 export HBT_MAX_CORE_UTILIZATION ?= 0.8
 # PDN / Endcap / Welltie（3D 策略）
 export PDN_TCL      ?= $(PLATFORM_DIR)/openRoad/pdn/grid_strategy-M1-M2-M5-M6.tcl

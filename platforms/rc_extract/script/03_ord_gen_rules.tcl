@@ -30,14 +30,10 @@ file mkdir $handoff_dir
 read_lef $tech_lef
 read_def $pattern_def
 
-# ----------------- Step 2: build bench DB -------------------
-# Rebuild bench pattern database (no new patterns are created).
-bench_wires -db_only
-
-# ----------------- Step 3: read golden SPEF -----------------
+# ----------------- Step 2: read golden SPEF -----------------
 bench_read_spef $pattern_spef
 
-# ----------------- Step 4: write RCX rules ------------------
+# ----------------- Step 3: write RCX rules ------------------
 
 puts "INFO: \[RCX\] Writing RCX rules..."
 puts "INFO: \[RCX\]   dir  = $handoff_dir"
@@ -46,7 +42,7 @@ write_rules -dir $handoff_dir
 
 puts "INFO: \[RCX\] RCX rules generation completed."
 
-# ----------------- Optional: self-check via diff_spef -------
+# ----------------- Optional Step 4: self-check via diff_spef
 # You can optionally re-extract patterns using the generated
 # RCX rules and compare with the golden SPEF, e.g.:
 #

@@ -25,7 +25,10 @@ handoff_log_paths $stage_paths
 load_design $DEF_IN $SDC_IN "Starting IO assignment"
 source $::env(OPENROAD_SCRIPTS_DIR)/placement_utils.tcl
 source $::env(OPENROAD_SCRIPTS_DIR)/floorplan_utils.tcl
+source $::env(OPENROAD_SCRIPTS_DIR)/io_place_3d_helpers.tcl
+set ::PIN3D_TIERED_IO 1
 source $::env(OPENROAD_SCRIPTS_DIR)/io_place.tcl
+unset ::PIN3D_TIERED_IO
 
 handoff_write_stage_outputs $stage_paths \
   -copy_sdc 1 \

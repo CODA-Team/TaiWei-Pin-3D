@@ -75,9 +75,9 @@ if {$::PAR_BAL_HI < $::PAR_BAL_LO} {
 set ::PAR_FIXED_SEED 1
 
 # hb_layer density-based cut budget knobs
-set ::HB_CUT_LAYER         "hb_layer"
-set ::HB_LAYER_WIDTH_UM    0.5
-set ::HB_LAYER_SPACING_UM  0.5
+set ::HB_CUT_LAYER         [_get HB_CUT_LAYER "hb_layer"]
+set ::HB_LAYER_WIDTH_UM    [expr {double([_get HB_LAYER_WIDTH_UM 0.5])}]
+set ::HB_LAYER_SPACING_UM  [expr {double([_get HB_LAYER_SPACING_UM 0.5])}]
 set ::HB_LAYER_RES_OHM     0.02
 set ::HB_VIA_DENSITY       0.5
 set ::CUTS_PER_NET         1

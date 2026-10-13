@@ -473,7 +473,7 @@ END M7
 
 LAYER hb_layer
   TYPE CUT ;
-  SPACING 1.568 ;
+  SPACING 0.968 ;
   WIDTH 0.032 ;
   RESISTANCE 3 ;
 END hb_layer
@@ -919,7 +919,7 @@ VIARULE hb_layerArray-0 GENERATE
     ENCLOSURE 0 0 ;
   LAYER hb_layer ;
     RECT -0.016 -0.016 0.016 0.016 ;
-    SPACING 1.568 BY 1.568 ;
+    SPACING 1.0 BY 1.0 ;
 END hb_layerArray-0
 
 VIARULE M6_m_M5_m GENERATE DEFAULT
@@ -977,7 +977,7 @@ VIARULE M2_m_M1_m GENERATE DEFAULT
 END M2_m_M1_m
 
 SPACING
-  SAMENET hb_layer hb_layer 1.568 ;
+  SAMENET hb_layer hb_layer 0.968 ;
 END SPACING
 
 END LIBRARY
