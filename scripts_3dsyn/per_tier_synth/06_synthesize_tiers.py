@@ -56,6 +56,14 @@ from flow_config import (
     SYNTHESIS_2D_LIB_FILES,
     SYNTHESIS_2D_PLATFORM_DIR,
     SYNTH_MODE,
+    TIEHI_CELL_BOTTOM,
+    TIEHI_CELL_UPPER,
+    TIEHI_PIN_BOTTOM,
+    TIEHI_PIN_UPPER,
+    TIELO_CELL_BOTTOM,
+    TIELO_CELL_UPPER,
+    TIELO_PIN_BOTTOM,
+    TIELO_PIN_UPPER,
     TOP_MODULE_NAME,
     UPPER_CELL_SUFFIX,
     UPPER_COARSE_MODULE_NAME,
@@ -91,6 +99,9 @@ GENUS_SEVERITY_SUMMARY_RE = re.compile(r"\bError\s*=\s*(\d+)\s*,\s*Fatal\s*=\s*(
 GENUS_MESSAGE_TABLE_RE = re.compile(r"^\|\s*[^|]+\|\s*(Error|Fatal)\s*\|\s*(\d+)\s*\|", re.IGNORECASE)
 GENUS_EXPLICIT_SEVERITY_RE = re.compile(r"^\s*(\*+\s*)?(Error|Fatal)\s*[:(]", re.IGNORECASE)
 GENUS_REPORT_COUNT_RE = re.compile(r"^(?P<label>.+?)\s+(?P<count>\d+)\s*$")
+GENUS_UNCLOCKED_SOURCE_RE = re.compile(
+    r"^pin:(?P<pin>\S+)\s+port:(?P<source>\S+)\s+\{Unclocked source\}$"
+)
 D2D_EXTRA_RC_TCL = os.path.join(GENUS_TMP_DIR, "06_hbt_model.tcl")
 D2D_EXTRA_RC_JSON = os.path.join(GENUS_TMP_DIR, "06_hbt_model.json")
 
@@ -146,6 +157,80 @@ def tcl_quote(value):
 
 def format_tcl_list(items):
     return " ".join(tcl_quote(item) for item in items)
+
+
+def strip_required_suffix(value, suffix, label):
+    assert value.endswith(suffix), "{} must end with {}: {}".format(label, suffix, value)
+    base = value[: -len(suffix)]
+    assert base, "{} becomes empty after removing suffix {}".format(label, suffix)
+    return base
+
+
+def homogeneous_constant_tie_specs():
+    bottom = [
+        (strip_required_suffix(TIELO_CELL_BOTTOM, BOTTOM_CELL_SUFFIX, "bottom TIELO cell"), TIELO_PIN_BOTTOM),
+        (strip_required_suffix(TIEHI_CELL_BOTTOM, BOTTOM_CELL_SUFFIX, "bottom TIEHI cell"), TIEHI_PIN_BOTTOM),
+    ]
+    upper = [
+        (strip_required_suffix(TIELO_CELL_UPPER, UPPER_CELL_SUFFIX, "upper TIELO cell"), TIELO_PIN_UPPER),
+        (strip_required_suffix(TIEHI_CELL_UPPER, UPPER_CELL_SUFFIX, "upper TIEHI cell"), TIEHI_PIN_UPPER),
+    ]
+    assert bottom == upper, "Homogeneous tiers resolve to different base tie cells: {} != {}".format(bottom, upper)
+    return bottom
+
+
+def tier_constant_tie_specs(tier):
+    if tier == "bottom":
+        return [(TIELO_CELL_BOTTOM, TIELO_PIN_BOTTOM), (TIEHI_CELL_BOTTOM, TIEHI_PIN_BOTTOM)]
+    if tier == "upper":
+        return [(TIELO_CELL_UPPER, TIELO_PIN_UPPER), (TIEHI_CELL_UPPER, TIEHI_PIN_UPPER)]
+    raise AssertionError("Unsupported tier for tie-cell configuration: {}".format(tier))
+
+
+def render_constant_tie_configuration(tie_specs):
+    assert len(tie_specs) == 2, "Expected TIELO/TIEHI specifications"
+    assert tie_specs[0] != tie_specs[1], "TIELO and TIEHI specifications must differ"
+    rendered_specs = " ".join(
+        "[list {} {}]".format(tcl_quote(cell_name), tcl_quote(port_name))
+        for cell_name, port_name in tie_specs
+    )
+    template = """proc syn3d_configure_constant_tie_cells {tie_specs} {
+  set tie_cells {}
+  foreach tie_spec $tie_specs {
+    if {[llength $tie_spec] != 2} { error "Invalid constant tie-cell specification: $tie_spec" }
+    set cell_name [lindex $tie_spec 0]
+    set port_name [lindex $tie_spec 1]
+    if {[regexp {[\[\]*?]} $cell_name]} {
+      error "Constant tie-cell name must not contain glob metacharacters: $cell_name"
+    }
+    set cell_matches [get_db lib_cells */$cell_name]
+    if {[llength $cell_matches] != 1} {
+      error "Constant tie-cell $cell_name must match exactly one loaded library cell; matches=$cell_matches"
+    }
+    set tie_cell [lindex $cell_matches 0]
+    set port_matches {}
+    foreach lib_pin [get_db $tie_cell .lib_pins] {
+      if {[get_db $lib_pin .base_name] eq $port_name} { lappend port_matches $lib_pin }
+    }
+    if {[llength $port_matches] != 1 || [get_db [lindex $port_matches 0] .direction] ne "out"} {
+      error "Constant tie-cell port $cell_name/$port_name must resolve to exactly one output pin"
+    }
+    set_db $tie_cell .avoid false
+    set_db $tie_cell .preserve false
+    lappend tie_cells $tie_cell
+  }
+  if {[lindex $tie_cells 0] eq [lindex $tie_cells 1]} {
+    error "TIELO and TIEHI resolve to the same library cell"
+  }
+  set_db use_tiehilo_for_const duplicate
+  if {[get_db / .use_tiehilo_for_const] ne "duplicate"} {
+    error "Failed to enable duplicate constant tie-cell mapping"
+  }
+  puts "SYN3D_CONSTANT_TIE_MAPPING=duplicate"
+}
+syn3d_configure_constant_tie_cells [list @TIE_SPECS@]
+"""
+    return template.replace("@TIE_SPECS@", rendered_specs)
 
 
 def collect_all_d2d_channels(wrapper_plan):
@@ -651,6 +736,8 @@ elaborate {wrapper_top}
 init_design
 read_sdc $in_sdc
 
+{constant_tie_configuration}
+
 set upper_mod [get_db modules {upper_module}]
 set bottom_mod [get_db modules {bottom_module}]
 set upper_hinst [get_db hinsts {upper_instance}]
@@ -701,7 +788,7 @@ puts "SYN3D_BOTTOM_BOUNDARY_OPTO=[get_db $bottom_mod .boundary_opto]"
 source $d2d_extra_rc_tcl
 
 check_design -unresolved > {check_design}
-check_timing_intent > {timing_intent}
+check_timing_intent -verbose > {timing_intent}
 report_timing > {pre_timing}
 
 # syn_generic
@@ -723,6 +810,14 @@ report_timing > {pre_timing}
 syn_opt -incr -effort low
 write_reports -directory $report_dir -tag final
 write_db [file join $db_dir {wrapper_top}_opt.db]
+
+# Database transformations can invalidate previously cached object handles even
+# when the corresponding hierarchical instances are preserved.  Resolve the
+# two tier instances again before issuing object-specific reports.
+set upper_hinst [get_db hinsts {upper_instance}]
+set bottom_hinst [get_db hinsts {bottom_instance}]
+if {{[llength $upper_hinst] != 1}} {{ error "Unable to resolve post-synthesis upper hinst {upper_instance}" }}
+if {{[llength $bottom_hinst] != 1}} {{ error "Unable to resolve post-synthesis bottom hinst {bottom_instance}" }}
 
 report_ungroup_modules > {ungroup}
 report_boundary_opt $upper_hinst > {upper_boundary}
@@ -752,6 +847,7 @@ exit
         upper_instance=WRAPPER_UPPER_INSTANCE_NAME,
         bottom_instance=WRAPPER_BOTTOM_INSTANCE_NAME,
         protected_top_names=format_tcl_list(protected_top_names),
+        constant_tie_configuration=render_constant_tie_configuration(homogeneous_constant_tie_specs()),
         **{key: tcl_quote(value) for key, value in reports.items()}
     )
     write_text(GENUS_TCL, tcl)
@@ -761,6 +857,9 @@ exit
     assert "ungroup $internal_design_hinsts" in loaded, "06 Tcl missing explicit internal hinst ungroup"
     assert "set_db $upper_mod .boundary_opto strict_no" in loaded, "06 Tcl missing upper boundary guard"
     assert "source $d2d_extra_rc_tcl" in loaded, "06 Tcl missing d2d extra RC source"
+    assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "06 Tcl missing duplicate constant tie mapping"
+    assert "Unable to resolve post-synthesis upper hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
+    assert "Unable to resolve post-synthesis bottom hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     return reports
 
 
@@ -861,6 +960,7 @@ def assert_hierarchical_output_contract(output_design, wrapper_plan, leaf_module
 
     upper_flatten = assert_no_design_submodule_boundaries(output_design, UPPER_COARSE_MODULE_NAME, leaf_module_types)
     bottom_flatten = assert_no_design_submodule_boundaries(output_design, BOTTOM_COARSE_MODULE_NAME, leaf_module_types)
+    constant_checks = assert_no_direct_constants_in_synthesized_design(output_design, leaf_module_types)
 
     return OrderedDict(
         [
@@ -871,6 +971,44 @@ def assert_hierarchical_output_contract(output_design, wrapper_plan, leaf_module
             ("bottom_internal_boundary", bottom_flatten),
             ("data_d2d_count", len(wrapper_plan["data_d2d_channels"])),
             ("clock_d2d_count", len(wrapper_plan["clock"]["clock_d2d_channels"])),
+            ("direct_constants", constant_checks),
+        ]
+    )
+
+
+def assert_no_direct_constants_in_synthesized_design(design, leaf_module_types):
+    cell_pin_constants = []
+    output_port_constants = []
+    for module_name in collect_reachable_module_names(
+        design, WRAPPER_TOP_MODULE_NAME, leaf_module_types
+    ):
+        module = design.get_module(module_name)
+        for port_name, port in module.ports.items():
+            if port.direction != "output":
+                continue
+            for bit_index, bit in enumerate(port.bits):
+                if not isinstance(bit, int):
+                    output_port_constants.append((module_name, port_name, bit_index, bit))
+        for cell_name, cell in module.cells.items():
+            for pin_name, bits in cell.connections.items():
+                for bit_index, bit in enumerate(bits):
+                    if not isinstance(bit, int):
+                        cell_pin_constants.append((module_name, cell_name, pin_name, bit_index, bit))
+    assert not cell_pin_constants, (
+        "Genus output retains direct constants on cell pins; duplicate tie mapping failed: {}".format(
+            cell_pin_constants[:20]
+        )
+    )
+    assert not output_port_constants, (
+        "Genus output retains direct constants on module outputs; duplicate tie mapping failed: {}".format(
+            output_port_constants[:20]
+        )
+    )
+    return OrderedDict(
+        [
+            ("cell_pin_constant_count", 0),
+            ("output_port_constant_count", 0),
+            ("mapping_mode", "duplicate"),
         ]
     )
 
@@ -992,10 +1130,74 @@ def parse_ungroup_report(path):
     )
 
 
-def analyze_reports(reports):
+def analyze_unclocked_sequential_sources(path, wrapper_design, wrapper_plan):
+    lines = read_text(path).splitlines()
+    summary_counts = []
+    records = []
+    for line in lines:
+        stripped = line.strip()
+        count_match = GENUS_REPORT_COUNT_RE.match(stripped)
+        if count_match and count_match.group("label").strip().lower() == (
+            "sequential clock pins without clock waveform"
+        ):
+            summary_counts.append(int(count_match.group("count")))
+        source_match = GENUS_UNCLOCKED_SOURCE_RE.match(stripped)
+        if source_match:
+            records.append(source_match.groupdict())
+
+    assert len(summary_counts) == 1, "Expected one unclocked sequential-pin summary in {}".format(path)
+    expected_count = summary_counts[0]
+    assert len(records) == expected_count, (
+        "Verbose timing-intent report lists {} unclocked sources but summary reports {}".format(
+            len(records), expected_count
+        )
+    )
+
+    top = wrapper_design.get_module(WRAPPER_TOP_MODULE_NAME)
+    constrained_clock_port = wrapper_plan["clock"]["source_clock_port"]
+    source_counts = OrderedDict()
+    for record in records:
+        prefix = WRAPPER_TOP_MODULE_NAME + "/"
+        assert record["source"].startswith(prefix), (
+            "Unclocked sequential pin is not driven by a wrapper primary input: {}".format(record)
+        )
+        source_name = record["source"][len(prefix) :]
+        base_name = re.sub(r"\[[0-9]+\]$", "", source_name)
+        assert base_name in top.ports, "Unclocked source port is absent from wrapper interface: {}".format(record)
+        assert top.ports[base_name].direction == "input", (
+            "Unclocked sequential source is not a primary input: {}".format(record)
+        )
+        assert base_name != constrained_clock_port, (
+            "Configured source clock lost its waveform during Genus synthesis: {}".format(record)
+        )
+        source_counts[source_name] = source_counts.get(source_name, 0) + 1
+
+    return OrderedDict(
+        [
+            ("pin_count", len(records)),
+            ("source_port_counts", source_counts),
+            ("classification", "original_unconstrained_primary_inputs"),
+        ]
+    )
+
+
+def analyze_reports(reports, wrapper_design, wrapper_plan):
     log_path = GENUS_LOG_PREFIX + ".log"
     dangerous = parse_dangerous_messages(
-        [log_path, reports["messages"], reports["timing_intent"], reports["check_design"]]
+        [log_path, reports["messages"], reports["check_design"]]
+    )
+    timing_dangerous = parse_dangerous_messages([reports["timing_intent"]])
+    timing_dangerous = [
+        hit
+        for hit in timing_dangerous
+        if not (
+            hit["pattern"] == "missing clock"
+            and "have no clock waveform driving them" in hit["text"].lower()
+        )
+    ]
+    dangerous.extend(timing_dangerous)
+    unclocked_sources = analyze_unclocked_sequential_sources(
+        reports["timing_intent"], wrapper_design, wrapper_plan
     )
     post_sdc_clock = assert_sdc_clock_period_ps(GENUS_POST_SDC, SDC_CLK_PERIOD_PS)
     upper_boundary = parse_boundary_report(reports["upper_boundary"])
@@ -1012,6 +1214,7 @@ def analyze_reports(reports):
             ("dangerous_messages", dangerous),
             ("dangerous_log_pattern_count", len(dangerous)),
             ("post_sdc_clock", post_sdc_clock),
+            ("unclocked_sequential_sources", unclocked_sources),
             ("upper_boundary", upper_boundary),
             ("bottom_boundary", bottom_boundary),
             ("ungroup", ungroup),
@@ -1153,7 +1356,7 @@ def run_homogeneous_genus():
     output_checks = assert_hierarchical_output_contract(output_design, wrapper_plan, lib_cells)
     output_checks["normalized_primary_port_count"] = len(normalized_ports)
     output_checks["normalized_primary_ports"] = normalized_ports
-    report_checks = analyze_reports(reports)
+    report_checks = analyze_reports(reports, wrapper_design, wrapper_plan)
 
     plan = build_genus_plan(
         liberty_checks=liberty_checks,
@@ -1576,6 +1779,8 @@ elaborate {wrapper_top}
 init_design
 read_sdc $in_sdc
 
+{constant_tie_configuration}
+
 set upper_mod [get_db modules {upper_module}]
 set bottom_mod [get_db modules {bottom_module}]
 set active_hinst [get_db hinsts {active_instance}]
@@ -1684,6 +1889,9 @@ exit
         pass_name=desc["pass_name"],
         active_tier=desc["active_tier"],
         frozen_tier=desc["frozen_tier"],
+        constant_tie_configuration=render_constant_tie_configuration(
+            tier_constant_tie_specs(desc["active_tier"])
+        ),
         db_opt=tcl_quote(db_opt),
         **{key: tcl_quote(value) for key, value in reports.items()}
     )
@@ -1695,6 +1903,7 @@ exit
     assert "ungroup $active_internal_design_hinsts" in loaded, "Hetero Tcl missing explicit active internal hinst ungroup"
     assert "syn_opt -incr -effort low" in loaded, "Hetero Tcl must run low-effort incremental syn_opt"
     assert "source $d2d_extra_rc_tcl" in loaded, "Hetero Tcl missing d2d extra RC source"
+    assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "Hetero Tcl missing duplicate constant tie mapping"
     return db_opt
 
 
@@ -2110,6 +2319,9 @@ def run_heterogeneous_genus():
     final_checks.update(assert_no_wrong_lib_cells(final_design, upper_lib_cells, bottom_lib_cells))
     final_checks["internal_boundaries"] = assert_final_tier_internal_boundaries_removed(
         final_design, upper_lib_cells, bottom_lib_cells
+    )
+    final_checks["direct_constants"] = assert_no_direct_constants_in_synthesized_design(
+        final_design, upper_lib_cells | bottom_lib_cells
     )
 
     plan = build_hetero_genus_plan(

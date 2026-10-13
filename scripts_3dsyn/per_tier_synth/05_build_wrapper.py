@@ -345,6 +345,79 @@ def index_primary_bits(split_plan):
     return by_label
 
 
+def analyze_primary_output_aliases(primary_by_label):
+    by_source_bit = defaultdict(list)
+    for item in primary_by_label.values():
+        if isinstance(item["bit"], int):
+            by_source_bit[item["bit"]].append(item)
+
+    alias_to_canonical = {}
+    alias_groups = []
+    for source_bit, items in by_source_bit.items():
+        if len(items) == 1:
+            continue
+
+        kinds = {item["kind"] for item in items}
+        assert kinds == {"PO"}, (
+            "Unsupported aliased primary bit {} with kinds {}: {}".format(
+                source_bit, sorted(kinds), [item["bit_label"] for item in items]
+            )
+        )
+        signatures = {
+            (
+                item["case"],
+                item["owner_tier"],
+                item.get("driver_tier"),
+                tuple(item.get("user_tiers", [])),
+            )
+            for item in items
+        }
+        assert len(signatures) == 1, (
+            "Aliased primary outputs for source bit {} have incompatible split semantics: {}".format(
+                source_bit,
+                [
+                    {
+                        "bit_label": item["bit_label"],
+                        "case": item["case"],
+                        "owner_tier": item["owner_tier"],
+                        "driver_tier": item.get("driver_tier"),
+                        "user_tiers": item.get("user_tiers", []),
+                    }
+                    for item in items
+                ],
+            )
+        )
+
+        signature = next(iter(signatures))
+        canonical = items[0]["bit_label"]
+        aliases = [item["bit_label"] for item in items[1:]]
+        for alias in aliases:
+            assert alias not in alias_to_canonical, "Duplicate primary output alias: {}".format(alias)
+            alias_to_canonical[alias] = canonical
+        alias_groups.append(
+            OrderedDict(
+                [
+                    ("source_bit", source_bit),
+                    ("canonical_bit_label", canonical),
+                    ("alias_bit_labels", aliases),
+                    (
+                        "split_signature",
+                        OrderedDict(
+                            [
+                                ("case", signature[0]),
+                                ("owner_tier", signature[1]),
+                                ("driver_tier", signature[2]),
+                                ("user_tiers", list(signature[3])),
+                            ]
+                        ),
+                    ),
+                ]
+            )
+        )
+
+    return alias_to_canonical, alias_groups
+
+
 def index_internal_d2d(split_plan):
     by_name = OrderedDict()
     for item in split_plan["internal_bits"]:
@@ -426,6 +499,7 @@ class TierActionPlan(object):
 
 def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_port_map):
     primary_by_label = index_primary_bits(split_plan)
+    primary_alias_to_canonical, primary_output_alias_groups = analyze_primary_output_aliases(primary_by_label)
     internal_by_name = index_internal_d2d(split_plan)
     generated_clock_channels = set(clock_port_map.get("generated_clock_channels", []))
     assert generated_clock_channels <= set(internal_by_name.keys()), (
@@ -514,7 +588,36 @@ def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_po
         elif item["kind"] == "PO":
             owner_name = canonical_name("po", item["port_name"], item["bit_index"])
             cross_name = canonical_name("d2d_po", item["port_name"], item["bit_index"])
-            if item["case"] == "PO-1":
+            alias_of = primary_alias_to_canonical.get(bit_label)
+            if alias_of is not None:
+                if item["case"] == "PO-1":
+                    remove_primary(owner, owner_name, "output", item, "redundant aliased primary output carrier")
+                    removed_legacy_ports.append({"tier": owner, "port": owner_name})
+                elif item["case"] == "PO-2":
+                    remove_primary(owner, owner_name, "output", item, "redundant aliased primary output carrier")
+                    remove_primary(other, cross_name, "input", item, "redundant aliased primary output consumer")
+                    remove_primary(owner, cross_name, "output", item, "redundant aliased primary output carrier")
+                    removed_legacy_ports.extend(
+                        [
+                            {"tier": owner, "port": owner_name},
+                            {"tier": other, "port": cross_name},
+                            {"tier": owner, "port": cross_name},
+                        ]
+                    )
+                elif item["case"] == "PO-3":
+                    driver = item["driver_tier"]
+                    remove_primary(driver, cross_name, "output", item, "redundant aliased primary output driver")
+                    removed_legacy_ports.append({"tier": driver, "port": cross_name})
+                    if owner in item["user_tiers"]:
+                        remove_primary(owner, cross_name, "input", item, "redundant aliased primary output consumer")
+                        removed_legacy_ports.append({"tier": owner, "port": cross_name})
+                    remove_primary(owner, owner_name, "output", item, "redundant aliased primary output pass-through")
+                    removed_legacy_ports.append({"tier": owner, "port": owner_name})
+                else:
+                    raise AssertionError(
+                        "Unsupported aliased primary output case {} for {}".format(item["case"], bit_label)
+                    )
+            elif item["case"] == "PO-1":
                 new_name = keep_primary(owner, owner_name, "output", item, wrapper_bit, "primary output driver")
                 connected_tier_ports.append({"tier": owner, "port": new_name, "direction": "output"})
             elif item["case"] == "PO-2":
@@ -558,6 +661,7 @@ def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_po
                     ("user_tiers", item.get("user_tiers", [])),
                     ("wrapper_port", item["port_name"]),
                     ("wrapper_bit", wrapper_bit),
+                    ("physical_driver_alias_of", primary_alias_to_canonical.get(bit_label)),
                     ("connected_tier_ports", connected_tier_ports),
                     ("removed_legacy_carrier_ports", removed_legacy_ports),
                 ]
@@ -629,6 +733,7 @@ def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_po
     return {
         "plans": plans,
         "primary_connections": primary_connections,
+        "primary_output_alias_groups": primary_output_alias_groups,
         "tier_interface_rewrite": tier_interface_rewrite,
         "data_d2d_channels": data_d2d_channels,
         "clock_d2d_channels": clock_d2d_channels,
@@ -1008,6 +1113,7 @@ def build_wrapper_plan(source_port_plan, action_plan, clock_port_map, merge_log,
             ("source_ports", source_port_plan["source_ports"]),
             ("tier_interface_rewrite", action_plan["tier_interface_rewrite"]),
             ("primary_connections", action_plan["primary_connections"]),
+            ("primary_output_alias_groups", action_plan["primary_output_alias_groups"]),
             ("data_d2d_channels", action_plan["data_d2d_channels"]),
             (
                 "clock",
@@ -1030,6 +1136,7 @@ def build_wrapper_plan(source_port_plan, action_plan, clock_port_map, merge_log,
                         ("data_d2d_count", len(action_plan["data_d2d_channels"])),
                         ("clock_d2d_count", len(action_plan["clock_d2d_channels"])),
                         ("removed_legacy_carrier_count", removed_count),
+                        ("primary_output_alias_group_count", len(action_plan["primary_output_alias_groups"])),
                         ("unsupported_count", 0),
                     ]
                 ),

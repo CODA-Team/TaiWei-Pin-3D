@@ -45,32 +45,21 @@ append_unique_path() {
 
 coarse_handoff_dir="${SYN3D_COARSE_SYNTH_DIR}/handoff"
 coarse_2d_lef="${coarse_handoff_dir}/lef/2d/coarse_units.lef"
-coarse_2d_lib_dir="${coarse_handoff_dir}/lib/2d"
+coarse_2d_lib="${coarse_handoff_dir}/lib/2d/coarse_units.lib"
 
 require_file "coarse synthesis netlist" "${RESULTS_DIR}/1_synth.v"
 require_file "coarse synthesis constraints" "${RESULTS_DIR}/1_synth.sdc"
 require_file "2D coarse-unit LEF" "${coarse_2d_lef}"
-
-shopt -s nullglob
-coarse_2d_libs=("${coarse_2d_lib_dir}"/*.lib)
-shopt -u nullglob
-if [[ ${#coarse_2d_libs[@]} -eq 0 ]]; then
-  echo "[3D-Syn] No 2D coarse-unit Liberty files found under: ${coarse_2d_lib_dir}" >&2
-  exit 1
-fi
+require_file "aggregate 2D coarse-unit Liberty" "${coarse_2d_lib}"
 
 additional_lefs="$(append_unique_path "${ADDITIONAL_LEFS:-}" "${coarse_2d_lef}")"
 additional_libs="${ADDITIONAL_LIBS:-}"
 partition_lefs="$(append_unique_path "${LEF_FILES}" "${coarse_2d_lef}")"
-partition_libs="${LIB_FILES}"
-for lib in "${coarse_2d_libs[@]}"; do
-  additional_libs="$(append_unique_path "${additional_libs}" "${lib}")"
-  partition_libs="$(append_unique_path "${partition_libs}" "${lib}")"
-done
+partition_libs="$(append_unique_path "${LIB_FILES}" "${coarse_2d_lib}")"
 
 echo "[3D-Syn][ORD] Starting coarse-grained tier partitioning"
 echo "[3D-Syn] 2D coarse-unit LEF : ${coarse_2d_lef}"
-echo "[3D-Syn] 2D coarse-unit LIBs: ${#coarse_2d_libs[@]} files"
+echo "[3D-Syn] 2D coarse-unit LIB : ${coarse_2d_lib}"
 
 make_args=(
   --no-print-directory

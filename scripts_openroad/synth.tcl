@@ -200,7 +200,7 @@ opt_clean -purge
 
 # Technology mapping of constant hi- and/or lo-drivers
 puts "--- Mapping hi/lo drivers. ---"
-hilomap -singleton \
+hilomap \
   -hicell {*}$::env(TIEHI_CELL_AND_PORT) \
   -locell {*}$::env(TIELO_CELL_AND_PORT)
 

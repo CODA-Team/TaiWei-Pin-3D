@@ -7,6 +7,7 @@ import json
 import os
 import re
 import shutil
+import shlex
 import subprocess
 import sys
 from collections import Counter, defaultdict
@@ -271,17 +272,30 @@ def liberty_blocks(text, kind):
 
 def load_pin_directions(repo_root, enablement):
     pin_dirs = {}
-    for rel in PIN_LIBS[enablement]:
-        path = repo_root / rel
+    lib_paths = [repo_root / rel for rel in PIN_LIBS[enablement]]
+    lib_paths.extend(Path(path) for path in shlex.split(os.environ.get("ADDITIONAL_LIBS", "")))
+    for path in lib_paths:
+        if not path.is_absolute():
+            path = repo_root / path
         if not path.is_file():
             fail("Required liberty file not found: {}".format(path))
         text = path.read_text(encoding="utf-8", errors="ignore")
         for cell_name, cell_body in liberty_blocks(text, "cell"):
             pins = pin_dirs.setdefault(cell_name, {})
-            for pin_name, pin_body in liberty_blocks(cell_body, "pin"):
-                match = re.search(r"\bdirection\s*:\s*([^;]+);", pin_body)
-                if match:
-                    pins[pin_name] = match.group(1).strip().lower()
+            for group_kind in ("pin", "bus"):
+                for pin_name, pin_body in liberty_blocks(cell_body, group_kind):
+                    match = re.search(r"\bdirection\s*:\s*([^;]+);", pin_body)
+                    if not match:
+                        continue
+                    direction = match.group(1).strip().lower()
+                    previous = pins.get(pin_name)
+                    if previous is not None and previous != direction:
+                        fail(
+                            "Conflicting pin direction for {}/{}: {} vs {}".format(
+                                cell_name, pin_name, previous, direction
+                            )
+                        )
+                    pins[pin_name] = direction
     if not pin_dirs:
         fail("No pin directions loaded for {}".format(enablement))
     return pin_dirs

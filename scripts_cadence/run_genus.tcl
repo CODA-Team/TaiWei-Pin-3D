@@ -10,6 +10,55 @@
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
+
+proc configure_constant_tie_cells {} {
+  set tie_cells {}
+  foreach variable_name {TIELO_CELL_AND_PORT TIEHI_CELL_AND_PORT} {
+    if {![info exists ::env($variable_name)]} {
+      error "$variable_name is not set"
+    }
+
+    set tie_spec $::env($variable_name)
+    if {[llength $tie_spec] != 2 || [lindex $tie_spec 0] eq "" || [lindex $tie_spec 1] eq ""} {
+      error "$variable_name must contain exactly one cell name and one output port: '$tie_spec'"
+    }
+
+    set cell_name [lindex $tie_spec 0]
+    if {[regexp {[\[\]*?]} $cell_name]} {
+      error "$variable_name cell name must not contain glob metacharacters: '$cell_name'"
+    }
+    set matches [get_db lib_cells */$cell_name]
+    if {[llength $matches] != 1} {
+      error "$variable_name cell '$cell_name' must match exactly one loaded library cell; matches=$matches"
+    }
+    set tie_cell [lindex $matches 0]
+    set port_name [lindex $tie_spec 1]
+    set port_matches {}
+    foreach lib_pin [get_db $tie_cell .lib_pins] {
+      if {[get_db $lib_pin .base_name] eq $port_name} {
+        lappend port_matches $lib_pin
+      }
+    }
+    if {[llength $port_matches] != 1 || [get_db [lindex $port_matches 0] .direction] ne "out"} {
+      error "$variable_name port '$port_name' must match exactly one output pin on '$cell_name'"
+    }
+    lappend tie_cells $tie_cell
+  }
+
+  if {[lindex $tie_cells 0] eq [lindex $tie_cells 1]} {
+    error "TIELO_CELL_AND_PORT and TIEHI_CELL_AND_PORT resolve to the same library cell"
+  }
+
+  foreach tie_cell $tie_cells {
+    set_db $tie_cell .avoid false
+    set_db $tie_cell .preserve false
+  }
+  set_db use_tiehilo_for_const duplicate
+  if {[get_db / .use_tiehilo_for_const] ne "duplicate"} {
+    error "Failed to enable duplicate constant tie-cell mapping"
+  }
+  puts "INFO: Constant tie-cell mapping = duplicate"
+}
 # Directories and key files
 set LOG_DIR       [_get LOG_DIR]
 set RESULTS_DIR   [_get RESULTS_DIR]
@@ -106,6 +155,8 @@ time_info Elaboration
 read_sdc $sdc
 init_design
 
+configure_constant_tie_cells
+
 # --- apply global dont-use from env (safe; no TAP/FILL/CLKBUF here) ---
 # if {[info exists ::env(DONT_USE_CELLS)] && $::env(DONT_USE_CELLS) ne ""} {
 #   foreach c $::env(DONT_USE_CELLS) { catch { set_dont_use $c true } }
@@ -158,4 +209,3 @@ write_sdc > $OUT_SDC
 puts "INFO: Wrote $OUT_V"
 puts "INFO: Wrote $OUT_SDC"
 exit
-

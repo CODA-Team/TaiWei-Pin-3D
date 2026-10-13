@@ -78,6 +78,12 @@ Intermediate files are written under
 are written under `results/<platform>/<design>/<flow_variant>`, with logs and
 reports in the corresponding `logs` and `reports` directories.
 
+Coarse partition consumes the aggregate physical views
+`handoff/lef/2d/coarse_units.lef` and `handoff/lib/2d/coarse_units.lib`. The
+single Liberty handoff keeps process arguments independent of the number of
+coarse-unit types; per-unit and tier-specific Liberty files remain internal
+coarse-synthesis products.
+
 ## Build and environment
 
 The 3D-Syn sources are already part of ORFS-Research; no source patch or
