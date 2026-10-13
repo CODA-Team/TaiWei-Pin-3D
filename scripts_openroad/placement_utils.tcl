@@ -2005,6 +2005,35 @@ proc _pin3d_end_bterm_hold_guard {saved_states} {
   }
 }
 
+proc pin3d_repair_timing_phase {phase args} {
+  if {$phase ni {setup hold}} {
+    error "pin3d_repair_timing_phase: phase must be setup or hold"
+  }
+  if {$phase eq "setup"} {
+    return [repair_timing_helper {*}$args -setup]
+  }
+
+  if {[llength [info commands _pin3d_boolean_env]] &&
+      ![_pin3d_boolean_env PIN3D_PORT_ROOT_HOLD_GUARD 1]} {
+    return [repair_timing_helper {*}$args -hold]
+  }
+  set port_root_nets [_pin3d_bterm_crossing_root_net_names]
+  if {[llength $port_root_nets] == 0} {
+    return [repair_timing_helper {*}$args -hold]
+  }
+
+  set saved_states [_pin3d_begin_bterm_hold_guard $port_root_nets]
+  set code [catch {repair_timing_helper {*}$args -hold} result options]
+  set restore_code [catch {_pin3d_end_bterm_hold_guard $saved_states} restore_result restore_options]
+  if {$restore_code} {
+    return -options $restore_options $restore_result
+  }
+  if {$code} {
+    return -options $options $result
+  }
+  return $result
+}
+
 proc pin3d_repair_timing_helper {args} {
   if {[llength [info commands _pin3d_boolean_env]] &&
       ![_pin3d_boolean_env PIN3D_PORT_ROOT_HOLD_GUARD 1]} {
@@ -2025,18 +2054,8 @@ proc pin3d_repair_timing_helper {args} {
   }
 
   puts "INFO(OR): PIN3D timing repair split into setup/hold port_root_guard_nets=[llength $port_root_nets]"
-  repair_timing_helper {*}$args -setup
-
-  set saved_states [_pin3d_begin_bterm_hold_guard $port_root_nets]
-  set code [catch {repair_timing_helper {*}$args -hold} result options]
-  set restore_code [catch {_pin3d_end_bterm_hold_guard $saved_states} restore_result restore_options]
-  if {$restore_code} {
-    return -options $restore_options $restore_result
-  }
-  if {$code} {
-    return -options $options $result
-  }
-  return $result
+  pin3d_repair_timing_phase setup {*}$args
+  return [pin3d_repair_timing_phase hold {*}$args]
 }
 
 

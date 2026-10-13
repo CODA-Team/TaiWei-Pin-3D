@@ -179,6 +179,17 @@ proc pin3d_incremental_route_after_repair {tier repair_kind} {
   estimate_parasitics -global_routing
 }
 
+proc pin3d_validate_route_repair_topology {tier phase} {
+  pin3d_reapply_route_repair_masks $tier
+  set label "5_1_grt_${tier}_post_${phase}"
+  set topology_status [pin3d_validate_and_repair_split_topology $label $::env(LOG_DIR) $::env(RESULTS_DIR) 0]
+  if {[dict get $topology_status violated] > 0} {
+    set failure_db [file join $::env(RESULTS_DIR) "${label}_failed.odb"]
+    write_db $failure_db
+    error "PIN3D split topology validation failed after $tier $phase; failure checkpoint: $failure_db"
+  }
+}
+
 proc pin3d_global_route_repair_tier {tier} {
   puts "INFO(OR): global-route incremental repair active_tier=$tier"
   apply_tier_policy $tier -fixlib 1 -allow_net "${tier}-only"
@@ -187,13 +198,12 @@ proc pin3d_global_route_repair_tier {tier} {
   pin3d_incremental_route_after_repair $tier design
 
   puts "Repair setup and hold violations on $tier tier..."
-  pin3d_repair_timing_helper
+  pin3d_repair_timing_phase setup
+  pin3d_validate_route_repair_topology $tier setup
+  pin3d_repair_timing_phase hold
+  pin3d_validate_route_repair_topology $tier hold
   pin3d_incremental_route_after_repair $tier timing
-
-  set topology_status [pin3d_validate_and_repair_split_topology "5_1_grt_$tier" $::env(LOG_DIR) $::env(RESULTS_DIR) 0]
-  if {[dict get $topology_status violated] > 0} {
-    error "PIN3D split topology validation failed after $tier global-route repair"
-  }
+  pin3d_validate_route_repair_topology $tier incremental_route
 }
 
 proc global_route_helper {} {

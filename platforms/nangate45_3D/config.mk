@@ -104,6 +104,7 @@ export PIN3D_LOCAL_TREE_ENABLE ?= 1
 export PIN3D_LOCAL_TREE_MIN_FANOUT ?= 32
 export PIN3D_PORT_ROOT_MIN_FANOUT ?= 32
 export PIN3D_LOCAL_TREE_BRANCH_FACTOR ?= 32
+export PIN3D_LOCAL_TREE_RECURSIVE_CONE ?= 1
 export PIN3D_PORT_ROOT_HOLD_GUARD ?= 1
 
 # 3D tier-related (based on Cadence structured variables)

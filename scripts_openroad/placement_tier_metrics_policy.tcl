@@ -1534,35 +1534,44 @@ proc _pin3d_boolean_env {name default_value} {
   return [expr {$value ni {0 false off no}}]
 }
 
-proc _set_cell_dont_touch_flag_batch {cell_names protect quiet} {
+proc _set_inst_dont_touch_flags {insts protect quiet} {
   set touched 0
+  set verified 0
   set failures 0
-  set chunk_size 256
-  set total [llength $cell_names]
-  for {set idx 0} {$idx < $total} {incr idx $chunk_size} {
-    set chunk [lrange $cell_names $idx [expr {$idx + $chunk_size - 1}]]
-    if {[llength $chunk] == 0} {
-      continue
-    }
-    set cells [get_cells -hierarchical -quiet $chunk]
-    if {$cells eq ""} {
-      continue
-    }
-    if {$protect} {
-      set failed [catch {set_dont_touch $cells} err]
-    } else {
-      set failed [catch {unset_dont_touch $cells} err]
-    }
-    if {$failed} {
-      incr failures [llength $chunk]
+  set target_state [expr {$protect ? 1 : 0}]
+  foreach inst $insts {
+    if {[catch {set inst_name [$inst getName]} err]} {
+      incr failures
       if {!$quiet} {
-        puts "WARN(OR): failed cell dont_touch batch protect=$protect : $err"
+        puts "WARN(OR): cannot read ODB instance name for dont_touch=$target_state : $err"
       }
       continue
     }
-    incr touched [llength $chunk]
+    if {[catch {$inst setDoNotTouch $target_state} err]} {
+      incr failures
+      if {!$quiet} {
+        puts "WARN(OR): cannot set ODB instance $inst_name dont_touch=$target_state : $err"
+      }
+      continue
+    }
+    incr touched
+    if {[catch {set actual_state [$inst isDoNotTouch]} err]} {
+      incr failures
+      if {!$quiet} {
+        puts "WARN(OR): cannot verify ODB instance $inst_name dont_touch state : $err"
+      }
+      continue
+    }
+    if {[expr {$actual_state ? 1 : 0}] != $target_state} {
+      incr failures
+      if {!$quiet} {
+        puts "WARN(OR): ODB instance $inst_name dont_touch verification failed expected=$target_state actual=$actual_state"
+      }
+      continue
+    }
+    incr verified
   }
-  return [dict create touched $touched failures $failures]
+  return [dict create requested [llength $insts] touched $touched verified $verified failures $failures]
 }
 
 proc _apply_inactive_tier_cell_dont_touch {active_tier quiet} {
@@ -1573,8 +1582,8 @@ proc _apply_inactive_tier_cell_dont_touch {active_tier quiet} {
     return
   }
 
-  set active_cells {}
-  set inactive_cells {}
+  set active_insts {}
+  set inactive_insts {}
   foreach inst [[ord::get_db_block] getInsts] {
     set inst_tier [_or_inst_tier $inst]
     if {$inst_tier eq "split_buffer"} {
@@ -1584,16 +1593,22 @@ proc _apply_inactive_tier_cell_dont_touch {active_tier quiet} {
       continue
     }
     if {$inst_tier eq $active_tier} {
-      lappend active_cells [$inst getName]
+      lappend active_insts $inst
     } else {
-      lappend inactive_cells [$inst getName]
+      lappend inactive_insts $inst
     }
   }
 
-  set active_result [_set_cell_dont_touch_flag_batch $active_cells 0 $quiet]
-  set inactive_result [_set_cell_dont_touch_flag_batch $inactive_cells 1 $quiet]
+  set active_result [_set_inst_dont_touch_flags $active_insts 0 $quiet]
+  set inactive_result [_set_inst_dont_touch_flags $inactive_insts 1 $quiet]
+  set failures [expr {[dict get $active_result failures] + [dict get $inactive_result failures]}]
   if {!$quiet} {
-    puts "INFO(OR): Tier cell mask active=$active_tier active_unlocked=[dict get $active_result touched] inactive_locked=[dict get $inactive_result touched] failures=[expr {[dict get $active_result failures] + [dict get $inactive_result failures]}]"
+    puts "INFO(OR): Tier cell mask active=$active_tier active_requested=[dict get $active_result requested] active_unlocked=[dict get $active_result verified] inactive_requested=[dict get $inactive_result requested] inactive_locked=[dict get $inactive_result verified] failures=$failures"
+  }
+  if {$failures > 0 ||
+      [dict get $active_result requested] != [dict get $active_result verified] ||
+      [dict get $inactive_result requested] != [dict get $inactive_result verified]} {
+    error "Failed to apply and verify inactive-tier cell mask for active tier $active_tier"
   }
 }
 
@@ -1601,17 +1616,21 @@ proc _release_tier_cell_dont_touch {quiet} {
   if {![_pin3d_boolean_env PIN3D_INACTIVE_TIER_DONT_TOUCH 1]} {
     return
   }
-  set tier_cells {}
+  set tier_insts {}
   foreach inst [[ord::get_db_block] getInsts] {
     set inst_tier [_or_inst_tier $inst]
     if {$inst_tier eq "split_buffer" || $inst_tier ni {upper bottom}} {
       continue
     }
-    lappend tier_cells [$inst getName]
+    lappend tier_insts $inst
   }
-  set result [_set_cell_dont_touch_flag_batch $tier_cells 0 $quiet]
+  set result [_set_inst_dont_touch_flags $tier_insts 0 $quiet]
   if {!$quiet} {
-    puts "INFO(OR): Released tier cell mask touched=[dict get $result touched] failures=[dict get $result failures]"
+    puts "INFO(OR): Released tier cell mask requested=[dict get $result requested] unlocked=[dict get $result verified] failures=[dict get $result failures]"
+  }
+  if {[dict get $result failures] > 0 ||
+      [dict get $result requested] != [dict get $result verified]} {
+    error "Failed to release and verify tier cell mask"
   }
 }
 
