@@ -2,7 +2,7 @@ current_design aes_cipher_top
 
 set clk_name clk
 set clk_port_name clk
-set clk_period 380
+set clk_period 420
 if {[info exists ::env(CLK_PERIOD)]} {
 	set clk_period $::env(CLK_PERIOD)
 }

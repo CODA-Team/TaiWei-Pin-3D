@@ -8,7 +8,7 @@ set_clock_gating_check -fall -setup 0
 #create_clock [get_ports {clk}] -name core_clock -period 1000.000000 -waveform {0.000000 500.000000}
 set clk_name core_clock
 set clk_port_name clk
-set clk_period 200.000000
+set clk_period 700.000000
 set clk_io_pct 0.2
 set clk_port [get_ports $clk_port_name]
 if {[llength $clk_port] != 1} { error "Expected one clock port: $clk_port_name" }

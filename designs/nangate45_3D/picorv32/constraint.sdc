@@ -7,7 +7,7 @@ set_clock_gating_check -rise -setup 0
 set_clock_gating_check -fall -setup 0
 set clk_name core_clock
 set clk_port_name clk
-set clk_period 0.900000
+set clk_period 1.500000
 set clk_io_pct 0.2
 set clk_port [get_ports $clk_port_name]
 if {[llength $clk_port] != 1} { error "Expected one clock port: $clk_port_name" }
