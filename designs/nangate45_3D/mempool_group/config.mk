@@ -3,6 +3,9 @@ export DESIGN_NICKNAME = mempool_group
 export PLATFORM = nangate45_3D
 
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+export PIN3D_INACTIVE_TIER_DONT_TOUCH ?= 1
+export SKIP_INCREMENTAL_REPAIR = 0
+export SKIP_GATE_CLONING = 0
 
 export SC_LEF_UPPER_COVER ?= \
   $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.lef \

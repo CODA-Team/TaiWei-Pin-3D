@@ -20,3 +20,4 @@ export MAP_EFF high
 
 export NUM_CORES   ?= 32
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+export GLOBAL_ROUTE_ARGS ?= -verbose -congestion_iterations 30

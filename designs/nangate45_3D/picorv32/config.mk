@@ -2,10 +2,12 @@ export DESIGN_NAME = picorv32
 export PLATFORM    = nangate45_3D
 
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+export PIN3D_INACTIVE_TIER_DONT_TOUCH ?= 1
+export SKIP_INCREMENTAL_REPAIR = 0
 
 export PLACE_DENSITY_LB_ADDON = 0.10
 export TNS_END_PERCENT        = 100
-export SKIP_GATE_CLONING      = 1
+export SKIP_GATE_CLONING      = 0
 export CORE_MARGIN = 1
 export CORE_ASPECT_RATIO = 1.0
 export CORE_UTILIZATION ?= 60
