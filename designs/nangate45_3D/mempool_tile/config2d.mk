@@ -26,3 +26,4 @@ export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/NLDM/fakeram/mempool_tile/ht45_memp
 export CORE_MARGIN = 1
 export CORE_UTILIZATION ?= 60
 export NUM_CORES ?= 32
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1

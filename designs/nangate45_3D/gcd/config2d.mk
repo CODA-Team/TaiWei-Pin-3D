@@ -16,3 +16,4 @@ export MAP_EFF high
 
 
 export NUM_CORES   ?= 32
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1

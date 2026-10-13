@@ -59,3 +59,4 @@ export ADDITIONAL_LIBS = \
 export CORE_MARGIN = 0.2
 export CORE_UTILIZATION ?= 60
 export NUM_CORES ?= 32
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1

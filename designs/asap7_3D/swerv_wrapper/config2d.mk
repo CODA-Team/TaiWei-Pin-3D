@@ -23,3 +23,4 @@ export MAP_EFF high
 export SWAP_ARITH_OPERATORS = 1
 
 export NUM_CORES   ?= 32
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1

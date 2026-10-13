@@ -456,13 +456,13 @@ ord-place-init-bottom:
 ord-place-upper:
 	@echo "[ORD] Place upper"
 	@$(call _mkstdirs)
-	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_upper.log,TIER_ALLOW_NET=all LEF_FILES="$(LEF_FILES_BOTTOM_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_upper.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_upper.log,LEF_FILES="$(LEF_FILES_BOTTOM_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_upper.tcl)
 
 .PHONY: ord-place-bottom
 ord-place-bottom:
 	@echo "[ORD] Place bottom"
 	@$(call _mkstdirs)
-	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_bottom.log,TIER_ALLOW_NET=all LEF_FILES="$(LEF_FILES_UPPER_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_bottom.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_bottom.log,LEF_FILES="$(LEF_FILES_UPPER_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_bottom.tcl)
 
 .PHONY: ord-3d-floorplan
 ord-3d-floorplan:
@@ -1011,6 +1011,10 @@ cds-postroute-owner:
 cds-final:
 	@echo "[CDS] Final"
 	@$(call _mkstdirs)
+	@if [[ "$(DESIGN_DIMENSION)" == "2D" && ! -f "$(RESULTS_DIR)/5_route.sdc" ]]; then \
+		echo "[CDS] Publish 2D final SDC: 1_synth.sdc -> 5_route.sdc"; \
+		cp -f "$(RESULTS_DIR)/1_synth.sdc" "$(RESULTS_DIR)/5_route.sdc"; \
+	fi
 	$(call _run_with_tmp_log,$(LOG_DIR)/6_final.log,$(TIME_CMD) $(INNOVUS_CMD) -overwrite -log $(LOG_DIR)/cadence_innovus_3d_final.log -files $(CADENCE_SCRIPTS_DIR)/innovus_3d_final.tcl)
 	@echo "[CDS] Extract eval JSON"
 	@$(PYTHON_EXE) "$(EXTRACT_EVAL_METRICS_PY)" \
