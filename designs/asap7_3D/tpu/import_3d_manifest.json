@@ -1,0 +1,13 @@
+{
+  "case": "tpu",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/asap7_3D/tpu/config2d.mk",
+  "config2d_sha256": "02b75dd86168e608c15ff1762671412da466240de6cd8058a913222c5188f55a",
+  "macros": [],
+  "pdk": "asap7",
+  "phase": 2,
+  "platform": "asap7_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7_3D/lef/asap7_tech_1x_6M7M.lef",
+  "tech_lef_sha256": "2291eec60a807f8c34c33453ea3ea661de8260bc4d9d1f0fc82a233ed2f2ade4",
+  "top": "tpu"
+}

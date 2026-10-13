@@ -1,0 +1,17 @@
+rtl/leon3core-inferred-nojtag.sv
+rtl/VTA.DefaultDe10Config.replmem.noqueue.sv
+rtl/vta_small_memories.sv
+rtl/vta_queue_512x128_adapter.sv
+rtl/leon3_banked_mems.sv
+rtl/vta_scratchpad_wrappers.sv
+rtl/vta_queue_wrapper.sv
+rtl/vta_host_bridge.sv
+rtl/leon3_vta_soc.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_256x16_1r1w.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_256x16_1rw.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_mem_0_ext.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_tensorFile_0_0_ext.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_tensorFile_0_1_ext.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_tensorFile_0_2_ext.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_tensorFile_0_ext.bb.sv
+rtl/blackboxes/ht_asap7_leon3vtabus_vta_q_512x128.bb.sv

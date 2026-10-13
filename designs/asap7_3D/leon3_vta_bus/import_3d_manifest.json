@@ -1,0 +1,470 @@
+{
+  "case": "leon3_vta_bus",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/asap7_3D/leon3_vta_bus/config2d.mk",
+  "config2d_sha256": "5fd4a6266a43b0464d08eeea1ade62f10892d5d7329be970ba54f6438dc1c72b",
+  "macros": [
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.bottom.cover.lef",
+          "sha256": "a640d7f0b562f80879fd4d5d48e549cfa7e2420961414e2966a48a019f7c18ea"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.bottom.lef",
+          "sha256": "0b236d2390a197fcf5df60538d0a356c88547eb7823b5a0c08488c4e917b71de"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.bottom.lib",
+          "sha256": "2cb6b27d96a33a3d04422e080986f3dac340823a0f9453a00318bd7a2af2157c"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.lef",
+          "sha256": "cc816a9b30a054f673ed3c881b82da42aba7d159ae48db4df1a0cb90099e9847"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.lib",
+          "sha256": "2ee4d5c5e21c27ede9c722da60ee76a94708374353969a21e13a643f064abf36"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.upper.cover.lef",
+          "sha256": "36f8d7982ec2e84e22bf0f51edcca7b443edab42a6b71f79b73a88f2f76d3849"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.upper.lef",
+          "sha256": "fe8931985dba60cbdd648f55e1f0e03e7f75710624eadf97f6ca2fb52402cb65"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.upper.lib",
+          "sha256": "d51444bfe43504cb3955f00fce5428d96da18fa95eeb5577282201239e7e4aa0"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1r1w.lib",
+      "master": "ht_asap7_leon3vtabus_256x16_1r1w",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.bottom.cover.lef",
+          "sha256": "8382d1bd696e0f1a4b56533e4cabf99a8974c34fad17d391445d7bd488971189"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.bottom.lef",
+          "sha256": "0c907cdd1665754e004f6ea5320bdfb0c3147afd072fe8d42226faef9e4e4cf5"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.bottom.lib",
+          "sha256": "3202763c16224aa7ab398aae889445d52bcaf2f9f4bbb765ecb79039417d17f0"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.lef",
+          "sha256": "5155d1fe99de1c2de2c4ca37c3e5a95cb25278d2d692e899d294b2741cc63a2d"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.lib",
+          "sha256": "b75ef7fbf3852cffe4c3dafb08ec6083230952408ad3097dfec964fabed64d97"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.upper.cover.lef",
+          "sha256": "4fd7dddf33c7ba411eb65022f7bd376ca6ba5bdc6c03841f873e1bd9079ecb9d"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.upper.lef",
+          "sha256": "7471ffbcfb511a9b61241a11286bf972119b760ee5bd60ccbc33793558751c93"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.upper.lib",
+          "sha256": "0077c6030d7e38709a0e2683dafbe41cf8a2b9501a6b79eac272839229dd7d1d"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_256x16_1rw.lib",
+      "master": "ht_asap7_leon3vtabus_256x16_1rw",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.bottom.cover.lef",
+          "sha256": "b04373e094cb7226b5e5e03d7cf86497353ee4597833f8820ad9d69cb07340da"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.bottom.lef",
+          "sha256": "310d39b87e15d3eae07fd8ae08a0da19dd208eeeab9ffb1d07f75c0aaab2794a"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.bottom.lib",
+          "sha256": "89dbca516048fd11904ae5bdda39966a1fcdd193ca6efb7265c85ab0d8b8a351"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.lef",
+          "sha256": "22821669a2b4d125f4f2eb01b2aeb42e38f101786dd63c66678505a4fdabc9fd"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.lib",
+          "sha256": "394fb670bea39b1ce279df80ddf70d5680fd70524bdfb7cbf1bceef295643166"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.upper.cover.lef",
+          "sha256": "5d039f6fb127be9212ed6c4c2f03f1978a65ff67e67caeb57eedd71d474f209c"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.upper.lef",
+          "sha256": "c956dd9cb7a031cfd720b75842ac183a2032e3dd4d22d3f0e2ba736763449495"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.upper.lib",
+          "sha256": "1a98bc60b5c563e34d429ba4ffb4fbb5a95b35102c386c3293a04be0678ac9ea"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_mem_0_ext.lib",
+      "master": "ht_asap7_leon3vtabus_mem_0_ext",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.bottom.cover.lef",
+          "sha256": "e1a6dc4aac0371e81d5a857967c4950ba86d3e245432c5341115234992587c28"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.bottom.lef",
+          "sha256": "d150f0db8c4631837fbd68b9ecfaa8fe7d6186da040d2aa159f1e441dfafa851"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.bottom.lib",
+          "sha256": "dfcc2c20e95d234e5d8ad23178e66325032fdb83d2daceda8a995154a077c771"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.lef",
+          "sha256": "25f1d81f5422a80f6a5e68f723fafee27b0efab30aa860f1da76a65290181fe4"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.lib",
+          "sha256": "f4a153106946dba145a7f4b6736f68168a9399dae0cc268f8ec80d0da9292b1f"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.upper.cover.lef",
+          "sha256": "caffa7d8c2069246f1cd0154247ee545948f6e2ffe92c85c84c91ccf963de248"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.upper.lef",
+          "sha256": "0255f2ce697e2608a6e42ad20066ed5ba85f1b13eb6f207e596f0f46a3cab594"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.upper.lib",
+          "sha256": "6f0bd394fc2d325952d967ef9ea311dfcde7a9c1e533286b6af7f458f4b2efa2"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_0_ext.lib",
+      "master": "ht_asap7_leon3vtabus_tensorFile_0_0_ext",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.bottom.cover.lef",
+          "sha256": "22117e339ae398e5955eba2262104a049b4d8bbdaa0c2803411e78a522e13f47"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.bottom.lef",
+          "sha256": "6a457f9e234e45c3f197932b7ee762af461824f6831021830a0b766d7db41b4a"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.bottom.lib",
+          "sha256": "5f70719cc210a7eb4e46664075186fc5d36883098482af7bb3190e1c43ebd58b"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.lef",
+          "sha256": "6966f758da4186066c62cc84133fb1c2dc23c1548ba825fc3ad500f8ffde6784"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.lib",
+          "sha256": "8f6de156df44f8c951df8222c0ef8149b9e955f703448700a908d895c3c906e0"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.upper.cover.lef",
+          "sha256": "3c7a6443ffe618d0a2922fa67eb3f3ff95dfbc647c04e4478b148ce67ae6138e"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.upper.lef",
+          "sha256": "45427ce2cc4195266be417dc596c4e88ac35132c31cbc69d1e23cc69c267a99d"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.upper.lib",
+          "sha256": "25b50d964707d947548d299567cfd035e069c92bee72ad44cf785b1212c58c17"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_1_ext.lib",
+      "master": "ht_asap7_leon3vtabus_tensorFile_0_1_ext",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.bottom.cover.lef",
+          "sha256": "e8236a36f51b17441936cc58391fb15a94044d2651d414ba761fad5b3133a752"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.bottom.lef",
+          "sha256": "68ef1ec0b849ceaf25372a643281d0b49eb2ac8f32e26cca31ca5da325dec0a6"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.bottom.lib",
+          "sha256": "2dfef71750e4a0af14f4a42a4783d6dbacf60c8a7b123c4b761c9816b646fdbc"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.lef",
+          "sha256": "20f5e55aec73a866619607e022edcb3cf88b499d704bd8a70577693e0af3fe7a"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.lib",
+          "sha256": "bb9f8747ffe98ab389fb3dd160b3a45d0f70796a37657f71db2c4cfe20957768"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.upper.cover.lef",
+          "sha256": "5f95364a21ae138b5789d50a6cd9ebde5fae41cf179cfa73016a0ea0b5140e2b"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.upper.lef",
+          "sha256": "b37ec9c9b5a73210935fad61446a029da4b1dfd184e5c56e0f8aa849ced40c27"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.upper.lib",
+          "sha256": "b4c1234c4954fc6cfba728e71253260921a0b9dec3bbc0127e4ec4ea841847ee"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_2_ext.lib",
+      "master": "ht_asap7_leon3vtabus_tensorFile_0_2_ext",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.bottom.cover.lef",
+          "sha256": "7d15fe4f4f8b3095eac576139caac39a495488e403a8463da24465433dc32d07"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.bottom.lef",
+          "sha256": "5ba8dc84d2fc7014c6d6c22356f49ae4721b82a96b69a68ce95821c4ede9bbbc"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.bottom.lib",
+          "sha256": "7a9b29af4f8e3fa928f107d36be13ec9f3ab000bfdb6a5a1108491f815a678b2"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.lef",
+          "sha256": "c264a3f6004656f009d4549077c016c70797527ff6ec54334c048c0a00c87e12"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.lib",
+          "sha256": "a76a80a03f6f3564909b7de945e353bf7eef0865a34eecb1cdf9d573107d310e"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.upper.cover.lef",
+          "sha256": "2eeaed6aa762296795cbb688c0cb57d7ef6f38b0645ecd21c1130eb59020aa68"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.upper.lef",
+          "sha256": "364df5a870d44f62e42beb65c25dbf86aab58a6cce585413018e9f0b13b3c56b"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.upper.lib",
+          "sha256": "5d8f40007e45d07d7ce3669f3bd2d49ae8033bda1eec86d0e721dfa049dc1d05"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.lib",
+      "master": "ht_asap7_leon3vtabus_tensorFile_0_ext",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.bottom.cover.lef",
+          "sha256": "c765c54d5c5843924391fa268c2232e977a7b3bebd59bd541c7c8ae2c318585f"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.bottom.lef",
+          "sha256": "d15055a5f81d15bd66fd36b2089b67809467cbb2885d8876c7f5316d137ab3ed"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.bottom.lib",
+          "sha256": "383ad392e2d49a507942b461b9fb1467653cfd193b5aaca7f85b4abf343b6654"
+        },
+        "original_lef": {
+          "relative": "lef_original/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.lef",
+          "sha256": "f85416d4e9303961dca338091822329a1c17683fc9fb4832d57ea806bca7d7a0"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.lib",
+          "sha256": "5a0ab74435976c21bcebfe621541a2695a844ff34a1cfb70fcf3029915ad9648"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.upper.cover.lef",
+          "sha256": "1e2bc8548da04cda3b81ffb49d26ed210588bfb847a5e7eed576ef638321131d"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.upper.lef",
+          "sha256": "448c96491fcaf6e6b0034246f171bb9b42b3e07df6bd9ab752f897598a8eb519"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.upper.lib",
+          "sha256": "406b84f738883c74d13dbb78685c417db480c8349bc0164ffc104d51979c0d82"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.lib",
+      "master": "ht_asap7_leon3vtabus_vta_q_512x128",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    }
+  ],
+  "pdk": "asap7",
+  "phase": 2,
+  "platform": "asap7_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7_3D/lef/asap7_tech_1x_6M7M.lef",
+  "tech_lef_sha256": "2291eec60a807f8c34c33453ea3ea661de8260bc4d9d1f0fc82a233ed2f2ade4",
+  "top": "leon3_vta_soc"
+}

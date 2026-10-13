@@ -111,9 +111,11 @@ if { ![env_var_equals SYNTH_HIERARCHICAL 1] } {
 
 puts "--- Generating memory JSON report. ---"
 json -o $::env(RESULTS_DIR)/mem.json
-# Run report and check here so as to fail early if this synthesis run is doomed
+# Run report and check here so as to fail early if this synthesis run is doomed.
+# 32768 bits covers the largest inferred memory in the imported case set:
+# rocket_gemmini's 512x64 TLROM.
 exec -- $::env(PYTHON_EXE) $::env(OPENROAD_SCRIPTS_DIR)/mem_dump.py \
-  --max-bits 4096 $::env(RESULTS_DIR)/mem.json
+  --max-bits 32768 $::env(RESULTS_DIR)/mem.json
 
 if { [env_var_exists_and_non_empty SYNTH_RETIME_MODULES] } {
   select $::env(SYNTH_RETIME_MODULES)

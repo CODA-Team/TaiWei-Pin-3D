@@ -1,0 +1,13 @@
+{
+  "case": "tpu",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/nangate45_3D/tpu/config2d.mk",
+  "config2d_sha256": "bcee8f37aa61f8b199f92754d266c4663eb87d0883f60563e994b45b6629fe30",
+  "macros": [],
+  "pdk": "nangate45",
+  "phase": 2,
+  "platform": "nangate45_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45_3D/lef/NangateOpenCellLibrary.tech.lef",
+  "tech_lef_sha256": "96c922b4c823b516c8e73536eaaf7ae367808f1958c16b31f365e90a84224f95",
+  "top": "tpu"
+}

@@ -1,0 +1,264 @@
+{
+  "case": "leon3_vta_bus",
+  "compiled_rtl": [
+    {
+      "relative": "rtl/leon3core-inferred-nojtag.sv",
+      "sha256": "f7aba16b08e0c59f09ab19d0b611d07cfab813ab8be99847105942f5889b80dd"
+    },
+    {
+      "relative": "rtl/VTA.DefaultDe10Config.replmem.noqueue.sv",
+      "sha256": "d0f52de8b22553f6943f02055d5ee9bdb604d374f7611941078b899e937e2a96"
+    },
+    {
+      "relative": "rtl/vta_small_memories.sv",
+      "sha256": "c934bfaef2f8d39c3c0ca27cce98b4ca1eede2d65add04eab2faff47a7a6cfa0"
+    },
+    {
+      "relative": "rtl/vta_queue_512x128_adapter.sv",
+      "sha256": "e52b34e8e9880ce82217b31b817aba1ba21ee2f9895eb930eea15f90a0a13150"
+    },
+    {
+      "relative": "rtl/leon3_banked_mems.sv",
+      "sha256": "4ce1d20196b03083b68a1547b6419d4fe779d548194d6c4f8695a3b2cc740d53"
+    },
+    {
+      "relative": "rtl/vta_scratchpad_wrappers.sv",
+      "sha256": "d41d0c899b165011ecbe5c12c348201a3ed429ae31264832ac91643b5cc0a1e1"
+    },
+    {
+      "relative": "rtl/vta_queue_wrapper.sv",
+      "sha256": "b3b33fb6368d535c240dc4dcd7c04dfe5afaeb736c11a3bf4192309a5c89b197"
+    },
+    {
+      "relative": "rtl/vta_host_bridge.sv",
+      "sha256": "85bbea86b8a8a7fc45069d362be2f0e200c677a0caec36f54fd1029666d24761"
+    },
+    {
+      "relative": "rtl/leon3_vta_soc.sv",
+      "sha256": "081fb36df7cba13ac35334d7ca058b3a1eaf4949304c02494e63d94c2112edef"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_256x16_1r1w.bb.sv",
+      "sha256": "c1eb7cbf0a939c0d6652b6e5cea4530c4fc6b72f862c670fcc309443a277c7f9"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_256x16_1rw.bb.sv",
+      "sha256": "20fe0ed78c6e9a8f2e8c147db05f1e38a33116724c206b977311846c47145f30"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_mem_0_ext.bb.sv",
+      "sha256": "98491467e829b0d45300214b4728734b739acdbde163c9612ddfad26837179e7"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_0_ext.bb.sv",
+      "sha256": "019b6f6d29d14223a34c424191735e1e261421c5583822b5a4d941f873e50669"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_1_ext.bb.sv",
+      "sha256": "8ec4c8de487aadc539fd8545cef04412c33752d28d763f0b90060f5819384f4f"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_2_ext.bb.sv",
+      "sha256": "13a3ef8ba6d25322d7cfbd931f40fa27dd9d8adc9a1cb9f3209c1936b006e476"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_ext.bb.sv",
+      "sha256": "53bbf906215479a1fd08a0b31c7fbeb3260d46924e106eeb2e75adacf801a545"
+    },
+    {
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_vta_q_512x128.bb.sv",
+      "sha256": "a953ab1c9615445e2d4d928d50fb32b008f4beda4b3851a73058105d24db6f99"
+    }
+  ],
+  "defines": [],
+  "files": [
+    {
+      "kind": "rtl",
+      "relative": "rtl/leon3core-inferred-nojtag.sv",
+      "sha256": "f7aba16b08e0c59f09ab19d0b611d07cfab813ab8be99847105942f5889b80dd",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/leon3core-inferred-nojtag.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/VTA.DefaultDe10Config.replmem.noqueue.sv",
+      "sha256": "d0f52de8b22553f6943f02055d5ee9bdb604d374f7611941078b899e937e2a96",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/VTA.DefaultDe10Config.replmem.noqueue.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/vta_small_memories.sv",
+      "sha256": "c934bfaef2f8d39c3c0ca27cce98b4ca1eede2d65add04eab2faff47a7a6cfa0",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/vta_small_memories.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/vta_queue_512x128_adapter.sv",
+      "sha256": "e52b34e8e9880ce82217b31b817aba1ba21ee2f9895eb930eea15f90a0a13150",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/vta_queue_512x128_adapter.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/leon3_banked_mems.sv",
+      "sha256": "4ce1d20196b03083b68a1547b6419d4fe779d548194d6c4f8695a3b2cc740d53",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/leon3_banked_mems.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/vta_scratchpad_wrappers.sv",
+      "sha256": "d41d0c899b165011ecbe5c12c348201a3ed429ae31264832ac91643b5cc0a1e1",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/vta_scratchpad_wrappers.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/vta_queue_wrapper.sv",
+      "sha256": "b3b33fb6368d535c240dc4dcd7c04dfe5afaeb736c11a3bf4192309a5c89b197",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/vta_queue_wrapper.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/vta_host_bridge.sv",
+      "sha256": "85bbea86b8a8a7fc45069d362be2f0e200c677a0caec36f54fd1029666d24761",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/vta_host_bridge.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/leon3_vta_soc.sv",
+      "sha256": "081fb36df7cba13ac35334d7ca058b3a1eaf4949304c02494e63d94c2112edef",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/leon3_vta_soc.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_256x16_1r1w.bb.sv",
+      "sha256": "c1eb7cbf0a939c0d6652b6e5cea4530c4fc6b72f862c670fcc309443a277c7f9",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_256x16_1r1w.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_256x16_1rw.bb.sv",
+      "sha256": "20fe0ed78c6e9a8f2e8c147db05f1e38a33116724c206b977311846c47145f30",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_256x16_1rw.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_mem_0_ext.bb.sv",
+      "sha256": "98491467e829b0d45300214b4728734b739acdbde163c9612ddfad26837179e7",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_mem_0_ext.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_0_ext.bb.sv",
+      "sha256": "019b6f6d29d14223a34c424191735e1e261421c5583822b5a4d941f873e50669",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_0_ext.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_1_ext.bb.sv",
+      "sha256": "8ec4c8de487aadc539fd8545cef04412c33752d28d763f0b90060f5819384f4f",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_1_ext.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_2_ext.bb.sv",
+      "sha256": "13a3ef8ba6d25322d7cfbd931f40fa27dd9d8adc9a1cb9f3209c1936b006e476",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_2_ext.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_ext.bb.sv",
+      "sha256": "53bbf906215479a1fd08a0b31c7fbeb3260d46924e106eeb2e75adacf801a545",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_tensorFile_0_ext.bb.sv"
+    },
+    {
+      "kind": "rtl",
+      "relative": "rtl/blackboxes/ht45_leon3vtabus_vta_q_512x128.bb.sv",
+      "sha256": "a953ab1c9615445e2d4d928d50fb32b008f4beda4b3851a73058105d24db6f99",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/blackboxes/ht45_leon3vtabus_vta_q_512x128.bb.sv"
+    },
+    {
+      "kind": "support",
+      "relative": "rtl/rtl_filelist.tcl",
+      "sha256": "c3532616204962676ad64520f1691298041283bb6a061d85bb2a8e0b0914ea3b",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/rtl_filelist.tcl"
+    },
+    {
+      "kind": "support",
+      "relative": "rtl/compile.f",
+      "sha256": "227367b61ecc8583627fac850dd798e60a6d7c30d1cf8501fb10579fd3d8161c",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/compile.f"
+    },
+    {
+      "kind": "support",
+      "relative": "rtl/files.f",
+      "sha256": "ce847228aa14b1443f2766beac29f5056ae3482a224a87d60c4ac271535550e2",
+      "source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/files.f"
+    }
+  ],
+  "include_source_parents": false,
+  "macros": [
+    {
+      "lef_sha256": "aa30c46358196eb75022e1731ff04f44f5d62a5bebc4d309f19a2c76b59e2163",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_256x16_1r1w.lef",
+      "lib_sha256": "d38a12765085974bb7c30818d629819ee1356a392a4f0e5f2c8a02e56d36f4ec",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_256x16_1r1w.lib",
+      "master": "ht45_leon3vtabus_256x16_1r1w"
+    },
+    {
+      "lef_sha256": "b2268695933687bd76615f453ff60f02a7712314a8960f7c6241ecceece15237",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_256x16_1rw.lef",
+      "lib_sha256": "74fc2dd454f0411fca93563d40ef91a051f3f7f894783a6479b9236da1092d08",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_256x16_1rw.lib",
+      "master": "ht45_leon3vtabus_256x16_1rw"
+    },
+    {
+      "lef_sha256": "b384c830cf59ec40389355fe0c22216e44c9c530599d4f1e70f6359470d4a751",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_mem_0_ext.lef",
+      "lib_sha256": "4916923b9450af169e263d806ce925824a130440b0c05ceb5af25dc7aeade6d3",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_mem_0_ext.lib",
+      "master": "ht45_leon3vtabus_mem_0_ext"
+    },
+    {
+      "lef_sha256": "c98c07344a830547df721b97e348d3ec827f80077139df36939b215384607a02",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_0_ext.lef",
+      "lib_sha256": "c8527460c2badd80915d68adcbedfcadbeb7c635c9c1cecce576f91d056cd0c7",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_0_ext.lib",
+      "master": "ht45_leon3vtabus_tensorFile_0_0_ext"
+    },
+    {
+      "lef_sha256": "5c0f2c0826c268e68b26386ce6eeab9f38e113ccac5af23df48ecc76832234ef",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_1_ext.lef",
+      "lib_sha256": "7395f0edcc050c1dd816d50926c09ac295dc36e717e6f114e8c60801b0fea359",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_1_ext.lib",
+      "master": "ht45_leon3vtabus_tensorFile_0_1_ext"
+    },
+    {
+      "lef_sha256": "94f30ca4f555be5120b7cec3c8c58a7bcd72603c76977b860b07d0d07f8f5c83",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_2_ext.lef",
+      "lib_sha256": "bf4b55ae2470a15e4f7ad26c4756c36c30038340bfbff6d08f1f371941ada869",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_2_ext.lib",
+      "master": "ht45_leon3vtabus_tensorFile_0_2_ext"
+    },
+    {
+      "lef_sha256": "1fd18decd2bc5ef286de08a4debe38528936c8200d78b714cdbcc0b9574a78f2",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_ext.lef",
+      "lib_sha256": "b6d3698b6ca2f9deac06b1ce40265849c9ee6ac81f21ad1524064d62a7ecf5bd",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_tensorFile_0_ext.lib",
+      "master": "ht45_leon3vtabus_tensorFile_0_ext"
+    },
+    {
+      "lef_sha256": "e957a9eef22d08c73e1650df6c390266d83ef31534881374659d134ff4adbb42",
+      "lef_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LEF/leon3_vta_bus/ht45_leon3vtabus_vta_q_512x128.lef",
+      "lib_sha256": "62720361d82dfce112a57621b7eb071786ccb0fdb437bbab14f89f708f815430",
+      "lib_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/LIB/leon3_vta_bus/ht45_leon3vtabus_vta_q_512x128.lib",
+      "master": "ht45_leon3vtabus_vta_q_512x128"
+    }
+  ],
+  "pdk": "nangate45",
+  "prepend_rtl": [],
+  "rtl_filelist_tcl": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus/rtl/rtl_filelist.tcl",
+  "schema_version": 1,
+  "sdc_sha256": "824730f8e543b1700c3bec73befd12b21b19f516df13c81df8c0907ab979f1a1",
+  "sdc_source": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/SDC/leon3_vta_bus/leon3_vta_bus_ng45.sdc",
+  "single_compilation_unit": false,
+  "source_root": "/home/zhyang/TaiWei-Integration/DESIGN/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/2026-Commercial-Benchmarking-SiemensEDA-be6b0075860df55394bc95bde5c1d696787e7946/datain/ng45/RTL/leon3_vta_bus",
+  "top": "leon3_vta_soc"
+}

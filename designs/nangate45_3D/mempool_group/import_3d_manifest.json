@@ -1,0 +1,413 @@
+{
+  "case": "mempool_group",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/nangate45_3D/mempool_group/config2d.mk",
+  "config2d_sha256": "1360e7256c43d756a6461257c388a9941a44c3d2665eb58ed9933a059079f9cb",
+  "macros": [
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_23x64.bottom.cover.lef",
+          "sha256": "57a3d7ff9cf4ca7a80e6be6b143be7dde56f3e6dff77d9e7e5c67213fa5d3d9a"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_23x64.bottom.lef",
+          "sha256": "417a6f203b6d6500a1f3f5c8126844f53b3f305a559c0755d1675e93d981592d"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_23x64.bottom.lib",
+          "sha256": "87bc756f36061e01a1d90467027c116ef69c7ae634ad079683c959a428ebb136"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_23x64.lef",
+          "sha256": "b2d4aa4a8ad000d449fc7bfde575829f5126f63feb91fb50acbf4453c1013be7"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_23x64.lib",
+          "sha256": "cbe6757a0d70ce56af21fee4c037ab35be252f853ded83f497053b908372978b"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_23x64.upper.cover.lef",
+          "sha256": "3e51120def040fa4e48859b9cfc43c95ebdc82544cfdcf293723f61d178bdb8a"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_23x64.upper.lef",
+          "sha256": "3007020a1a0c37d2cef1ae5deed015a787f1da3ab095a9610dd9afcfddc39c31"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_23x64.upper.lib",
+          "sha256": "c97f48352228d879a81a6e50ece9f6c459b609f4b0df7448986627a6e20963b1"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_23x64.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_23x64.lib",
+      "master": "ht45_mempoolgroup_23x64",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_256x128.bottom.cover.lef",
+          "sha256": "0428215a008b9a1ea00532e8364e329f4eaa674a99bd3b484873c3cb345fdd75"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_256x128.bottom.lef",
+          "sha256": "e245d23c4563763094849f57ef6142e410bf6c7a7344fd1ae9b3892594fffa4a"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_256x128.bottom.lib",
+          "sha256": "c3a320cd1687f860590b45cfb4a7a72bb9e962d118c2562ded3e369c9ff06993"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_256x128.lef",
+          "sha256": "8577b69f3aca6b27a40210de5971824c1f63364d48f1075f21c1890460297723"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_256x128.lib",
+          "sha256": "26af7be3282bd1278637459f62d9202070bd1d7d906a9bffe1258d43955e4a91"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_256x128.upper.cover.lef",
+          "sha256": "0daa2458841725e6fd2eaa700df8e9dfb888390802bf1772022e2805b258e6cd"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_256x128.upper.lef",
+          "sha256": "7d2c7ada9722ff22b8c266f34bfcc49a9347ae463c76e5addc96da2e8314f183"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_256x128.upper.lib",
+          "sha256": "4a9be3d6721ed062532b114fc436fd4ce526e21b02e3b74a1f0cdbbfadee81c7"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_256x128.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_256x128.lib",
+      "master": "ht45_mempoolgroup_256x128",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_32x128.bottom.cover.lef",
+          "sha256": "9dd7de023e1fc7bb37e431b39cfbba84b7aa47799b018b7676e2cb8e143dff2d"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_32x128.bottom.lef",
+          "sha256": "271f0d85c493dc73f35cb63e1fcb586921f3e8b576578d7fb7d8a0374fecde6c"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_32x128.bottom.lib",
+          "sha256": "404c61d3d67bcc1e06d20a1430ce78626925265256fafd84dec7435c3ecd15a4"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_32x128.lef",
+          "sha256": "e4d01acae9150ae07be31cf43f4dbaf2f477cb6359b767860737b8aa82617c8f"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_32x128.lib",
+          "sha256": "1515aa25faea2cfe18907e0d7c5ae90b2d9c4c8b9b928dd2ec583a6d4c2efc64"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_32x128.upper.cover.lef",
+          "sha256": "1f8199a4589acc0d755118294cfffe78a192fb6bc2e0d1e148e3a70f0e138165"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_32x128.upper.lef",
+          "sha256": "68fb044ab380684b59007d7bdf71e39b4fa46c87c47d821409550d81ab05a35a"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_32x128.upper.lib",
+          "sha256": "020b7825b7961310a0817536f6ca6cddc8afa7ce99d47d765f3480d7162fcba8"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_32x128.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_32x128.lib",
+      "master": "ht45_mempoolgroup_32x128",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_32x256.bottom.cover.lef",
+          "sha256": "139666fca9402bf5806caf5ddb95fc2540edbf565f5deca7f038210e1fa0fbea"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_32x256.bottom.lef",
+          "sha256": "3cbd0908e12a0a2635a6a80ac8f8778bef56fa0e544d3c3fcb1dd47ff9f4abec"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_32x256.bottom.lib",
+          "sha256": "05bd7d87fdfee61b8a38903076241593da36f6231c52dcfa2e251d6cb193456d"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_32x256.lef",
+          "sha256": "95a62872da00a9ce236a9f6f17c2cbf9a16538cddb90d2bf994e45d03862e2f9"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_32x256.lib",
+          "sha256": "14f8e66f474282cba080c918c9a2af10bb926b475bb59e304101dde62d40610f"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_32x256.upper.cover.lef",
+          "sha256": "9f51851bc7fa50f6654d34aebbf1bc449ce46842f46686088421556d867d5dd2"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_32x256.upper.lef",
+          "sha256": "0b28c9ac2bf55cf3d21ab0d12ececce8488d6211ece89d2efe3ae260cf96b967"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_32x256.upper.lib",
+          "sha256": "603dfa26cb98da8d37af7e3fde2e8af610b94078a8eb7d7959eebe41dc0d9112"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_32x256.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_32x256.lib",
+      "master": "ht45_mempoolgroup_32x256",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_512x16384.bottom.cover.lef",
+          "sha256": "bc9044cf127114b0db420d8a9a1516966040c707c44d797b6997f16da9dd28ee"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_512x16384.bottom.lef",
+          "sha256": "47bf5b9ada5a5aa6f71dcb665818058610f97bdd5f228007e386768a62051ada"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_512x16384.bottom.lib",
+          "sha256": "0e8e97272081e89217871688613f24cfef2165cb3cad6282a291c8ec88ce38ad"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_512x16384.lef",
+          "sha256": "6b64edd417457940ce37bc6f0c524e343c0cfc0735615ee9275daa8430fedc18"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_512x16384.lib",
+          "sha256": "6287d23cad110d6d6da67cd4e9ef9c5ad3c1de46b82d8ece06380a970da2687c"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_512x16384.upper.cover.lef",
+          "sha256": "b12d8150202d71f6133d80340d33c63934310a8db6e8b3f53df193920bf906fc"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_512x16384.upper.lef",
+          "sha256": "af80d6bf37883ef59b3c993e894bb3da0af4f4d9edcde41717279b985d5341ef"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_512x16384.upper.lib",
+          "sha256": "8c87b2a0431805a9810c2aef3d5bf69a08746505e98c0667065b3ba35251da00"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_512x16384.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_512x16384.lib",
+      "master": "ht45_mempoolgroup_512x16384",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_512x64.bottom.cover.lef",
+          "sha256": "e74c620f0cb147f34c4b62c82a7d5a7c2fd714d86abe591060e29682a607cae4"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_512x64.bottom.lef",
+          "sha256": "3c36aa4972e910e506f917cca28e7cfab5bc46f9ff3d79ef1d0fc2345723a4a3"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_512x64.bottom.lib",
+          "sha256": "35a4b6ef72a97e707ccdf5e63507c610137c833c78a8351351f4bfebf6c5983a"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_512x64.lef",
+          "sha256": "ea1927edcb25508df462472e21e6571bf850d0f5ee59550dc03e141db8859641"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_512x64.lib",
+          "sha256": "d5ca052507de3d862dff35a87aeeb8aa279242a8118fb612559c39d04771235a"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_512x64.upper.cover.lef",
+          "sha256": "60dae8731eddf6c41c79730b0f0744b268d0780b8b43696bf9a779808f611db9"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_512x64.upper.lef",
+          "sha256": "d482fbc5639a1faf819199a2e4c7e6786e3fedab519e5c4e66094019d4da6fbd"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_512x64.upper.lib",
+          "sha256": "61a7b65286e716aae3ca7a819a9aa12d7d0466f269e96c3a30b624ee75e666f9"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_512x64.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_512x64.lib",
+      "master": "ht45_mempoolgroup_512x64",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/mempool_group/ht45_mempoolgroup_64x64.bottom.cover.lef",
+          "sha256": "8912a1091768276a6242b7f777c09b5b8cbae99bf255a1586d97c452cc95e8cf"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/mempool_group/ht45_mempoolgroup_64x64.bottom.lef",
+          "sha256": "b40c028d5e77d5d483f191d0ec5552c703f9c5c04d0a0084354ee1b224fe608f"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/mempool_group/ht45_mempoolgroup_64x64.bottom.lib",
+          "sha256": "568466e8dbc25816afcea18c3ea3348b7dcf5f1ba276907bd0e6423759f083eb"
+        },
+        "original_lef": {
+          "relative": "lef_original/mempool_group/ht45_mempoolgroup_64x64.lef",
+          "sha256": "68aa3197c6245c3637756120a39e97ee688e902907c2a093d700c2623b2239c5"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/mempool_group/ht45_mempoolgroup_64x64.lib",
+          "sha256": "ffd6d8fe9ad6207de140f647ad72d15a4205217bd022c90f84f948797e23d187"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/mempool_group/ht45_mempoolgroup_64x64.upper.cover.lef",
+          "sha256": "214f2a2ce5d22f88ad03cc3e76acd720bbf706dfb157dc918a66fad526234409"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/mempool_group/ht45_mempoolgroup_64x64.upper.lef",
+          "sha256": "4ec8f322befac2f33a9dbdb40937db98fe45f9059d05db81349f0395b6e7fe1d"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/mempool_group/ht45_mempoolgroup_64x64.upper.lib",
+          "sha256": "426061ef692bb7da25b54937533bf8bb70a538e5d1704ef4c7659e16c22f76ba"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/mempool_group/ht45_mempoolgroup_64x64.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/mempool_group/ht45_mempoolgroup_64x64.lib",
+      "master": "ht45_mempoolgroup_64x64",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    }
+  ],
+  "pdk": "nangate45",
+  "phase": 2,
+  "platform": "nangate45_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45_3D/lef/NangateOpenCellLibrary.tech.lef",
+  "tech_lef_sha256": "96c922b4c823b516c8e73536eaaf7ae367808f1958c16b31f365e90a84224f95",
+  "top": "mempool_group"
+}

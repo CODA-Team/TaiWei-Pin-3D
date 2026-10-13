@@ -1,0 +1,356 @@
+{
+  "case": "xiangshan_coupledl2",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/asap7_3D/xiangshan_coupledl2/config2d.mk",
+  "config2d_sha256": "4d36fa4dbf2145129ee00bc1d3c1811d3805a169e9493b7ec16750b1d88e5bd4",
+  "macros": [
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_2048x137_bk.bottom.cover.lef",
+          "sha256": "b64f6bdfbd95a3e5fcbe705f7532ad85f5c22e828930090f685b06272c34421c"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_2048x137_bk.bottom.lef",
+          "sha256": "ba4766395f92daccbc0f5772860d3e14c9db60fda049bc8c4fb4a29e7e2b161b"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_2048x137_bk.bottom.lib",
+          "sha256": "dab51f7934561dff3950a4ca5eb263ac45aa3fe37c82812d5ad5af12c961297c"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_2048x137_bk.lef",
+          "sha256": "4d2e2f5982da638420c032af1bd8cd1b3e68b5005643095d84c040d4b57e53ec"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_2048x137_bk.lib",
+          "sha256": "c9c96d2dc548fde7cdc5d48859554a1186c252cd314719e7d00d90970475783e"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_2048x137_bk.upper.cover.lef",
+          "sha256": "6f6c8cf495d11b9c90e8e48acee623267917d4d793314ef566675165348e23f0"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_2048x137_bk.upper.lef",
+          "sha256": "bc8427a319777eeaa4b9676c2a18f2e38e61dc3e1e9f6afd7f6aae6b2a788360"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_2048x137_bk.upper.lib",
+          "sha256": "196418ec0862a94a9f7875081b2b5354f959e259fd951bfd3f507bc685dc2c9c"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_2048x137_bk.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_2048x137_bk.lib",
+      "master": "array_2048x137_bk",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_256x104.bottom.cover.lef",
+          "sha256": "f144f8b737d081b82bf16cf64209095152a2451fd933b22d9d30c02a29fd4df9"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_256x104.bottom.lef",
+          "sha256": "ac9fc5153ae47c7a5bf4f67f54e4fb62add101943d6f5658e2739000acb5fa2a"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_256x104.bottom.lib",
+          "sha256": "5c55d9492abf727747ef1452c03d848d99ceeb89dcbc7ce75b1d6ac7bacb3886"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_256x104.lef",
+          "sha256": "a3b6ea0992471bca429260ad3c41b0771dcee4c13c4a761d883a2a2154d5dbc3"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_256x104.lib",
+          "sha256": "55d095c9c6dd5dec3a4fd6b9c716d1aaec53b10730649df1550ee5e0bd69336c"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_256x104.upper.cover.lef",
+          "sha256": "1fed11c94263d3871c41096565019e1dc96d084c273f95a432c1adfab769fdde"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_256x104.upper.lef",
+          "sha256": "1794aa03bc6dd6b1ea5a65c08f71cb5d1c97d40fed69f6fa8397944f54bc9f16"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_256x104.upper.lib",
+          "sha256": "62648081bffcf06221ce8f2680018a8aeca22f3d8a14aa49626e438a3fe59d3f"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_256x104.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x104.lib",
+      "master": "array_256x104",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_256x13.bottom.cover.lef",
+          "sha256": "c17d0f232fd147c3736effa1b09ee0b1d3ac01c7d97a9c474a8042363f82205d"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_256x13.bottom.lef",
+          "sha256": "784a6c1b2ee5cd019c2116021d64414988015e19622502a3922466d63de309fb"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_256x13.bottom.lib",
+          "sha256": "ab5de33edff12ac25a4706e03340dc9571632e0f7ed80a12b469c21bab9b8b02"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_256x13.lef",
+          "sha256": "19fcde4b2a1bdb97f14f04e4aa75c906eca2599c096d524b2c92e5217dfd3f32"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_256x13.lib",
+          "sha256": "fd451c54ba021573c1dd20e8e0012eacea404747069c6935c69ebc81e3b1d660"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_256x13.upper.cover.lef",
+          "sha256": "a5491a4fb0c0293a8c9400516412bf3e4938b381bb34e01beb8dcbc6527a1752"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_256x13.upper.lef",
+          "sha256": "9b65b8f09ca12b8a659924dbf6cd4aa2d032a12586f17207233bddf86e893d8f"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_256x13.upper.lib",
+          "sha256": "a21fbf02c3febea200671f16eed38234ad44284b0ad158e71f67180155a81d85"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_256x13.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x13.lib",
+      "master": "array_256x13",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_256x16.bottom.cover.lef",
+          "sha256": "3342f6e041e58797b20ca14377cb120e1ee1314872e503a3bc70bcd57dd9b28d"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_256x16.bottom.lef",
+          "sha256": "ea3d299fa12cd0df2651ce7d4a79aabdb3537cdb2c9894c573c1db0adc11e7e4"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_256x16.bottom.lib",
+          "sha256": "53a851db8270d2f516118bcee88152387f15c646dfab686d5b837114d65815a0"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_256x16.lef",
+          "sha256": "2d084e373b84f0231723ed0faeb78fe237d27dd0d7a22bae8e739b77caf0dc19"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_256x16.lib",
+          "sha256": "e62bc9791292da2e3ad6731e29d0d02b0ef0073d556fd0dce8828d8f6ad9676e"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_256x16.upper.cover.lef",
+          "sha256": "16497265acef038be4f37773964d34ea15a7450c6ba920d080e6832379c97c71"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_256x16.upper.lef",
+          "sha256": "c6816acea9517261f85a9389d10061d0b32458d2324dd8356d63a6d1c175c1dc"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_256x16.upper.lib",
+          "sha256": "7a50203a358b858843da2a732fb3e2c10c669d3c70fe522437adf23553b98cdb"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_256x16.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x16.lib",
+      "master": "array_256x16",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_256x164.bottom.cover.lef",
+          "sha256": "ea94d5b471a06f8830511d1c6c21b8f9229b667248d0c17fbf8605b207bf58c2"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_256x164.bottom.lef",
+          "sha256": "29f8892115b2ee0f580789063df36bdf3892316b0143fba2371f3c76bf092422"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_256x164.bottom.lib",
+          "sha256": "ca85d4b2d96cba10999757da33491ef410bb86112eca3411c7913166bc1e52d7"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_256x164.lef",
+          "sha256": "9114bee8d798dc1e75647d822258af06b16d2c08a8298faa0a5beeb79968526a"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_256x164.lib",
+          "sha256": "5e0b293b58a65eb4ce98dc069786b6ffb151064f24b5ef822377600671b398a3"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_256x164.upper.cover.lef",
+          "sha256": "5028935ecd6cfb9797f2ccd5dd129f15de26e9d2fb4209409235be678ef82c01"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_256x164.upper.lef",
+          "sha256": "d7f8544b337a25bbb2145b353ac0710e86bff88ff389d6d776a74e77aed5af09"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_256x164.upper.lib",
+          "sha256": "0cbddc1f183706e3e42f24b98e86adfa23b2ad300387c18a1227975a1a4336ee"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_256x164.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x164.lib",
+      "master": "array_256x164",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/xiangshan_coupledl2/array_256x8_0.bottom.cover.lef",
+          "sha256": "080492434fa3bb3898520b5052df33c707ce47c10df25692079e0208717bdf2e"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/xiangshan_coupledl2/array_256x8_0.bottom.lef",
+          "sha256": "148d0462c12ea587fa730bdafead0ced36a8511baa3144a54e1ab4a67a4ffd55"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/xiangshan_coupledl2/array_256x8_0.bottom.lib",
+          "sha256": "b21303c6f875e76483bbc362c02bbc0fe108a34304e63261f63ac5e45de0c627"
+        },
+        "original_lef": {
+          "relative": "lef_original/xiangshan_coupledl2/array_256x8_0.lef",
+          "sha256": "91ec39ef839de6b9cf34049b96500b55c14ef161cef862063ac351744a35bc01"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/xiangshan_coupledl2/array_256x8_0.lib",
+          "sha256": "b5d2a1e19b984f9d61ca566fe595f15ff3adf15f8fe3d8a2d62ffaf22c91b7d0"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/xiangshan_coupledl2/array_256x8_0.upper.cover.lef",
+          "sha256": "721caf32f9a289578882d04db09ad3d6783a2b4aa93e9d82ea25ca65d9aa859a"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/xiangshan_coupledl2/array_256x8_0.upper.lef",
+          "sha256": "2fe05eadb3c646c3be10a0cf18fd4700b67853fb729c945909f9ad1dfdfab967"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/xiangshan_coupledl2/array_256x8_0.upper.lib",
+          "sha256": "b8fa60a04f228dd3b45a083db53c1c421c9b93eef6844bc129a11528ee1d2581"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/xiangshan_coupledl2/array_256x8_0.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x8_0.lib",
+      "master": "array_256x8_0",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    }
+  ],
+  "pdk": "asap7",
+  "phase": 2,
+  "platform": "asap7_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7_3D/lef/asap7_tech_1x_6M7M.lef",
+  "tech_lef_sha256": "2291eec60a807f8c34c33453ea3ea661de8260bc4d9d1f0fc82a233ed2f2ade4",
+  "top": "CoupledL2"
+}

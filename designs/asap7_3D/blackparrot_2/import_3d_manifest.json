@@ -1,0 +1,299 @@
+{
+  "case": "blackparrot_2",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/asap7_3D/blackparrot_2/config2d.mk",
+  "config2d_sha256": "7c2b27b5dbff5e3109698f385f7db6bcb8d8e25912c31b1d830790553f400c1b",
+  "macros": [
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_256x95.bottom.cover.lef",
+          "sha256": "c05461d14fa5f7e6d2c547ba1dc40e6da13d1f951b3e89d8f6d78705e61f0062"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/blackparrot_2/ht_asap7_blackparrot_256x95.bottom.lef",
+          "sha256": "e253bfd9a06d14a48c106cc5ed852e65d9810ccf1804b6fad5d55c162808e662"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_256x95.bottom.lib",
+          "sha256": "14892eb2dc4ad058fd45bf419daf9bc67c975024d0b578886e3ee428006c6fff"
+        },
+        "original_lef": {
+          "relative": "lef_original/blackparrot_2/ht_asap7_blackparrot_256x95.lef",
+          "sha256": "4e83bf47a2f95d6da7e3d9d07965c81246661d92e367abfbf953ae83a2b0841f"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/blackparrot_2/ht_asap7_blackparrot_256x95.lib",
+          "sha256": "e5082e96a443810830d412de1879eeda617bdd57bf9d7a43084b0e380ef5a0ae"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_256x95.upper.cover.lef",
+          "sha256": "e3b502ac522dc81f91bbd921505e20daedf394489cc60072f9ef9b4de402eb6d"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/blackparrot_2/ht_asap7_blackparrot_256x95.upper.lef",
+          "sha256": "bec299d0b6868817b9dfb4954c02e806d02d64ba9eb1bed8f2ee0a4c337e4e0e"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_256x95.upper.lib",
+          "sha256": "ab369d487c08506ab68257be4e7a93353daf3e71c8e15166336ac3ee4c671362"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/blackparrot_2/ht_asap7_blackparrot_256x95.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_256x95.lib",
+      "master": "ht_asap7_blackparrot_256x95",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_512x64.bottom.cover.lef",
+          "sha256": "f66fa37c10779c85cd54dde38557503b831132b47199cdb2c1ce3256e233253c"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/blackparrot_2/ht_asap7_blackparrot_512x64.bottom.lef",
+          "sha256": "3c331c65584f2e673041b371bfe0461cb6f4221cb05eaaf58b270030ed686f8c"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_512x64.bottom.lib",
+          "sha256": "0fc3358c1b11d40911b7e167b05050273c81be49b4c3cf75648520d4f14d49c1"
+        },
+        "original_lef": {
+          "relative": "lef_original/blackparrot_2/ht_asap7_blackparrot_512x64.lef",
+          "sha256": "51980b163feceef5ceb3e9f5fda98c415325ef768b96b98487d3d6d5506f616c"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/blackparrot_2/ht_asap7_blackparrot_512x64.lib",
+          "sha256": "56399c78a83eaa1b020c8276c39818b01987301a4a06cb2f78acbd35da109227"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_512x64.upper.cover.lef",
+          "sha256": "483a089f9208ec8ea81bd0686cbbc1f2ddff55d34f5738650f412137e7528dff"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/blackparrot_2/ht_asap7_blackparrot_512x64.upper.lef",
+          "sha256": "0ff82e4b56e535b229b310db76a12c6a56a425f18484275c4cf008ac5d7d442b"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_512x64.upper.lib",
+          "sha256": "8bf641147b41a2b11caf055b17f825551f16a918e5597f13caae7a3c81594751"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/blackparrot_2/ht_asap7_blackparrot_512x64.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_512x64.lib",
+      "master": "ht_asap7_blackparrot_512x64",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x15.bottom.cover.lef",
+          "sha256": "af742b4b9232394f78f4de9427bfdab959283692c6286cb2eba76ec8d0944aa3"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x15.bottom.lef",
+          "sha256": "d5cdcff4b6e84375cbbb04cac75ef5498332e386a4ac54875c692b5226f84945"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x15.bottom.lib",
+          "sha256": "c060c491125ad99f5e8f998226045aa4d0deb12bbb5597bcffcf3ea9f7800528"
+        },
+        "original_lef": {
+          "relative": "lef_original/blackparrot_2/ht_asap7_blackparrot_64x15.lef",
+          "sha256": "af76781e9073d5902bc7d24ce2a32bbd36ab417675132b9d4538d603f3fbda50"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/blackparrot_2/ht_asap7_blackparrot_64x15.lib",
+          "sha256": "55edfc1296a315174e390eea5369d7ff80acd5f35c6cecd153e0f12c5d62336f"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x15.upper.cover.lef",
+          "sha256": "a31f8c7d0f8841cbaa4795cd03d7aaf929b20bc55754413337a22885708d4d74"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x15.upper.lef",
+          "sha256": "fceb37984716f34415497af845e3ab55b9b84c16e1d226f44426c4f0a8f182f9"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x15.upper.lib",
+          "sha256": "a6545147a7a7649b48a2cc9d114427bc052270971d77ad1bee79f4cede9df5dc"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/blackparrot_2/ht_asap7_blackparrot_64x15.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x15.lib",
+      "master": "ht_asap7_blackparrot_64x15",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x7.bottom.cover.lef",
+          "sha256": "9350c3e8782657fbc0c6bd2869262da9ff7d503451b24959eb2a6fda412d1f64"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x7.bottom.lef",
+          "sha256": "fc033e1b6a390d5926b7d7ca3bfd52bc9523bf65f03a7aac3b6a1942686fa1c7"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x7.bottom.lib",
+          "sha256": "0918e0d80d84ecb702eb819800651c15fabd3f1c76d5b83f3d29c45d829e0e26"
+        },
+        "original_lef": {
+          "relative": "lef_original/blackparrot_2/ht_asap7_blackparrot_64x7.lef",
+          "sha256": "fe0241c3b3130d964721aeb98d01e71db649eb0ad47b33194d1dd2f57af853a8"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/blackparrot_2/ht_asap7_blackparrot_64x7.lib",
+          "sha256": "2bf6628cdb125c673ecd3a820fff9ba41be22a394d142e2230fef3cde7b7bd91"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x7.upper.cover.lef",
+          "sha256": "7040d0a7ca5a1e18b62f1431faa77e6ce2897a5cd23faa1fa9a32c477cf4d0dd"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x7.upper.lef",
+          "sha256": "5070317a80cc1775976a522b1747c53363fa7bc79f160a59388d84b6894a2224"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x7.upper.lib",
+          "sha256": "72c82c7a7613167a23cbd5844521917aabb57ee0efb733285e70639f334366e0"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/blackparrot_2/ht_asap7_blackparrot_64x7.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x7.lib",
+      "master": "ht_asap7_blackparrot_64x7",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x96.bottom.cover.lef",
+          "sha256": "983c0f9d6f75a9021acf32934a318a89eb8ac7badadcd6a6b05bf814a2358c28"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x96.bottom.lef",
+          "sha256": "4e6c1177eb78387501264c181ee38fd3ec07e9c98c05f1f8f8dd4218452a9e04"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x96.bottom.lib",
+          "sha256": "05d7c7a9b5b1d4fb02d3deda51c8998321c8ce520dbcb27cd8c1d7cfc17af181"
+        },
+        "original_lef": {
+          "relative": "lef_original/blackparrot_2/ht_asap7_blackparrot_64x96.lef",
+          "sha256": "addacaf3519a0eb0a58dc81e719a48804fdc623a671751f33502d32e70fa0fb9"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/blackparrot_2/ht_asap7_blackparrot_64x96.lib",
+          "sha256": "bc1a9b608fdc83f2bd9f266f6fd3d384eba0e15cb2c70f4b963ff8dd710993e8"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/blackparrot_2/ht_asap7_blackparrot_64x96.upper.cover.lef",
+          "sha256": "59158b06f3ca326bbc28c662ee073c77284af1ef0d88b61614afd17aa6bb600d"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/blackparrot_2/ht_asap7_blackparrot_64x96.upper.lef",
+          "sha256": "e5e714b945b45b329dcd34a746a2d16d70eee1ae63580e7cbcdaeb4bfd596336"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x96.upper.lib",
+          "sha256": "377250db4b9f6cd971e01a9a683f0df32c286c943c685aa59850771248ffb25d"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lef/fakeram/blackparrot_2/ht_asap7_blackparrot_64x96.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x96.lib",
+      "master": "ht_asap7_blackparrot_64x96",
+      "source_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    }
+  ],
+  "pdk": "asap7",
+  "phase": 2,
+  "platform": "asap7_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/asap7_3D/lef/asap7_tech_1x_6M7M.lef",
+  "tech_lef_sha256": "2291eec60a807f8c34c33453ea3ea661de8260bc4d9d1f0fc82a233ed2f2ade4",
+  "top": "black_parrot"
+}

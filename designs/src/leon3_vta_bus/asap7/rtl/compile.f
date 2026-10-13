@@ -1,0 +1,9 @@
+RTL/leon3core-inferred-nojtag.sv
+RTL/VTA.DefaultDe10Config.replmem.noqueue.sv
+RTL/vta_small_memories.sv
+RTL/vta_queue_512x128_adapter.sv
+RTL/leon3_banked_mems.sv
+RTL/vta_scratchpad_wrappers.sv
+RTL/vta_queue_wrapper.sv
+RTL/vta_host_bridge.sv
+RTL/leon3_vta_soc.sv

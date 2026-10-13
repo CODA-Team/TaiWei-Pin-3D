@@ -1,0 +1,527 @@
+{
+  "case": "rocket_gemmini",
+  "config2d": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/designs/nangate45_3D/rocket_gemmini/config2d.mk",
+  "config2d_sha256": "abf714280b83ae63dc4bbe02e009d7f449129b795928b5a661473d2fae233bb3",
+  "macros": [
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.bottom.cover.lef",
+          "sha256": "c7f0fcb9547ad3a8697e8bb2550a1b23493b41fd2bcf69a3affd9ca0050b0aca"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.bottom.lef",
+          "sha256": "1f7eb9e8c9d31d54dea583aae3e9dd4078ab0e312a4fac3f64a9e67838d6ea86"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.bottom.lib",
+          "sha256": "a751af716a48c53d5b2b61be14e5a33cc1ec12c21695452dcf7cd80646b424d1"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.lef",
+          "sha256": "733ce7aacc7c548980a33d2e4161822c9d142f40d1b4a4e622eeac670ca663ec"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.lib",
+          "sha256": "02ddabc842925013f316bf66566891f9acd764365ab8d8c27191a0c295f842d2"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.upper.cover.lef",
+          "sha256": "f795bd37448d07da10fb75f2bdf3cbddf22c8562d6b9a9dc86a2278ffb03db30"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.upper.lef",
+          "sha256": "ecd6702f125b4c2ae0a6cb2c132d2548cfdd1123ca60a4aa5c2524c163bba24e"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.upper.lib",
+          "sha256": "17e6e1286576f536758216a2478f15508f6d4aea2513d88a4eb792b0cbb56cca"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_banks_0_ext.lib",
+      "master": "ht45_rocketgemmini_cc_banks_0_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.bottom.cover.lef",
+          "sha256": "fa0b67becc6bd02ade9099e9defadf56dc61b3848d01dc3ffce85cb2aae79251"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.bottom.lef",
+          "sha256": "81b544d7db714335f406cd6b1f9438417d43e806a3cfb3199d27b64c8dd0f814"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.bottom.lib",
+          "sha256": "f5b0a6bd6c5f86984929a5cb51bcceed1f1f3f195852d4c473c6b4b981595cb4"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.lef",
+          "sha256": "451afb0a508c931661b32c91b2317171574164fd85cf3a738a2564c1c6efd856"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.lib",
+          "sha256": "66dc38e6a8bbcbd00da41c569ec4569d503968451e16415ba79cb137387f8390"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.upper.cover.lef",
+          "sha256": "d196fd35f8172ebd96688a23b229a8556f2c20e84135f452fc87389df777a67b"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.upper.lef",
+          "sha256": "ba409a183213a097d158e139e31e3669b7adb32ef71fb1ad90e4565549454b4c"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.upper.lib",
+          "sha256": "bacba30ee3af89bcfe1ae2e1b596eb3e1fc02876f4cb26ab77a7f728c77300ab"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_cc_dir_ext.lib",
+      "master": "ht45_rocketgemmini_cc_dir_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.bottom.cover.lef",
+          "sha256": "4b4dc766b78b111b20a7c06663295e2e4694c7ca4981cd08e5080f864583bf52"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.bottom.lef",
+          "sha256": "9c6fc02445beab504e60c3462d77554078ba9abfcf619277593da42bfd3c06fa"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.bottom.lib",
+          "sha256": "0c830b54708ddf0ebf7b0eb503f766d3d7ebd1d378bca4c9c8597d4d6fa1a0d7"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.lef",
+          "sha256": "489a7a7f0fe7524fb2fb0ae1fff39898102564a8fd17a81a919c80093ce590b1"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.lib",
+          "sha256": "37c0aded7694fd7ee69ed05334c353df0d1ff941ddd634af803f612f9ee0780b"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.upper.cover.lef",
+          "sha256": "b778ca5a114dc5002000e44ae8bc2cd0ef745a4b3bb5d730efac5f5c2c49d1b3"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.upper.lef",
+          "sha256": "0d657797945f667307714b346d326fc2f804535fd9968525ab8045a8ac6dc3a4"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.upper.lib",
+          "sha256": "ab3cbfcda9277d510c6c9ba7e46c67458f2109a0f944efe69a6fec1eb2516459"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_0_ext.lib",
+      "master": "ht45_rocketgemmini_mem_0_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.bottom.cover.lef",
+          "sha256": "14ca975dfdd4ffb2d838388b8c073131c6676ffa24fc07b1aa93e6d2e83c226f"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.bottom.lef",
+          "sha256": "5a3ac245f93d4768f5e9b3e284d60db070b6cd05feb7b78cd28fbab37645c187"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.bottom.lib",
+          "sha256": "005b5c29248f05c80804eb3ca57534bababe37e26169d285fad65b8dff2882d7"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.lef",
+          "sha256": "3c46f74f60dbb5dbb224e282684993a2f484638e4ae6f7a628386996e61b7cbe"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.lib",
+          "sha256": "878f92b9a3519dc09ead9c85042c1fb22995ea00b6b10f700e6302dcfc16a6e2"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.upper.cover.lef",
+          "sha256": "aa6e316fddcbce2a0f2f62c47d767a9ca434dc1f278edbbf9a25b8bed0a77bfc"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.upper.lef",
+          "sha256": "6094f1265f3697776d556d4570dad35b405374b3911b5842a841de000b67d528"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.upper.lib",
+          "sha256": "c7a876681fad1c9c50c3efc6ee87a2f3a650a8e914ef5a61d1dc91daa94cd3aa"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_1_ext.lib",
+      "master": "ht45_rocketgemmini_mem_1_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_ext.bottom.cover.lef",
+          "sha256": "5d41e7948be5bfcfd2cc819ea85ab7a567f7df5e866ced2a0be0f5861647e7b5"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_ext.bottom.lef",
+          "sha256": "abd15bd99e526e7a6c5f930b7f03feee39c8177fe1caa2aeaeedddf045ce1624"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_ext.bottom.lib",
+          "sha256": "141402166a80fd2a41d38cd8ab61e89c0798f1f7df204852d5d1593a8fbd03f2"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_mem_ext.lef",
+          "sha256": "0a360938987a8a0df80b2555c34ae8d3ff887d474a3951000cf04022e1b998ee"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_mem_ext.lib",
+          "sha256": "278f2bd7c71b0106728a567ebd2a4e6de10b353e7bd966794021e115eea8eb06"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_mem_ext.upper.cover.lef",
+          "sha256": "74cd086c8079886228eb7c2425294be97926e40d5c894a5808d90cdfa04399a2"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_mem_ext.upper.lef",
+          "sha256": "38186321f35f7f5e545569aadcf245e2e1a9d6914c72f8d728f5830ec980df8b"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_ext.upper.lib",
+          "sha256": "f9fba96e043ae1b163690f8c314d4b06d227bd1d979cd017d412ff4d04307385"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_mem_ext.lib",
+      "master": "ht45_rocketgemmini_mem_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.bottom.cover.lef",
+          "sha256": "cf2af1667e0f82ff603bff42d3798194fca92faa32a010323a696e0ec7fdfc3b"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.bottom.lef",
+          "sha256": "4178fdf91a8c5245fa2af6f0dae382e0a453480f864bdb9065e94c74eda4936e"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.bottom.lib",
+          "sha256": "ae53765d1df1da09f142c2a90e91db466ea7bff9b92e855f12adb3ae85ec9d33"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.lef",
+          "sha256": "eaf4961376a6d14efdffdf331b6a26a644034869b68749f14314338550c0d99e"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.lib",
+          "sha256": "1f1401cab76d494cd75c1da573b86627435a73c5be8fecbd4e3aeaa1f0b46cad"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.upper.cover.lef",
+          "sha256": "5cc1a8b519410ebee0c05436225d727ee3afd91d3fc02df2a4f7a90905a4ed77"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.upper.lef",
+          "sha256": "6306e982a9dec7f2ce2146e6360634f7e411eec715297b575fcfb9861932d4c2"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.upper.lib",
+          "sha256": "cf4b04149986a162bb703a83773940d40583f697ca8a3df99417101489ad0b92"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext.lib",
+      "master": "ht45_rocketgemmini_rockettile_dcache_data_arrays_0_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.bottom.cover.lef",
+          "sha256": "b18022c98ae954a187a52dcce04110b2c7c9af9455a7dfa714e88ee4d5ceca73"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.bottom.lef",
+          "sha256": "c38ca94b730deafecdbc6b7d47c50592567a56ea52efb7217c39d7c82758263d"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.bottom.lib",
+          "sha256": "fd002a2be99ec442b4fbca82b7e601d76aadc766f693496277aa6e694cfe1150"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.lef",
+          "sha256": "f304d268e71ca0bd4be1e7a6523f79648ccc4372042dbabc8fd5574624328b30"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.lib",
+          "sha256": "2ad75258c5fe5d75113e2bc0e9307206d5b775ae250b767f57aa425a816c2ac7"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.upper.cover.lef",
+          "sha256": "1f6a3612d4a69a709dc07fba4679349bb2a3d3523ed85426b5191b159ce9dea0"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.upper.lef",
+          "sha256": "0b46301af6f1f1f45d716c6d367df3af5838558ee30f99cac661d16520e18250"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.upper.lib",
+          "sha256": "26949f8da33225b0dd0fd8766deed867e458e49e39b5a59626b6d0e3c7442f33"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_dcache_tag_array_ext.lib",
+      "master": "ht45_rocketgemmini_rockettile_dcache_tag_array_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.bottom.cover.lef",
+          "sha256": "df2d4c3c47d788d5eb0c6920ca22418d5815254091d76323bdaa0976cb36b181"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.bottom.lef",
+          "sha256": "6b743955cac1577aec478c34e5c1719d803190dd0e971be3c77a4b49ca4e5d16"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.bottom.lib",
+          "sha256": "1ab990a34d29b5b8deac44ce4ebfeac450762f2ca87d0fb02f56d13668e32193"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.lef",
+          "sha256": "02d77292c9c8ecc23f2c02503cc9d1163f5e9ba67bdcad3403c5b783ba1c4623"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.lib",
+          "sha256": "d0162c089a78df0acb83cf71b90dbe920e832b95cf536f5b995a378ddd399670"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.upper.cover.lef",
+          "sha256": "432e96ba66d48fd67542f2c02fef1155859063bcffc3835665f6c81111dce952"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.upper.lef",
+          "sha256": "e829bbf63cf986637bc6faf6e2f9895a40df446782a03b180d47698edf1d6c92"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.upper.lib",
+          "sha256": "a30837af33896194354ffea8e4d40d11889cf0d5a8251dde0ccd2122a14cc0ed"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext.lib",
+      "master": "ht45_rocketgemmini_rockettile_icache_data_arrays_0_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    },
+    {
+      "bottom_layers": [
+        "M1",
+        "M2",
+        "M3",
+        "M4"
+      ],
+      "files": {
+        "bottom_cover_lef": {
+          "relative": "lef_bottom/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.bottom.cover.lef",
+          "sha256": "f4cf42decc633bb238967ca6c4267795f4e369d833ec72e84455e0d0b65e8148"
+        },
+        "bottom_lef": {
+          "relative": "lef_bottom/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.bottom.lef",
+          "sha256": "3ad33e0ef768905e0a0b690bcef5c98e5858e96522d75840293f8b9b18cf1e39"
+        },
+        "bottom_lib": {
+          "relative": "lib_bottom/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.bottom.lib",
+          "sha256": "65031e4df38e29ba031df956ac30f03e0e754a1de470f73ed917ef9f41d2f5b7"
+        },
+        "original_lef": {
+          "relative": "lef_original/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.lef",
+          "sha256": "25cd3aa3438cbddf99d6a6a910a5e7ea01566ab9320ddce571d78832b0e3bf86"
+        },
+        "original_lib": {
+          "relative": "lib_original/NLDM/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.lib",
+          "sha256": "0f28b736da4896abe0c85a5cdf89c775a625810ea953cc7554bfca962759aacb"
+        },
+        "upper_cover_lef": {
+          "relative": "lef_upper/fakeram_cover/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.upper.cover.lef",
+          "sha256": "6df88b5ccccae2e14fdf03477d80981187caaf7d1331d7564c51a6080b5ce586"
+        },
+        "upper_lef": {
+          "relative": "lef_upper/fakeram_block/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.upper.lef",
+          "sha256": "a5282d101f705906afc261a2160030bdd5abc4e606e09287e0fd14ce17aa92e6"
+        },
+        "upper_lib": {
+          "relative": "lib_upper/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.upper.lib",
+          "sha256": "e7a8a8ec108cb44e9e98bb0ea0fe5a3a2af24538e5b15e445f54c9471df93082"
+        }
+      },
+      "lef_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lef/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.lef",
+      "lib_source": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45/lib/NLDM/fakeram/rocket_gemmini/ht45_rocketgemmini_rockettile_icache_tag_array_ext.lib",
+      "master": "ht45_rocketgemmini_rockettile_icache_tag_array_ext",
+      "source_layers": [
+        "metal1",
+        "metal2",
+        "metal3",
+        "metal4"
+      ],
+      "upper_layers": [
+        "M1_m",
+        "M2_m",
+        "M3_m",
+        "M4_m"
+      ]
+    }
+  ],
+  "pdk": "nangate45",
+  "phase": 2,
+  "platform": "nangate45_3D",
+  "schema_version": 1,
+  "tech_lef": "/home/zhyang/TaiWei-Integration/TaiWei-Pin-3D/platforms/nangate45_3D/lef/NangateOpenCellLibrary.tech.lef",
+  "tech_lef_sha256": "96c922b4c823b516c8e73536eaaf7ae367808f1958c16b31f365e90a84224f95",
+  "top": "DigitalTop"
+}
