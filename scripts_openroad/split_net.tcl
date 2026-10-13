@@ -1,15 +1,20 @@
 # ============================================================
 # OpenROAD Tcl
 # File: split_net.tcl
-# Regular-buffer split pass for mixed-tier signal nets.
+# Dual-boundary-buffer split pass for mixed-fanout cross-tier signal nets.
 #
-# This matches the Cadence split-net intent:
-#   driver -> original_net -> retained sinks + buffer input
-#   buffer -> branch_net   -> moved sinks
+# Each crossing net is normalized into three independent segments:
+#   driver -> original_net -> same-tier sinks + source buffer input
+#   source buffer -> bridge_net -> destination buffer
+#   destination buffer -> branch_net -> opposite-tier sinks
 #
-# The pass runs after IO placement and before macro placement. It does not
-# require a special 1-input/2-output splitter cell; it uses a regular 1-input
-# / 1-output buffer on the selected tier.
+# Pure crossing nets, whose sinks are all on the opposite die, are left
+# untouched by default to avoid adding two buffer stages without isolating any
+# same-tier load.  The middle bridge net is the only cross-tier segment for
+# nets selected by this pass.  Both boundary cells use ordinary 1-input/1-output
+# buffers and are protected from later topology rewriting; ordinary upper/bottom
+# repair passes remain free to build their own local buffer trees on original_net
+# and branch_net.
 # ============================================================
 
 if {![llength [info commands _or_bterm_tier]]} {
@@ -47,6 +52,9 @@ namespace eval ::tier_split_or2 {
     buffer_master_lower_re   {}
 
     buffer_inst_suffix       __SPLITBUF__
+    source_buffer_suffix     __SPLITBUF__SRC
+    destination_buffer_suffix __SPLITBUF__DST
+    bridge_net_suffix        __BRIDGE
     branch_net_suffix        __BRANCH
 
     require_both_sink_tiers  1

@@ -72,6 +72,10 @@ proc global_route_helper {} {
   }
 
   if {[env_var_exists_and_non_empty SKIP_INCREMENTAL_REPAIR] && !$::env(SKIP_INCREMENTAL_REPAIR)} {
+    # allow_net=all keeps PG hookup safe.  Re-protect the immutable dual
+    # boundary only for the interval that can rewrite the signal topology.
+    _protect_pin3d_split_buffers 0 1
+    _protect_pin3d_bridge_nets 0 1
     repair_design_helper
     log_cmd global_route -start_incremental
     log_cmd detailed_placement

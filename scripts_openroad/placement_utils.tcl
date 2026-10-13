@@ -561,7 +561,8 @@ proc _pin3d_split_buffer_cells {} {
 }
 
 proc _split_branch_name_match {name} {
-  return [string match "*__BRANCH*" [string trim $name]]
+  set name [string trim $name]
+  return [expr {[string match "*__BRANCH*" $name] || [string match "*__BRIDGE*" $name]}]
 }
 
 proc pin3d_split_manifest_path {{results_dir ""}} {
@@ -814,7 +815,7 @@ proc _pin3d_buffer_inst_io {inst {allow_split_tag 0}} {
 
 proc _pin3d_buffer_drive_score {master_name} {
   set score 999999
-  if {[regexp -nocase -- {[_x]([0-9]+)(?:_|$)} $master_name -> drive]} {
+  if {[regexp -nocase -- {[_x]([0-9]+)[a-z]*(?:_|$)} $master_name -> drive]} {
     set score $drive
   }
   return $score
@@ -966,7 +967,188 @@ proc _pin3d_collect_downstream_branch_domain {branch_net split_tier} {
     branch_buffers [lsort [array names seen_buffers]]]
 }
 
+proc _pin3d_find_bterm_by_name {bterm_name} {
+  set block [ord::get_db_block]
+  if {![catch {set bterm [$block findBTerm $bterm_name]}] && $bterm ne "" && $bterm ne "NULL"} {
+    return $bterm
+  }
+  foreach bterm [$block getBTerms] {
+    if {[$bterm getName] eq $bterm_name} {
+      return $bterm
+    }
+  }
+  return ""
+}
+
+proc _pin3d_driver_net_from_split_record {record} {
+  set driver_kind iterm
+  if {[dict exists $record driver_kind]} {
+    set driver_kind [dict get $record driver_kind]
+  }
+  set driver_pin [dict get $record driver_pin]
+  if {$driver_kind eq "bterm"} {
+    set driver_obj [_pin3d_find_bterm_by_name $driver_pin]
+  } else {
+    set driver_obj [_pin3d_find_iterm_by_name $driver_pin]
+  }
+  if {$driver_obj eq "" || $driver_obj eq "NULL"} {
+    return ""
+  }
+  if {[catch {set driver_net [$driver_obj getNet]}] || $driver_net eq "" || $driver_net eq "NULL"} {
+    return ""
+  }
+  return $driver_net
+}
+
+proc _pin3d_domain_wrong_tier_nets {net_names expected_tier} {
+  set wrong {}
+  foreach net_name $net_names {
+    set net [_pin3d_find_net_by_name $net_name]
+    if {$net eq "" || $net eq "NULL"} {
+      continue
+    }
+    lassign [tier_net_structural_presence_detail_counts $net] upper_count bottom_count io_count unknown_count
+    if {$expected_tier eq "upper"} {
+      set invalid [expr {$bottom_count > 0 || $unknown_count > 0}]
+    } else {
+      set invalid [expr {$upper_count > 0 || $unknown_count > 0}]
+    }
+    if {$invalid} {
+      lappend wrong $net_name
+    }
+  }
+  return [lsort -unique $wrong]
+}
+
+proc _pin3d_validate_dual_boundary_entry {record} {
+  foreach key {split_src_inst split_dst_inst bridge_net source_tier destination_tier moved_sinks retained_sinks driver_pin} {
+    if {![dict exists $record $key]} {
+      return [dict create status violated reason "dual_manifest_missing_${key}"]
+    }
+  }
+
+  set source_tier [dict get $record source_tier]
+  set destination_tier [dict get $record destination_tier]
+  set src_inst [_pin3d_find_inst_by_name [dict get $record split_src_inst]]
+  set dst_inst [_pin3d_find_inst_by_name [dict get $record split_dst_inst]]
+  if {$src_inst eq ""} {
+    return [dict create status violated reason source_boundary_buffer_missing]
+  }
+  if {$dst_inst eq ""} {
+    return [dict create status violated reason destination_boundary_buffer_missing]
+  }
+  set src_info [_pin3d_buffer_inst_io $src_inst 1]
+  set dst_info [_pin3d_buffer_inst_io $dst_inst 1]
+  if {$src_info eq "" || $dst_info eq ""} {
+    return [dict create status violated reason boundary_buffer_invalid]
+  }
+  if {[_or_split_buffer_physical_tier $src_inst] ne $source_tier} {
+    return [dict create status violated reason source_boundary_buffer_tier_mismatch]
+  }
+  if {[_or_split_buffer_physical_tier $dst_inst] ne $destination_tier} {
+    return [dict create status violated reason destination_boundary_buffer_tier_mismatch]
+  }
+
+  set bridge_net [_pin3d_iterm_net [dict get $src_info output]]
+  set dst_input_net [_pin3d_iterm_net [dict get $dst_info input]]
+  if {$bridge_net eq "" || $dst_input_net ne $bridge_net} {
+    return [dict create status violated reason bridge_endpoint_connection_invalid]
+  }
+  if {[$bridge_net getName] ne [dict get $record bridge_net]} {
+    return [dict create status violated reason bridge_net_identity_changed]
+  }
+  set bridge_signal_iterms 0
+  foreach iterm [$bridge_net getITerms] {
+    set sig_type [_pin3d_safe_sigtype_from_mterm [$iterm getMTerm]]
+    if {$sig_type ne "POWER" && $sig_type ne "GROUND"} {
+      incr bridge_signal_iterms
+    }
+  }
+  set bridge_bterms 0
+  catch {set bridge_bterms [llength [$bridge_net getBTerms]]}
+  if {$bridge_signal_iterms != 2 || $bridge_bterms != 0} {
+    return [dict create status violated reason bridge_not_point_to_point]
+  }
+
+  set driver_net [_pin3d_driver_net_from_split_record $record]
+  if {$driver_net eq ""} {
+    return [dict create status violated reason driver_or_driver_net_missing]
+  }
+  set source_domain [_pin3d_collect_downstream_branch_domain $driver_net $source_tier]
+  set source_reachable [dict get $source_domain sink_names]
+  set source_boundary_sink [_pin3d_iterm_full_name [dict get $src_info input]]
+  set missing_source_boundary [_list_minus [list $source_boundary_sink] $source_reachable]
+  set missing_source [_list_minus [dict get $record retained_sinks] $source_reachable]
+  set wrong_source_nets [_pin3d_domain_wrong_tier_nets [dict get $source_domain branch_nets] $source_tier]
+
+  set destination_root [_pin3d_iterm_net [dict get $dst_info output]]
+  if {$destination_root eq ""} {
+    return [dict create status violated reason destination_local_root_missing]
+  }
+  set destination_domain [_pin3d_collect_downstream_branch_domain $destination_root $destination_tier]
+  set destination_reachable [dict get $destination_domain sink_names]
+  set missing_moved [_list_minus [dict get $record moved_sinks] $destination_reachable]
+  set leaked_retained {}
+  foreach retained_sink [dict get $record retained_sinks] {
+    if {[lsearch -exact $destination_reachable $retained_sink] >= 0} {
+      lappend leaked_retained $retained_sink
+    }
+  }
+  set wrong_destination_nets [_pin3d_domain_wrong_tier_nets [dict get $destination_domain branch_nets] $destination_tier]
+
+  set details [dict create \
+    missing_source_boundary $missing_source_boundary \
+    missing_source $missing_source \
+    missing_moved $missing_moved \
+    leaked_retained $leaked_retained \
+    source_wrong_tier_nets $wrong_source_nets \
+    destination_wrong_tier_nets $wrong_destination_nets \
+    source_buffers [dict get $source_domain branch_buffers] \
+    destination_buffers [dict get $destination_domain branch_buffers]]
+  # Resizer may legally swap equivalent gate inputs, clone logic, or move loads
+  # between same-tier trees.  Manifest sink identities therefore become stale
+  # after repair_timing.  The immutable contract is the source-buffer input,
+  # the point-to-point bridge, a non-empty destination domain, and tier purity.
+  if {[llength $missing_source_boundary] > 0} {
+    return [dict merge [dict create status violated reason source_boundary_not_reachable] $details]
+  }
+  if {[llength $wrong_source_nets] > 0} {
+    return [dict merge [dict create status violated reason source_local_tree_crosses_tier] $details]
+  }
+  if {[llength $wrong_destination_nets] > 0} {
+    return [dict merge [dict create status violated reason destination_local_tree_crosses_tier] $details]
+  }
+  if {[llength $destination_reachable] == 0} {
+    return [dict merge [dict create status violated reason destination_local_domain_empty] $details]
+  }
+
+  set direct_topology 1
+  if {[_pin3d_iterm_net_name [dict get $src_info input]] ne [dict get $record original_net]} {
+    set direct_topology 0
+  }
+  if {[dict exists $record branch_net] && [_pin3d_iterm_net_name [dict get $dst_info output]] ne [dict get $record branch_net]} {
+    set direct_topology 0
+  }
+  if {[llength [dict get $source_domain branch_buffers]] > 0 || [llength [dict get $destination_domain branch_buffers]] > 0} {
+    set direct_topology 0
+  }
+  if {[llength $missing_source] > 0 || [llength $missing_moved] > 0 || [llength $leaked_retained] > 0} {
+    set direct_topology 0
+  }
+  if {$direct_topology} {
+    return [dict merge [dict create status valid reason direct_dual_boundary_preserved] $details]
+  }
+  set rewrite_reason dual_boundary_with_local_buffer_trees
+  if {[llength $missing_source] > 0 || [llength $missing_moved] > 0 || [llength $leaked_retained] > 0} {
+    set rewrite_reason dual_boundary_with_local_logic_rewrite
+  }
+  return [dict merge [dict create status equivalent reason $rewrite_reason] $details]
+}
+
 proc _pin3d_validate_split_entry {record} {
+  if {[dict exists $record record_type] && [dict get $record record_type] eq "dual_boundary"} {
+    return [_pin3d_validate_dual_boundary_entry $record]
+  }
   set split_tier [dict get $record buffer_tier]
   set split_inst_name [dict get $record split_inst]
   set original_net_name [dict get $record original_net]
@@ -1186,6 +1368,9 @@ proc _pin3d_anchor_inst_for_split_repair {driver_iterm moved_iterms} {
 }
 
 proc _pin3d_repair_split_entry {record {quiet 0}} {
+  if {[dict exists $record record_type] && [dict get $record record_type] eq "dual_boundary"} {
+    return [dict create repaired 0 reason dual_boundary_auto_repair_disabled]
+  }
   set driver_iterm [_pin3d_find_iterm_by_name [dict get $record driver_pin]]
   if {$driver_iterm eq ""} {
     return [dict create repaired 0 reason driver_pin_missing]
@@ -1267,7 +1452,7 @@ proc _pin3d_repair_split_entry {record {quiet 0}} {
   return [dict create repaired 1 reason [dict get $post_status reason]]
 }
 
-proc pin3d_validate_and_repair_split_topology {stage_label {log_dir ""} {results_dir ""}} {
+proc pin3d_validate_and_repair_split_topology {stage_label {log_dir ""} {results_dir ""} {allow_repair ""}} {
   if {$results_dir eq ""} {
     set results_dir [_get RESULTS_DIR]
   }
@@ -1284,6 +1469,9 @@ proc pin3d_validate_and_repair_split_topology {stage_label {log_dir ""} {results
   set auto_repair 1
   if {[info exists ::env(PIN3D_SPLIT_AUTO_REPAIR)] && $::env(PIN3D_SPLIT_AUTO_REPAIR) ne ""} {
     set auto_repair $::env(PIN3D_SPLIT_AUTO_REPAIR)
+  }
+  if {$allow_repair ne ""} {
+    set auto_repair $allow_repair
   }
 
   _pin3d_rebuild_name_caches
@@ -1329,7 +1517,7 @@ proc pin3d_validate_and_repair_split_topology {stage_label {log_dir ""} {results
 
     incr counts(violated)
     puts $fh [format "split_net %s status=violated reason=%s" $net_name $reason]
-    foreach key {missing_moved leaked_retained moved_on_driver original_net_mixed_fanout branch_net_mixed_fanout branch_cross_tier_nets branch_buffers} {
+    foreach key {missing_source missing_moved leaked_retained moved_on_driver source_wrong_tier_nets destination_wrong_tier_nets original_net_mixed_fanout branch_net_mixed_fanout branch_cross_tier_nets branch_buffers source_buffers destination_buffers} {
       if {[dict exists $status_info $key] && [llength [dict get $status_info $key]] > 0} {
         puts $fh [format "  %s %s" $key [dict get $status_info $key]]
       }
@@ -1406,7 +1594,10 @@ proc _collect_split_structure_snapshot {} {
     set split_branch_nets {}
     array set related_lookup {}
 
-    foreach inst_name [_pin3d_manifest_name_set $manifest_records split_inst] {
+    foreach inst_name [concat \
+      [_pin3d_manifest_name_set $manifest_records split_inst] \
+      [_pin3d_manifest_name_set $manifest_records split_src_inst] \
+      [_pin3d_manifest_name_set $manifest_records split_dst_inst]] {
       set inst [_pin3d_find_inst_by_name $inst_name]
       if {$inst ne "" && $inst ne "NULL"} {
         lappend split_buffer_instances $inst_name
@@ -1422,7 +1613,8 @@ proc _collect_split_structure_snapshot {} {
 
     foreach net_name [concat \
       [_pin3d_manifest_name_set $manifest_records original_net] \
-      [_pin3d_manifest_name_set $manifest_records branch_net]] {
+      [_pin3d_manifest_name_set $manifest_records branch_net] \
+      [_pin3d_manifest_name_set $manifest_records bridge_net]] {
       set net [_pin3d_find_net_by_name $net_name]
       if {$net eq "" || $net eq "NULL"} {
         continue

@@ -91,6 +91,12 @@ if {![design_is_routed]} {
   error "Design has unrouted nets."
 }
 
+set split_topology_status [pin3d_validate_and_repair_split_topology \
+  5_route $LOG_DIR $RESULTS_DIR 0]
+if {[dict get $split_topology_status violated] > 0} {
+  error "Post-route dual-boundary validation found [dict get $split_topology_status violated] invalid topology record(s); see 5_route.split_topology.summary.rpt"
+}
+
 pin3d_metrics_invalidate_cache
 report_cross_tier_transition $summary_report $before_report $after_report -label "route"
 report_cross_tier_transition $clock_summary_report $clock_before_report $clock_after_report -label "route clock" -clock_only 1

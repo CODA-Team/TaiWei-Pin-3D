@@ -45,6 +45,11 @@ report_split_structure_snapshot $split_before_report -label "legalize_upper befo
 
 source $::env(OPENROAD_SCRIPTS_DIR)/opt_lg_design.tcl
 pin3d_metrics_invalidate_cache
+set split_topology_status [pin3d_validate_and_repair_split_topology \
+  "3_5_lg_upper" $LOG_DIR $RESULTS_DIR 0]
+if {[dict get $split_topology_status violated] > 0} {
+  error "PIN3D split topology validation failed after upper legalization"
+}
 report_cross_tier_transition $summary_report $before_report $after_report -label "legalize_upper"
 report_mixed_fanout_transition $mixed_summary_report $mixed_before_report $mixed_after_report -label "legalize_upper"
 report_split_structure_transition $split_summary_report $split_before_report $split_after_report -label "legalize_upper"

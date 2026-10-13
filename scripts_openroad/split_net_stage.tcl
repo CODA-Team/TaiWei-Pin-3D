@@ -1,6 +1,6 @@
 # ============================================================
 # split_net_stage.tcl
-# Run the OpenROAD 3D mixed-tier split pass or pass-through mode.
+# Run the OpenROAD 3D all-crossing split pass or pass-through mode.
 # ============================================================
 
 # Core setup
@@ -24,7 +24,7 @@ handoff_bind_stage_io $stage_paths
 proc _write_split_summary {path mode stats_dict} {
   set fh [open $path w]
   puts $fh "mode $mode"
-  foreach key {candidate_nets mixed_tier_nets mixed_fanout_nets split_nets processed_residual} {
+  foreach key {candidate_nets crossing_nets pure_crossing_nets mixed_tier_nets mixed_fanout_nets split_nets processed_residual} {
     if {[dict exists $stats_dict $key]} {
       puts $fh "$key [dict get $stats_dict $key]"
     }
@@ -73,11 +73,25 @@ if {[pin3d_split_net_flow_enabled]} {
   set ::tier_split_or2::CFG(dry_run) 0
   set ::tier_split_or2::CFG(report_file) $action_report
   set ::tier_split_or2::CFG(manifest_file) $split_manifest_path
+  set split_port_driven 0
+  if {[info exists ::env(PIN3D_SPLIT_PORT_DRIVEN_NETS)] && $::env(PIN3D_SPLIT_PORT_DRIVEN_NETS) ne ""} {
+    set port_mode [string tolower [string trim $::env(PIN3D_SPLIT_PORT_DRIVEN_NETS)]]
+    set split_port_driven [expr {$port_mode ni {0 false off no}}]
+  }
+  set ::tier_split_or2::CFG(skip_port_driven_nets) [expr {!$split_port_driven}]
+  puts "INFO(OR): split port-driven nets enabled=$split_port_driven"
   set split_stats [::tier_split_or2::run]
+  set topology_status [pin3d_validate_and_repair_split_topology \
+    split_net_insert $LOG_DIR $RESULTS_DIR 0]
+  if {[dict get $topology_status violated] > 0} {
+    error "Dual-boundary split insertion produced [dict get $topology_status violated] invalid topology record(s); see split_net_insert.split_topology.summary.rpt"
+  }
   _write_split_summary $SUMMARY_OUT $split_mode [dict create \
     candidate_nets [dict get $split_stats candidate_nets] \
+    crossing_nets [dict get $split_stats crossing_nets] \
+    pure_crossing_nets [dict get $split_stats pure_crossing_nets] \
     mixed_tier_nets [dict get $split_stats mixed_tier_nets] \
-    mixed_fanout_nets [dict get $before_mixed_stats mixed_fanout_all] \
+    mixed_fanout_nets [dict get $split_stats mixed_fanout_nets] \
     split_nets [dict get $split_stats split_count] \
     processed_residual [dict get $split_stats processed_residual] \
     skip_reason_counts [dict get $split_stats skip_reason_counts]]

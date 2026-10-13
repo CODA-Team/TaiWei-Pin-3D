@@ -273,7 +273,7 @@ proc ::tier_split_or2::find_master_by_name {master_name} {
 
 proc ::tier_split_or2::buffer_drive_score {master_name} {
   set score 999999
-  if {[regexp -nocase -- {[_x]([0-9]+)(?:_|$)} $master_name -> drive]} {
+  if {[regexp -nocase -- {[_x]([0-9]+)[a-z]*(?:_|$)} $master_name -> drive]} {
     set score $drive
   }
   return $score
@@ -437,7 +437,11 @@ proc ::tier_split_or2::get_net_driver {net} {
     if {$CFG(skip_port_driven_nets)} {
       return [list "" "top_level_term_net_not_supported"]
     }
-    return [list "" "top_level_term_driver_not_supported"]
+    set tier [::tier_split_or2::bterm_tier $driver_obj]
+    if {$tier ni {upper bottom}} {
+      return [list "" "top_level_term_driver_tier_unknown"]
+    }
+    return [list [list $driver_kind $driver_obj] ""]
   }
 
   lassign [::tier_split_or2::driver_ok $driver_obj] ok reason
@@ -999,6 +1003,255 @@ proc ::tier_split_or2::split_net_with_buffer {block net driver_info sinks_by_tie
   return [list 1 "" $record]
 }
 
+proc ::tier_split_or2::driver_tier {driver_kind driver_obj} {
+  switch -- $driver_kind {
+    iterm { return [::tier_split_or2::classify_iterm $driver_obj] }
+    bterm { return [::tier_split_or2::bterm_tier $driver_obj] }
+    default { return unknown }
+  }
+}
+
+proc ::tier_split_or2::driver_net {driver_obj} {
+  if {$driver_obj eq "" || $driver_obj eq "NULL"} {
+    return ""
+  }
+  if {[catch {set net [$driver_obj getNet]}]} {
+    return ""
+  }
+  if {$net eq "" || $net eq "NULL"} {
+    return ""
+  }
+  return $net
+}
+
+proc ::tier_split_or2::cleanup_failed_dual_split {original_net moved_inst_sinks branch_net_name bridge_net_name src_inst_name dst_inst_name} {
+  foreach sink $moved_inst_sinks {
+    catch {$sink connect $original_net}
+  }
+  foreach inst_name [list $src_inst_name $dst_inst_name] {
+    if {$inst_name ne ""} {
+      catch {delete_instance $inst_name}
+    }
+  }
+  foreach net_name [list $branch_net_name $bridge_net_name] {
+    if {$net_name eq ""} {
+      continue
+    }
+    set net [_pin3d_find_net_by_name $net_name]
+    if {$net ne "" && $net ne "NULL"} {
+      catch {::odb::dbNet_destroy $net}
+    }
+  }
+  _pin3d_rebuild_name_caches
+}
+
+proc ::tier_split_or2::remember_created_dual_split_objects {src_inst dst_inst bridge_net branch_net src_in src_out dst_in dst_out moved_inst_sinks} {
+  foreach inst [list $src_inst $dst_inst] {
+    set ::_PIN3D_INST_CACHE([$inst getName]) $inst
+  }
+  foreach net [list $bridge_net $branch_net] {
+    set ::_PIN3D_NET_CACHE([$net getName]) $net
+  }
+  foreach iterm [concat [list $src_in $src_out $dst_in $dst_out] $moved_inst_sinks] {
+    set ::_PIN3D_ITERM_CACHE([::tier_split_or2::iterm_full_name $iterm]) $iterm
+  }
+}
+
+proc ::tier_split_or2::build_dual_split_record {net driver_kind driver_obj source_tier destination_tier src_master_name dst_master_name src_inst_name dst_inst_name bridge_net_name branch_net_name moved_inst_sinks retained_inst_sinks} {
+  return [dict create \
+    record_type dual_boundary \
+    original_net [$net getName] \
+    bridge_net $bridge_net_name \
+    branch_net $branch_net_name \
+    split_src_inst $src_inst_name \
+    split_dst_inst $dst_inst_name \
+    source_buffer_master $src_master_name \
+    destination_buffer_master $dst_master_name \
+    source_tier $source_tier \
+    destination_tier $destination_tier \
+    driver_kind $driver_kind \
+    driver_pin [::tier_split_or2::object_label $driver_kind $driver_obj] \
+    moved_sinks [::tier_split_or2::iterm_name_list $moved_inst_sinks] \
+    retained_sinks [::tier_split_or2::iterm_name_list $retained_inst_sinks] \
+    split_inst $dst_inst_name \
+    buffer_master $dst_master_name \
+    driver_tier $source_tier \
+    buffer_tier $destination_tier \
+    retained_tier $source_tier]
+}
+
+proc ::tier_split_or2::fast_verify_dual_split {original_net driver_obj source_tier destination_tier src_inst dst_inst src_in src_out dst_in dst_out bridge_net branch_net moved_inst_sinks retained_inst_sinks} {
+  if {[::tier_split_or2::driver_net $driver_obj] ne $original_net} {
+    return [dict create status violated reason driver_not_on_original_net]
+  }
+  if {[_pin3d_iterm_net $src_in] ne $original_net} {
+    return [dict create status violated reason source_buffer_input_not_on_original_net]
+  }
+  if {[_pin3d_iterm_net $src_out] ne $bridge_net || [_pin3d_iterm_net $dst_in] ne $bridge_net} {
+    return [dict create status violated reason bridge_endpoint_connection_invalid]
+  }
+  if {[_pin3d_iterm_net $dst_out] ne $branch_net} {
+    return [dict create status violated reason destination_buffer_output_not_on_branch_net]
+  }
+  if {[::tier_split_or2::master_tier [$src_inst getMaster]] ne $source_tier} {
+    return [dict create status violated reason source_buffer_tier_mismatch]
+  }
+  if {[::tier_split_or2::master_tier [$dst_inst getMaster]] ne $destination_tier} {
+    return [dict create status violated reason destination_buffer_tier_mismatch]
+  }
+  foreach sink $moved_inst_sinks {
+    if {[_pin3d_iterm_net $sink] ne $branch_net} {
+      return [dict create status violated reason moved_sink_not_on_branch_net]
+    }
+  }
+  foreach sink $retained_inst_sinks {
+    if {[_pin3d_iterm_net $sink] ne $original_net} {
+      return [dict create status violated reason retained_sink_not_on_original_net]
+    }
+  }
+  set bridge_signal_iterms 0
+  foreach iterm [$bridge_net getITerms] {
+    set sig_type [::tier_split_or2::safe_sigtype [$iterm getMTerm]]
+    if {$sig_type ne "POWER" && $sig_type ne "GROUND"} {
+      incr bridge_signal_iterms
+    }
+  }
+  set bridge_bterms 0
+  catch {set bridge_bterms [llength [$bridge_net getBTerms]]}
+  if {$bridge_signal_iterms != 2 || $bridge_bterms != 0} {
+    return [dict create status violated reason bridge_not_point_to_point]
+  }
+  if {[net_has_mixed_fanout $original_net]} {
+    return [dict create status violated reason original_net_still_mixed_fanout]
+  }
+  if {[net_has_mixed_fanout $branch_net]} {
+    return [dict create status violated reason branch_net_still_mixed_fanout]
+  }
+  return [dict create status valid reason direct_dual_boundary_split_ok]
+}
+
+proc ::tier_split_or2::split_net_with_dual_buffers {block net driver_info sinks_by_tier fp} {
+  variable CFG
+
+  set net_name [$net getName]
+  lassign $driver_info driver_kind driver_obj
+  set source_tier [::tier_split_or2::driver_tier $driver_kind $driver_obj]
+  if {$source_tier ni {upper bottom}} {
+    ::tier_split_or2::record_skip $fp $net_name driver_tier_unknown "driver=[::tier_split_or2::object_label $driver_kind $driver_obj]"
+    return [list 0 driver_tier_unknown ""]
+  }
+  set destination_tier [::tier_split_or2::opposite_tier $source_tier]
+
+  set retained_inst_sinks [dict get $sinks_by_tier ${source_tier}_inst]
+  set retained_term_sinks [dict get $sinks_by_tier ${source_tier}_term]
+  set moved_inst_sinks [dict get $sinks_by_tier ${destination_tier}_inst]
+  set moved_term_sinks [dict get $sinks_by_tier ${destination_tier}_term]
+  if {[llength [dict get $sinks_by_tier unknown]] > 0} {
+    ::tier_split_or2::record_skip $fp $net_name unknown_sink_tier "count=[llength [dict get $sinks_by_tier unknown]]"
+    return [list 0 unknown_sink_tier ""]
+  }
+  if {[llength $moved_inst_sinks] == 0 && [llength $moved_term_sinks] == 0} {
+    ::tier_split_or2::record_skip $fp $net_name no_destination_tier_sinks "destination_tier=$destination_tier"
+    return [list 0 no_destination_tier_sinks ""]
+  }
+  if {[llength $moved_term_sinks] > 0} {
+    ::tier_split_or2::record_skip $fp $net_name top_level_sink_rewire_not_supported "destination_tier=$destination_tier count=[llength $moved_term_sinks]"
+    return [list 0 top_level_sink_rewire_not_supported ""]
+  }
+
+  set src_buffer_info [::tier_split_or2::choose_buffer_master $source_tier 1]
+  set dst_buffer_info [::tier_split_or2::choose_buffer_master $destination_tier [llength $moved_inst_sinks]]
+  if {$src_buffer_info eq ""} {
+    ::tier_split_or2::record_skip $fp $net_name no_source_tier_buffer_master "source_tier=$source_tier"
+    return [list 0 no_source_tier_buffer_master ""]
+  }
+  if {$dst_buffer_info eq ""} {
+    ::tier_split_or2::record_skip $fp $net_name no_destination_tier_buffer_master "destination_tier=$destination_tier"
+    return [list 0 no_destination_tier_buffer_master ""]
+  }
+  lassign $src_buffer_info src_master_name src_in_pin src_out_pin src_area src_drive src_required_drive
+  lassign $dst_buffer_info dst_master_name dst_in_pin dst_out_pin dst_area dst_drive dst_required_drive
+  set src_master [::tier_split_or2::find_master_by_name $src_master_name]
+  set dst_master [::tier_split_or2::find_master_by_name $dst_master_name]
+  if {$src_master eq "" || $dst_master eq ""} {
+    ::tier_split_or2::record_skip $fp $net_name buffer_master_lookup_failed "source_master=$src_master_name destination_master=$dst_master_name"
+    return [list 0 buffer_master_lookup_failed ""]
+  }
+
+  set safe_net_name [::tier_split_or2::sanitize_name_component $net_name]
+  set src_inst_name [::tier_split_or2::ensure_unique_name $block "${safe_net_name}$CFG(source_buffer_suffix)_${source_tier}"]
+  set dst_inst_name [::tier_split_or2::ensure_unique_name $block "${safe_net_name}$CFG(destination_buffer_suffix)_${destination_tier}"]
+  set bridge_net_name [::tier_split_or2::ensure_unique_name $block "${safe_net_name}$CFG(bridge_net_suffix)_${source_tier}_${destination_tier}"]
+  set branch_net_name [::tier_split_or2::ensure_unique_name $block "${safe_net_name}$CFG(branch_net_suffix)_${destination_tier}"]
+  puts $fp "ACTION_DUAL net=$net_name driver=[::tier_split_or2::object_label $driver_kind $driver_obj] driver_kind=$driver_kind source_tier=$source_tier destination_tier=$destination_tier retained_inst_sinks=[llength $retained_inst_sinks] retained_term_sinks=[llength $retained_term_sinks] moved_sinks=[llength $moved_inst_sinks] source_master=$src_master_name source_drive=$src_drive destination_master=$dst_master_name destination_drive=$dst_drive source_inst=$src_inst_name destination_inst=$dst_inst_name bridge_net=$bridge_net_name branch_net=$branch_net_name"
+
+  set record [::tier_split_or2::build_dual_split_record $net $driver_kind $driver_obj $source_tier $destination_tier $src_master_name $dst_master_name $src_inst_name $dst_inst_name $bridge_net_name $branch_net_name $moved_inst_sinks $retained_inst_sinks]
+  if {$CFG(dry_run)} {
+    foreach sink $moved_inst_sinks {
+      puts $fp "  DRYRUN MOVE [::tier_split_or2::iterm_full_name $sink] -> $branch_net_name"
+    }
+    return [list 1 "" $record]
+  }
+
+  set src_inst [odb::dbInst_create $block $src_master $src_inst_name]
+  if {$src_inst eq "" || $src_inst eq "NULL"} {
+    ::tier_split_or2::record_skip $fp $net_name source_dbInst_create_failed "master=$src_master_name"
+    return [list 0 source_dbInst_create_failed ""]
+  }
+  set dst_inst [odb::dbInst_create $block $dst_master $dst_inst_name]
+  if {$dst_inst eq "" || $dst_inst eq "NULL"} {
+    catch {delete_instance $src_inst_name}
+    ::tier_split_or2::record_skip $fp $net_name destination_dbInst_create_failed "master=$dst_master_name"
+    return [list 0 destination_dbInst_create_failed ""]
+  }
+
+  set anchor_inst [[lindex $moved_inst_sinks 0] getInst]
+  set anchor_loc [$anchor_inst getLocation]
+  foreach split_inst [list $src_inst $dst_inst] {
+    $split_inst setLocation [lindex $anchor_loc 0] [lindex $anchor_loc 1]
+    catch {$split_inst setOrient [$anchor_inst getOrient]}
+    catch {$split_inst setPlacementStatus [$anchor_inst getPlacementStatus]}
+  }
+
+  set bridge_net [odb::dbNet_create $block $bridge_net_name]
+  set branch_net [odb::dbNet_create $block $branch_net_name]
+  if {$bridge_net eq "" || $bridge_net eq "NULL" || $branch_net eq "" || $branch_net eq "NULL"} {
+    ::tier_split_or2::cleanup_failed_dual_split $net $moved_inst_sinks $branch_net_name $bridge_net_name $src_inst_name $dst_inst_name
+    ::tier_split_or2::record_skip $fp $net_name dual_net_create_failed "bridge=$bridge_net_name branch=$branch_net_name"
+    return [list 0 dual_net_create_failed ""]
+  }
+
+  set src_in [$src_inst findITerm $src_in_pin]
+  set src_out [$src_inst findITerm $src_out_pin]
+  set dst_in [$dst_inst findITerm $dst_in_pin]
+  set dst_out [$dst_inst findITerm $dst_out_pin]
+  if {$src_in eq "" || $src_out eq "" || $dst_in eq "" || $dst_out eq ""} {
+    ::tier_split_or2::cleanup_failed_dual_split $net $moved_inst_sinks $branch_net_name $bridge_net_name $src_inst_name $dst_inst_name
+    ::tier_split_or2::record_skip $fp $net_name buffer_pin_lookup_failed "source_master=$src_master_name destination_master=$dst_master_name"
+    return [list 0 buffer_pin_lookup_failed ""]
+  }
+
+  $src_in connect $net
+  $src_out connect $bridge_net
+  $dst_in connect $bridge_net
+  $dst_out connect $branch_net
+  foreach sink $moved_inst_sinks {
+    $sink connect $branch_net
+    puts $fp "  MOVE SINK [::tier_split_or2::iterm_full_name $sink] -> $branch_net_name"
+  }
+
+  ::tier_split_or2::remember_created_dual_split_objects $src_inst $dst_inst $bridge_net $branch_net $src_in $src_out $dst_in $dst_out $moved_inst_sinks
+  set verify_status [::tier_split_or2::fast_verify_dual_split $net $driver_obj $source_tier $destination_tier $src_inst $dst_inst $src_in $src_out $dst_in $dst_out $bridge_net $branch_net $moved_inst_sinks $retained_inst_sinks]
+  if {[dict get $verify_status status] ne "valid"} {
+    puts $fp "  VERIFY_FAIL status=[dict get $verify_status status] reason=[dict get $verify_status reason]"
+    ::tier_split_or2::cleanup_failed_dual_split $net $moved_inst_sinks $branch_net_name $bridge_net_name $src_inst_name $dst_inst_name
+    return [list 0 "verify_[dict get $verify_status reason]" ""]
+  }
+
+  puts $fp "  VERIFY_OK status=valid topology=dual_boundary"
+  return [list 1 "" $record]
+}
+
 proc ::tier_split_or2::run {} {
   variable CFG
   variable INST_TIER_CACHE
@@ -1015,7 +1268,7 @@ proc ::tier_split_or2::run {} {
   set fp [open $CFG(report_file) w]
 
   puts $fp "# tier_split_or2"
-  puts $fp "# mode=regular_buffer_split"
+  puts $fp "# mode=dual_boundary_buffer_split"
   puts $fp "# dry_run=$CFG(dry_run)"
   puts $fp "# split_y_um=$CFG(split_y_um)"
   puts $fp "# tier_utilization method=[dict get $tier_util method] core_area=[dict get $tier_util core_area] util_upper=[dict get $tier_util upper] util_bottom=[dict get $tier_util bottom] area_upper=[dict get $tier_util upper_area] area_bottom=[dict get $tier_util bottom_area] total_cell_area=[dict get $tier_util total_cell_area]"
@@ -1044,6 +1297,8 @@ proc ::tier_split_or2::run {} {
   set split_cnt 0
   set skip_cnt 0
   set mixed_tier_nets 0
+  set crossing_nets 0
+  set pure_crossing_nets 0
   set candidate_nets 0
   set manifest_records {}
   array set skip_reason_counts {}
@@ -1087,16 +1342,27 @@ proc ::tier_split_or2::run {} {
     set sinks_by_tier [::tier_split_or2::collect_sinks_by_tier $net]
     set upper_total [expr {[llength [dict get $sinks_by_tier upper_inst]] + [llength [dict get $sinks_by_tier upper_term]]}]
     set bottom_total [expr {[llength [dict get $sinks_by_tier bottom_inst]] + [llength [dict get $sinks_by_tier bottom_term]]}]
+    set both_sink_tiers [expr {$upper_total > 0 && $bottom_total > 0}]
 
-    if {$CFG(require_both_sink_tiers)} {
-      if {$upper_total == 0 || $bottom_total == 0} {
-        continue
-      }
+    if {$both_sink_tiers} {
+      incr mixed_tier_nets
     }
-    incr mixed_tier_nets
+    if {$CFG(require_both_sink_tiers) && !$both_sink_tiers} {
+      continue
+    }
+    if {$upper_total == 0 && $bottom_total == 0} {
+      continue
+    }
 
     lassign [::tier_split_or2::get_net_driver $net] driver_info driver_reason
     if {$driver_info eq ""} {
+      # With sinks on both tiers the net is unquestionably crossing even when
+      # its driver is unsupported.  A one-tier sink net is only a crossing
+      # candidate after the driver tier is known.
+      if {!$both_sink_tiers} {
+        continue
+      }
+      incr crossing_nets
       ::tier_split_or2::record_skip $fp $net_name $driver_reason ""
       incr skip_cnt
       if {![info exists skip_reason_counts($driver_reason)]} {
@@ -1105,9 +1371,36 @@ proc ::tier_split_or2::run {} {
       incr skip_reason_counts($driver_reason)
       continue
     }
+
+    lassign $driver_info driver_kind driver_obj
+    set source_tier [::tier_split_or2::driver_tier $driver_kind $driver_obj]
+    set destination_tier [::tier_split_or2::opposite_tier $source_tier]
+    if {$destination_tier ni {upper bottom}} {
+      if {$both_sink_tiers} {
+        incr crossing_nets
+      }
+      ::tier_split_or2::record_skip $fp $net_name driver_tier_unknown \
+        "driver=[::tier_split_or2::object_label $driver_kind $driver_obj]"
+      incr skip_cnt
+      if {![info exists skip_reason_counts(driver_tier_unknown)]} {
+        set skip_reason_counts(driver_tier_unknown) 0
+      }
+      incr skip_reason_counts(driver_tier_unknown)
+      continue
+    }
+    set destination_total [expr {\
+      [llength [dict get $sinks_by_tier ${destination_tier}_inst]] + \
+      [llength [dict get $sinks_by_tier ${destination_tier}_term]]}]
+    if {$destination_total == 0} {
+      continue
+    }
+    incr crossing_nets
+    if {!$both_sink_tiers} {
+      incr pure_crossing_nets
+    }
     incr candidate_nets
 
-    lassign [::tier_split_or2::split_net_with_buffer $block $net $driver_info $sinks_by_tier $fp] split_ok split_reason split_record
+    lassign [::tier_split_or2::split_net_with_dual_buffers $block $net $driver_info $sinks_by_tier $fp] split_ok split_reason split_record
     if {$split_ok} {
       incr split_cnt
       if {$split_record ne ""} {
@@ -1133,6 +1426,8 @@ proc ::tier_split_or2::run {} {
   puts $fp "# skip_count=$skip_cnt"
   puts $fp "# mixed_tier_nets=$mixed_tier_nets"
   puts $fp "# mixed_fanout_nets=$mixed_tier_nets"
+  puts $fp "# crossing_nets=$crossing_nets"
+  puts $fp "# pure_crossing_nets=$pure_crossing_nets"
   puts $fp "# candidate_nets=$candidate_nets"
   puts $fp "# processed_residual=[expr {$candidate_nets - $split_cnt}]"
   puts $fp "# util_upper=[dict get $tier_util upper]"
@@ -1148,11 +1443,14 @@ proc ::tier_split_or2::run {} {
   close $fp
 
   puts "tier_split_or2: wrote $CFG(report_file)"
-  puts "tier_split_or2: split_count=$split_cnt skip_count=$skip_cnt mixed_tier_nets=$mixed_tier_nets candidate_nets=$candidate_nets dry_run=$CFG(dry_run)"
+  puts "tier_split_or2: split_count=$split_cnt skip_count=$skip_cnt crossing_nets=$crossing_nets mixed_tier_nets=$mixed_tier_nets pure_crossing_nets=$pure_crossing_nets candidate_nets=$candidate_nets dry_run=$CFG(dry_run)"
   return [dict create \
     split_count $split_cnt \
     skip_count $skip_cnt \
     mixed_tier_nets $mixed_tier_nets \
+    mixed_fanout_nets $mixed_tier_nets \
+    crossing_nets $crossing_nets \
+    pure_crossing_nets $pure_crossing_nets \
     candidate_nets $candidate_nets \
     processed_residual [expr {$candidate_nets - $split_cnt}] \
     manifest_records $manifest_records \

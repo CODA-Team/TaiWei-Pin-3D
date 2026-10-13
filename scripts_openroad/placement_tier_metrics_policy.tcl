@@ -1526,6 +1526,116 @@ proc _apply_net_class_optimization_mask {active_class quiet {skip_clock_nets 0}}
   }
 }
 
+proc _pin3d_boolean_env {name default_value} {
+  if {![info exists ::env($name)] || $::env($name) eq ""} {
+    return $default_value
+  }
+  set value [string tolower [string trim $::env($name)]]
+  return [expr {$value ni {0 false off no}}]
+}
+
+proc _set_cell_dont_touch_flag_batch {cell_names protect quiet} {
+  set touched 0
+  set failures 0
+  set chunk_size 256
+  set total [llength $cell_names]
+  for {set idx 0} {$idx < $total} {incr idx $chunk_size} {
+    set chunk [lrange $cell_names $idx [expr {$idx + $chunk_size - 1}]]
+    if {[llength $chunk] == 0} {
+      continue
+    }
+    set cells [get_cells -hierarchical -quiet $chunk]
+    if {$cells eq ""} {
+      continue
+    }
+    if {$protect} {
+      set failed [catch {set_dont_touch $cells} err]
+    } else {
+      set failed [catch {unset_dont_touch $cells} err]
+    }
+    if {$failed} {
+      incr failures [llength $chunk]
+      if {!$quiet} {
+        puts "WARN(OR): failed cell dont_touch batch protect=$protect : $err"
+      }
+      continue
+    }
+    incr touched [llength $chunk]
+  }
+  return [dict create touched $touched failures $failures]
+}
+
+proc _apply_inactive_tier_cell_dont_touch {active_tier quiet} {
+  if {![_pin3d_boolean_env PIN3D_INACTIVE_TIER_DONT_TOUCH 1]} {
+    if {!$quiet} {
+      puts "INFO(OR): PIN3D_INACTIVE_TIER_DONT_TOUCH=off; cell mask skipped"
+    }
+    return
+  }
+
+  set active_cells {}
+  set inactive_cells {}
+  foreach inst [[ord::get_db_block] getInsts] {
+    set inst_tier [_or_inst_tier $inst]
+    if {$inst_tier eq "split_buffer"} {
+      continue
+    }
+    if {$inst_tier ni {upper bottom}} {
+      continue
+    }
+    if {$inst_tier eq $active_tier} {
+      lappend active_cells [$inst getName]
+    } else {
+      lappend inactive_cells [$inst getName]
+    }
+  }
+
+  set active_result [_set_cell_dont_touch_flag_batch $active_cells 0 $quiet]
+  set inactive_result [_set_cell_dont_touch_flag_batch $inactive_cells 1 $quiet]
+  if {!$quiet} {
+    puts "INFO(OR): Tier cell mask active=$active_tier active_unlocked=[dict get $active_result touched] inactive_locked=[dict get $inactive_result touched] failures=[expr {[dict get $active_result failures] + [dict get $inactive_result failures]}]"
+  }
+}
+
+proc _release_tier_cell_dont_touch {quiet} {
+  if {![_pin3d_boolean_env PIN3D_INACTIVE_TIER_DONT_TOUCH 1]} {
+    return
+  }
+  set tier_cells {}
+  foreach inst [[ord::get_db_block] getInsts] {
+    set inst_tier [_or_inst_tier $inst]
+    if {$inst_tier eq "split_buffer" || $inst_tier ni {upper bottom}} {
+      continue
+    }
+    lappend tier_cells [$inst getName]
+  }
+  set result [_set_cell_dont_touch_flag_batch $tier_cells 0 $quiet]
+  if {!$quiet} {
+    puts "INFO(OR): Released tier cell mask touched=[dict get $result touched] failures=[dict get $result failures]"
+  }
+}
+
+proc _protect_pin3d_bridge_nets {quiet {protect 1}} {
+  set records [pin3d_read_split_manifest]
+  set bridge_names [_pin3d_manifest_name_set $records bridge_net]
+  set touched 0
+  set failures 0
+  foreach net_name $bridge_names {
+    if {[_set_net_dont_touch_flag $net_name $protect 1]} {
+      incr touched
+    } else {
+      incr failures
+      if {!$quiet} {
+        puts "WARN(OR): failed to set bridge dont_touch=$protect for $net_name"
+      }
+    }
+  }
+  if {!$quiet} {
+    puts "INFO(OR): PIN3D bridge protection protect=$protect touched=$touched failures=$failures"
+  }
+  return $touched
+}
+
 # ------------------------------------------------------------
 # Apply tier policy
 # Options:
@@ -1544,6 +1654,7 @@ proc apply_tier_policy {tier args} {
     -rebuild_rows 1
     -skip_clock_nets 0
     -protect_split_buffers 1
+    -inactive_cell_mask 1
   }
   if {([llength $args] % 2) != 0} {
     error "apply_tier_policy: args must be key-value pairs, got: $args"
@@ -1594,9 +1705,23 @@ proc apply_tier_policy {tier args} {
   }
   set fixlib_elapsed_ms [_pin3d_elapsed_ms $fixlib_start_ms]
 
-  # _protect_pin3d_split_buffers $opt(-quiet) $opt(-protect_split_buffers)
   set netmask_start_ms [clock milliseconds]
   _apply_net_class_optimization_mask $effective_allow_net $opt(-quiet) $opt(-skip_clock_nets)
+  if {$effective_allow_net eq "upper_only" || $effective_allow_net eq "bottom_only"} {
+    if {$opt(-inactive_cell_mask)} {
+      _apply_inactive_tier_cell_dont_touch $tier $opt(-quiet)
+    } else {
+      _release_tier_cell_dont_touch $opt(-quiet)
+    }
+  }
+  # Protect split topology only in stages that perform one-tier netlist
+  # optimization.  Infrastructure stages use allow_net=all and must leave the
+  # cells mutable long enough for global_connect to attach their PG pins.
+  set protect_split_topology [expr {
+    $opt(-protect_split_buffers) &&
+    ($effective_allow_net eq "upper_only" || $effective_allow_net eq "bottom_only")}]
+  _protect_pin3d_split_buffers $opt(-quiet) $protect_split_topology
+  _protect_pin3d_bridge_nets $opt(-quiet) $protect_split_topology
   set netmask_elapsed_ms [_pin3d_elapsed_ms $netmask_start_ms]
   set rebuild_elapsed_ms 0
   if {$opt(-rebuild_rows)} {

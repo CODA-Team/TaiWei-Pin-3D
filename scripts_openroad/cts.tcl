@@ -53,7 +53,8 @@ set requested_allow_net [or_cts_requested_allow_net $active_tier]
 set effective_allow_net [or_cts_effective_allow_net $active_tier]
 or_cts_report_stage_banner "owner-tree" $active_tier $fixed_tier $requested_allow_net $effective_allow_net
 or_cts_set_fixed_tier_status $fixed_tier FIRM
-apply_tier_policy $active_tier -fixlib 1 -allow_net $effective_allow_net -skip_clock_nets 1
+apply_tier_policy $active_tier -fixlib 1 -allow_net $effective_allow_net \
+  -skip_clock_nets 1 -inactive_cell_mask 0
 report_cross_tier_snapshot $before_report -label "cts before"
 report_mixed_fanout_snapshot $mixed_before_report -label "cts before"
 report_split_structure_snapshot $split_before_report -label "cts before"
@@ -99,6 +100,10 @@ set err [catch {check_placement -verbose} err_message]
 if {$err} {
   puts "WARNING: $err_message"
 }
+# CTS must reconnect clock ITerms on both dies.  Once clock construction is
+# complete, restore the inactive-die lock before data-path repair_timing.
+_apply_inactive_tier_cell_dont_touch $active_tier 0
+
 set skip_cts_post_repair 0
 if {[info exists ::env(OPENROAD_CTS_OWNER_REPAIR_TIMING)]} {
   set skip_cts_post_repair $::env(OPENROAD_CTS_OWNER_REPAIR_TIMING)
@@ -122,6 +127,11 @@ if {!$skip_cts_post_repair} {
 
 or_cts_set_fixed_tier_status $fixed_tier PLACED
 
+set split_topology_status [pin3d_validate_and_repair_split_topology \
+  "4_0_cts" $LOG_DIR $RESULTS_DIR 0]
+if {[dict get $split_topology_status violated] > 0} {
+  error "PIN3D split topology validation failed after CTS owner-tree optimization"
+}
 pin3d_metrics_invalidate_cache
 report_cross_tier_transition $summary_report $before_report $after_report -label "cts"
 report_mixed_fanout_transition $mixed_summary_report $mixed_before_report $mixed_after_report -label "cts"

@@ -15,6 +15,8 @@ export DETAILED_ROUTE_END_ITERATION = 20
 export CORE_UTILIZATION ?= 60
 
 export NUM_CORES   ?= 32
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+export PIN3D_INACTIVE_TIER_DONT_TOUCH ?= 1
 
 export SC_LEF_UPPER_COVER ?= \
   $(PLATFORM_DIR)/lef_bottom/asap7sc7p5t_28_R_1x_220121a.bottom.lef \

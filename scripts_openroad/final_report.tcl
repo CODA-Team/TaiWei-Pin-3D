@@ -31,6 +31,12 @@ set_propagated_clock [all_clocks]
 puts "Starting global connection cleanup"
 global_connect
 
+set split_topology_status [pin3d_validate_and_repair_split_topology \
+  6_final $LOG_DIR $RESULTS_DIR 0]
+if {[dict get $split_topology_status violated] > 0} {
+  error "Final dual-boundary validation found [dict get $split_topology_status violated] invalid topology record(s); see 6_final.split_topology.summary.rpt"
+}
+
 source $::env(OPENROAD_SCRIPTS_DIR)/deleteRoutingObstructions.tcl
 deleteRoutingObstructions
 
