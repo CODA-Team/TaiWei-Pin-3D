@@ -1,0 +1,21 @@
+{
+  "epochs": 300,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "batch_size": 32,
+  "hidden_dim": 64,
+  "n_layers": 3,
+  "dropout": 0.1,
+  "lambda_degree": 0.1,
+  "lambda_area": 0.1,
+  "patience": 30,
+  "train_frac": 0.7,
+  "val_frac": 0.15,
+  "seed": 42,
+  "run_name": "run_0407_143602",
+  "no_aux_loss": false,
+  "n_params": 60195,
+  "n_train": 727,
+  "n_val": 155,
+  "n_test": 157
+}

@@ -1,0 +1,527 @@
+{
+  "ADD": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "SUB": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "MUL": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "DIV": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "MOD": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "DIVFLOOR": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "MODFLOOR": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "ALU": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "X",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 3
+      },
+      {
+        "name": "CO",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 4
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CI",
+        "direction": "input"
+      },
+      {
+        "name": "BI",
+        "direction": "input"
+      }
+    ]
+  },
+  "FA": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "C",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 2
+      },
+      {
+        "name": "X",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 3
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 4
+      }
+    ],
+    "fixed_ports": []
+  },
+  "MACC": {
+    "parameterized_ports": [
+      {
+        "name": "A",
+        "direction": "input",
+        "width_param": "A_WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "B",
+        "direction": "input",
+        "width_param": "B_WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "Y",
+        "direction": "output",
+        "width_param": "Y_WIDTH",
+        "slot_idx": 2
+      }
+    ],
+    "fixed_ports": []
+  },
+  "DFF": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      }
+    ]
+  },
+  "DFFE": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "EN",
+        "direction": "input"
+      }
+    ]
+  },
+  "DFFSR": {
+    "parameterized_ports": [
+      {
+        "name": "SET",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "CLR",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 2
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 3
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      }
+    ]
+  },
+  "DFFSRE": {
+    "parameterized_ports": [
+      {
+        "name": "SET",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "CLR",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      },
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 2
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 3
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "EN",
+        "direction": "input"
+      }
+    ]
+  },
+  "ADFF": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "ARST",
+        "direction": "input"
+      }
+    ]
+  },
+  "ADFFE": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "ARST",
+        "direction": "input"
+      },
+      {
+        "name": "EN",
+        "direction": "input"
+      }
+    ]
+  },
+  "SDFF": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "SRST",
+        "direction": "input"
+      }
+    ]
+  },
+  "SDFFE": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "SRST",
+        "direction": "input"
+      },
+      {
+        "name": "EN",
+        "direction": "input"
+      }
+    ]
+  },
+  "SDFFCE": {
+    "parameterized_ports": [
+      {
+        "name": "D",
+        "direction": "input",
+        "width_param": "WIDTH",
+        "slot_idx": 0
+      },
+      {
+        "name": "Q",
+        "direction": "output",
+        "width_param": "WIDTH",
+        "slot_idx": 1
+      }
+    ],
+    "fixed_ports": [
+      {
+        "name": "CLK",
+        "direction": "input"
+      },
+      {
+        "name": "SRST",
+        "direction": "input"
+      },
+      {
+        "name": "EN",
+        "direction": "input"
+      }
+    ]
+  }
+}

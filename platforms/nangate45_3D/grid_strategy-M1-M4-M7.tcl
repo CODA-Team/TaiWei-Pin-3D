@@ -210,11 +210,14 @@ add_pdn_stripe \
 
 # Optional M10 (only if exists in tech)
 if {[tech_layer_exists "M10"]} {
+  set m10_pitch 32.0
+  # The default M10 pair needs 21.2 um; use an 18-track pitch for a small core.
+  if {$core_width < 21.2} { set m10_pitch 28.8 }
   add_pdn_stripe \
     -grid      {BOT} \
     -layer     {M10} \
     -width     {3.2} \
-    -pitch     {32.0} \
+    -pitch     $m10_pitch \
     -offset    {2} \
     -nets      {BOT_VDD BOT_VSS}
 }

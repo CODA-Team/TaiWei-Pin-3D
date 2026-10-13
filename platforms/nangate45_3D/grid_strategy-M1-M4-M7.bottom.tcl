@@ -93,7 +93,10 @@ add_pdn_stripe -grid {BOT} -layer {M1} -width {0.14} -pitch $rail_pitch -offset 
 add_pdn_stripe -grid {BOT} -layer {M4} -width {0.84} -pitch $bot_m4_pitch -offset $bot_m4_offset -nets {BOT_VDD BOT_VSS}
 add_pdn_stripe -grid {BOT} -layer {M7} -width {2.4} -pitch $bot_m7_pitch -offset $bot_m7_offset -nets {BOT_VDD BOT_VSS}
 if {[tech_layer_exists "M10"]} {
-  add_pdn_stripe -grid {BOT} -layer {M10} -width {3.2} -pitch {32.0} -offset {2} -nets {BOT_VDD BOT_VSS}
+  set m10_pitch 32.0
+  # The default M10 pair needs 21.2 um; use an 18-track pitch for a small core.
+  if {$core_width < 21.2} { set m10_pitch 28.8 }
+  add_pdn_stripe -grid {BOT} -layer {M10} -width {3.2} -pitch $m10_pitch -offset {2} -nets {BOT_VDD BOT_VSS}
 }
 add_pdn_connect -grid {BOT} -layers {M1 M4}
 add_pdn_connect -grid {BOT} -layers {M4 M7}

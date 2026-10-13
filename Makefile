@@ -16,6 +16,10 @@ export WORK_HOME     ?= .
 # Script directories
 export OPENROAD_SCRIPTS_DIR ?= $(FLOW_HOME)/scripts_openroad
 export CADENCE_SCRIPTS_DIR  ?= $(FLOW_HOME)/scripts_cadence
+export SCRIPTS_3DSYN_DIR    ?= $(FLOW_HOME)/scripts_3dsyn
+export SCRIPTS_3DCTS_DIR    ?= $(FLOW_HOME)/scripts_3dcts
+export SCRIPTS_3DDP_DIR     ?= $(FLOW_HOME)/scripts_3ddp
+export D3D_PARTITION_SCRIPTS_DIR ?= $(FLOW_HOME)/scripts_d3d_partition
 export UTILS_DIR            ?= $(FLOW_HOME)/util
 
 # ---------------- Design config ----------------
@@ -54,11 +58,39 @@ include $(PLATFORM_DIR)/config.mk
 export DESIGN_NICKNAME ?= $(DESIGN_NAME)
 export FLOW_VARIANT    ?= base   # can be openroad / cadence / hybrid
 export PIN3D_VIEW_IMPL ?= tcl
+export WORK_PLATFORM   ?= $(if $(filter cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
 
-export LOG_DIR     ?= $(WORK_HOME)/logs/$(PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
-export OBJECTS_DIR ?= $(WORK_HOME)/objects/$(PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
-export REPORTS_DIR ?= $(WORK_HOME)/reports/$(PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
-export RESULTS_DIR ?= $(WORK_HOME)/results/$(PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
+export LOG_DIR     ?= $(WORK_HOME)/logs/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
+export OBJECTS_DIR ?= $(WORK_HOME)/objects/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
+export REPORTS_DIR ?= $(WORK_HOME)/reports/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
+export RESULTS_DIR ?= $(WORK_HOME)/results/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
+export CTS3D_WORK_DIR ?= $(OBJECTS_DIR)/3dcts
+
+# Optional standalone CPU-only D3D Partitioner.  All paths are derived from
+# the current flow checkout and can be overridden without editing this file.
+export ORFS_RESEARCH_HOME ?= $(abspath $(FLOW_HOME)/../ORFS-Research)
+export D3D_PARTITIONER_ROOT ?= $(ORFS_RESEARCH_HOME)/tools/D3D-Partitioner
+export D3D_PARTITION_DRIVER_HOME ?= $(D3D_PARTITIONER_ROOT)/d3d-partition-driver
+export D3D_PARTITION_PREFIX ?= $(ORFS_RESEARCH_HOME)/tools/install/d3d-partitioner
+export D3D_PARTITION_ENV_PREFIX ?= $(ORFS_RESEARCH_HOME)/.conda/taiwei-d3d-cpu
+export D3D_PARTITION_PYTHON ?= $(D3D_PARTITION_ENV_PREFIX)/bin/python
+export D3D_PARTITION_DRIVER ?= $(D3D_PARTITION_DRIVER_HOME)/run_partition.py
+export D3D_PARTITION_CHECK ?= $(D3D_PARTITION_DRIVER_HOME)/check_install.py
+export D3D_PARTITION_CONFIG_PLATFORM ?= $(patsubst %_3D,%,$(PLATFORM))
+export D3D_PARTITION_CONFIG ?= $(D3D_PARTITION_SCRIPTS_DIR)/config/openroad/$(D3D_PARTITION_CONFIG_PLATFORM)/$(DESIGN_NICKNAME).yaml
+export D3D_PARTITION_CASE_NAME ?= $(DESIGN_NICKNAME)
+export D3D_PARTITION_RUNTIME_ROOT ?= $(OBJECTS_DIR)/d3d_partition
+export D3D_PARTITION_DEF ?= $(RESULTS_DIR)/2_2_floorplan_io.def
+export D3D_PARTITION_VERILOG ?= $(RESULTS_DIR)/2_2_floorplan_io.v
+export D3D_PARTITION_SDC ?= $(RESULTS_DIR)/2_floorplan.sdc
+export D3D_PARTITION_LEFS ?= $(LEF_FILES)
+export D3D_PARTITION_NUM_THREADS ?= $(NUM_CORES)
+export D3D_PARTITION_OUTPUT ?= $(RESULTS_DIR)/partition.txt
+export D3D_PARTITION_SUMMARY ?= $(REPORTS_DIR)/d3d_partition_summary.json
+export D3D_PARTITION_DEFER_TIE_CELLS ?= 1
+export D3D_PARTITION_DEFERRED_TIES ?= $(RESULTS_DIR)/d3d_deferred_ties.json
+export D3D_TIE_PORT_TIER ?= bottom
+export D3D_TIE_INSTANTIATION_SUMMARY ?= $(REPORTS_DIR)/d3d_tie_instantiation_summary.json
 
 # ---------------- Shell / time ----------------
 SHELL       := /usr/bin/env bash
@@ -99,6 +131,7 @@ export EXTRACT_EVAL_METRICS_PY ?= $(UTILS_DIR)/extract_eval_metrics.py
 OPENROAD_ARGS = -no_init -threads ${NUM_CORES} -exit
 OPENROAD_CMD  = $(OPENROAD_EXE) $(OPENROAD_ARGS)
 YOSYS_FLAGS  += -v 3
+export YOSYS_FLAGS
 
 # Cadence toolchain
 export GENUS_EXE   ?= $(shell which genus)
@@ -183,6 +216,8 @@ export GPL_ROUTABILITY_DRIVEN ?= 1
 
 export ENABLE_DPO ?= 1
 export DPO_MAX_DISPLACEMENT ?= 5 1
+export DP_3D_MAX_DISPLACEMENT ?= $(DPO_MAX_DISPLACEMENT)
+export DP_3D_MARGIN ?= $(CORE_MARGIN)
 
 # Public CTS knobs. Keep this list short and documented.
 export CTS_LAYER ?= bottom
@@ -310,18 +345,41 @@ ord-tier-partition:
 	@echo "[ORD] Tier partition"
 	@$(call _mkstdirs)
 	$(call _run_with_tmp_log,$(LOG_DIR)/2_tritonpart.log,$(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/tier_partition.tcl)
-	@echo "[ORD] Copy 2D artifacts to $(3D_PLATFORM)"
-	@mkdir -p $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
-	@cp -rf $(RESULTS_DIR)/* $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)/ || true
+	@if [[ "$(abspath $(RESULTS_DIR))" == "$(abspath $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT))" ]]; then \
+	  echo "[ORD] Results already use the $(3D_PLATFORM) directory"; \
+	else \
+	  echo "[ORD] Copy 2D artifacts to $(3D_PLATFORM)"; \
+	  mkdir -p $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT); \
+	  cp -rf $(RESULTS_DIR)/* $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)/ || true; \
+	fi
+
+.PHONY: ord-tier-partition-d3d
+ord-tier-partition-d3d:
+	@echo "[ORD] D2D -> Differentiable-3D tier partition (CPU)"
+	@$(call _mkstdirs)
+	@mkdir -p "$(D3D_PARTITION_RUNTIME_ROOT)"
+	$(call _run_with_tmp_log,$(LOG_DIR)/2_d3d_partition.log,$(TIME_CMD) "$(D3D_PARTITION_SCRIPTS_DIR)/run_d3d_partition.sh")
+
+.PHONY: ord-check-tier-partition-d3d
+ord-check-tier-partition-d3d:
+	@echo "[ORD] Check installed CPU-only D3D tier partitioner"
+	@$(MAKE) --no-print-directory -C "$(D3D_PARTITION_DRIVER_HOME)" check \
+		ENV_PREFIX="$(D3D_PARTITION_ENV_PREFIX)" \
+		PYTHON_EXECUTABLE="$(D3D_PARTITION_PYTHON)" \
+		INSTALL_PREFIX="$(D3D_PARTITION_PREFIX)"
 
 .PHONY: ord-test-partition
 ord-test-partition:
 	@echo "[ORD] Tier partition experiment"
 	@$(call _mkstdirs)
 	$(call _run_with_tmp_log,$(LOG_DIR)/2_tritonpart.log,$(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/tier_partition_experiment.tcl)
-	@echo "[ORD] Copy 2D artifacts to $(3D_PLATFORM)"
-	@mkdir -p $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
-	@cp -rf $(RESULTS_DIR)/* $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)/ || true
+	@if [[ "$(abspath $(RESULTS_DIR))" == "$(abspath $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT))" ]]; then \
+	  echo "[ORD] Results already use the $(3D_PLATFORM) directory"; \
+	else \
+	  echo "[ORD] Copy 2D artifacts to $(3D_PLATFORM)"; \
+	  mkdir -p $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT); \
+	  cp -rf $(RESULTS_DIR)/* $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)/ || true; \
+	fi
 
 # ----- 3D init -----
 .PHONY: ord-pre-tcl
@@ -350,6 +408,28 @@ ord-pre:
 		tcl|"") $(MAKE) --no-print-directory ord-pre-tcl ;; \
 		*) echo "[ERROR][ORD] Unsupported PIN3D_VIEW_IMPL='$(PIN3D_VIEW_IMPL)'"; exit 1 ;; \
 	esac
+	@if [[ -f "$(D3D_PARTITION_DEFERRED_TIES)" ]]; then \
+	  echo "[ORD] Restore deferred tie nets as logical constants"; \
+	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/defer_tie_cells.py" rewrite-netlist \
+	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
+	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
+	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)"; \
+	  echo "[ORD] Instantiate tier-local tie cells for deferred constants"; \
+	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/instantiate_tie_cells.py" \
+	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
+	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
+	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)" \
+	    --upper-tiehi "$(UPPER_TIEHI_CELL_AND_PORT)" \
+	    --upper-tielo "$(UPPER_TIELO_CELL_AND_PORT)" \
+	    --bottom-tiehi "$(BOTTOM_TIEHI_CELL_AND_PORT)" \
+	    --bottom-tielo "$(BOTTOM_TIELO_CELL_AND_PORT)" \
+	    --port-tier "$(D3D_TIE_PORT_TIER)" \
+	    --summary "$(D3D_TIE_INSTANTIATION_SUMMARY)"; \
+	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/defer_tie_cells.py" rewrite-def \
+	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.def" \
+	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.def" \
+	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)"; \
+	fi
 
 # ----- Place -----
 .PHONY: ord-place-init
@@ -445,6 +525,13 @@ ord-gp2lg:
 	@$(call _mkstdirs)
 	$(call _or,$(OPENROAD_SCRIPTS_DIR)/handoff_copy_gp2lg.tcl,$(LOG_DIR)/3_3_gp2lg.log)
 
+.PHONY: ord-detail-place-3d
+ord-detail-place-3d:
+	@echo "[ORD] True 3D detailed placement"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_detail_place_3d_repair.log,LEF_FILES="$(LEF_FILES)" $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DDP_DIR)/detail_place_3d_repair_stage.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_detail_place_3d.log,LEF_FILES="$(LEF_FILES)" $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DDP_DIR)/detail_place_3d.tcl)
+
 .PHONY: ord-legalize-upper
 ord-legalize-upper:
 	@echo "[ORD] Legalize upper"
@@ -469,6 +556,13 @@ ord-cts-post:
 	@echo "[ORD] CTS receive-opt"
 	@$(call _mkstdirs)
 	$(call _run_with_tmp_log,$(LOG_DIR)/4_1_cts_post.log,LEF_FILES="$(LEF_FILES_CTS_RECEIVE)" COVER_LAYER="$(COVER_LAYER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/cts_post.tcl)
+
+.PHONY: ord-cts-3d
+ord-cts-3d:
+	@echo "[ORD] True 3D CTS"
+	@$(call _mkstdirs)
+	@mkdir -p "$(CTS3D_WORK_DIR)"
+	$(call _run_with_tmp_log,$(LOG_DIR)/4_cts_3d.log,. "$(SCRIPTS_3DCTS_DIR)/cts_params.env"; LEF_FILES="$(LEF_FILES_CTS_OWNER)" COVER_LAYER="$(COVER_LAYER)" $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DCTS_DIR)/cts_3d.tcl)
 
 .PHONY: ord-route
 ord-route:
@@ -613,6 +707,94 @@ cds-synth:
 	@$(call _mkstdirs)
 	$(call _run_with_tmp_log,$(LOG_DIR)/1_genus.log,$(TIME_CMD) $(GENUS_CMD) -overwrite -log $(LOG_DIR)/cadence_1_genus.log -f $(CADENCE_SCRIPTS_DIR)/run_genus.tcl)
 	@cp -f $(SDC_FILE) $(RESULTS_DIR)/1_synth.sdc 2>/dev/null || true
+
+# ----- 3D-Syn coarse-grained synthesis -----
+export SYN3D_COARSE_UNIT_KEEP_MODE ?= all
+export SYN3D_COARSE_SYNTH_DIR ?= $(OBJECTS_DIR)/3dsyn/coarse_synth
+export SYN3D_PLATFORM ?= $(3D_PLATFORM)
+export SYN3D_PLATFORM_DIR ?= $(3D_PLATFORM_DIR)
+export SYN3D_PER_TIER_SYNTH_DIR ?= $(OBJECTS_DIR)/3dsyn/per_tier_synth
+export SYN3D_HANDOFF_DIR ?= $(OBJECTS_DIR)/3dsyn/handoff
+export SYN3D_HBT_MODEL_MODE ?= scale
+export SYN3D_HBT_R_SCALE ?= 0
+export SYN3D_HBT_C_SCALE ?= 0.25
+export SYN3D_BACKEND_PREPLACE_OPT ?= 0
+
+.PHONY: cds-coarse-synth
+cds-coarse-synth: prep-libs
+	@echo "[CDS][3D-Syn] Coarse-grained synthesis"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/1_3dsyn_coarse_synth.log,/usr/bin/env \
+	  DONT_USE_LIBS="$(DONT_USE_LIBS)" \
+	  DONT_USE_SC_LIB="$(DONT_USE_SC_LIB)" \
+	  LIB_SYNTH="$(DONT_USE_LIBS)" \
+	  LIB_FILES="$(LIB_FILES)" \
+	  LIB_DIR="$(LIB_DIR)" \
+	  LEF_DIR="$(LEF_DIR)" \
+	  TECH_LEF="$(TECH_LEF)" \
+	  SC_LEF="$(SC_LEF)" \
+	  ADDITIONAL_LEFS="$(ADDITIONAL_LEFS)" \
+	  VERILOG_FILES="$(VERILOG_FILES)" \
+	  SDC_FILE="$(SDC_FILE)" \
+	  DESIGN_NAME="$(DESIGN_NAME)" \
+	  SYNTH_ARGS="$(SYNTH_ARGS)" \
+	  SYNTH_HIERARCHICAL="$(SYNTH_HIERARCHICAL)" \
+	  ABC_AREA="$(ABC_AREA)" \
+	  ADDER_MAP_FILE="$(ADDER_MAP_FILE)" \
+	  LATCH_MAP_FILE="$(LATCH_MAP_FILE)" \
+	  CLKGATE_MAP_FILE="$(CLKGATE_MAP_FILE)" \
+	  MAX_UNGROUP_SIZE="$(MAX_UNGROUP_SIZE)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/coarse_synth/run_coarse_synth.sh)
+
+.PHONY: cds-coarse-partition
+cds-coarse-partition:
+	@echo "[CDS][3D-Syn] Coarse-grained tier partitioning"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/2_3dsyn_coarse_partition.log,/usr/bin/env \
+	  DESIGN_CONFIG="$(DESIGN_CONFIG)" \
+	  ADDITIONAL_LEFS="$(ADDITIONAL_LEFS)" \
+	  ADDITIONAL_LIBS="$(ADDITIONAL_LIBS)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/coarse_partition/run_cds_coarse_partition.sh)
+
+.PHONY: ord-coarse-partition
+ord-coarse-partition:
+	@echo "[ORD][3D-Syn] Coarse-grained tier partitioning"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/2_3dsyn_coarse_partition.log,/usr/bin/env \
+	  DESIGN_CONFIG="$(DESIGN_CONFIG)" \
+	  ADDITIONAL_LEFS="$(ADDITIONAL_LEFS)" \
+	  ADDITIONAL_LIBS="$(ADDITIONAL_LIBS)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/coarse_partition/run_ord_coarse_partition.sh)
+
+.PHONY: cds-per-tier-synth
+cds-per-tier-synth:
+	@echo "[CDS][3D-Syn] HBT-aware per-tier synthesis"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_3dsyn_per_tier_synth.log,/usr/bin/env \
+	  DESIGN_NAME="$(DESIGN_NAME)" \
+	  SDC_FILE="$(SDC_FILE)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/per_tier_synth/run_per_tier_synth.sh)
+
+.PHONY: cds-3dsyn-handoff
+cds-3dsyn-handoff:
+	@echo "[CDS][3D-Syn] Backend handoff"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/4_3dsyn_handoff.log,/usr/bin/env \
+	  DESIGN_CONFIG="$(DESIGN_CONFIG)" \
+	  DESIGN_NAME="$(DESIGN_NAME)" \
+	  SDC_FILE="$(SDC_FILE)" \
+	  SYN3D_BACKEND_PREPLACE_OPT="$(SYN3D_BACKEND_PREPLACE_OPT)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/handoff/run_cds_handoff.sh)
+
+.PHONY: ord-3dsyn-handoff
+ord-3dsyn-handoff: prep-libs
+	@echo "[ORD][3D-Syn] Backend handoff"
+	@$(call _mkstdirs)
+	$(call _run_with_tmp_log,$(LOG_DIR)/4_3dsyn_handoff.log,/usr/bin/env \
+	  DESIGN_NAME="$(DESIGN_NAME)" \
+	  SDC_FILE="$(SDC_FILE)" \
+	  SYN3D_BACKEND_PREPLACE_OPT="$(SYN3D_BACKEND_PREPLACE_OPT)" \
+	  $(TIME_CMD) bash $(SCRIPTS_3DSYN_DIR)/handoff/run_ord_handoff.sh)
 
 .PHONY: cds-preplace
 cds-preplace:

@@ -23,6 +23,12 @@ scheduling_file.cts.*
 test.scripts
 test.*_run
 run_logs
+batch_experiments/0903_plugin_batches/runs/
+batch_experiments/target_sequence_batch/logs/
+batch_experiments/target_sequence_batch/status/
+batch_experiments/target_sequence_batch/dispatch/
+batch_experiments/target_sequence_batch/tasks.tsv
+batch_experiments/target_sequence_batch/resolved_config.env
 test*.sh
 test.tcl
 .st_launch_*
