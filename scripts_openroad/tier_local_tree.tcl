@@ -139,6 +139,88 @@ proc ::pin3d_local_tree::direct_domain_loads {net tier excluded_inst_names} {
   return $loads
 }
 
+# Return the mutable, same-tier loads that may be moved below an existing
+# buffer output while repairing a buffer cone.  Split buffers form the fixed
+# cross-tier interface and must remain connected to their current root net.
+proc ::pin3d_local_tree::recursive_domain_loads {net tier} {
+  set loads {}
+  foreach iterm [::pin3d_local_tree::direct_domain_loads $net $tier {}] {
+    set inst [$iterm getInst]
+    if {[_or_inst_tier $inst] eq "split_buffer" ||
+        [_or_is_split_buffer_name [$inst getName]]} {
+      continue
+    }
+    lappend loads $iterm
+  }
+  return $loads
+}
+
+proc ::pin3d_local_tree::net_is_dont_touch {net} {
+  if {[catch {set dont_touch [$net isDoNotTouch]}]} {
+    return 0
+  }
+  return $dont_touch
+}
+
+proc ::pin3d_local_tree::compare_cone_depth_desc {left right} {
+  set left_depth [lindex $left 0]
+  set right_depth [lindex $right 0]
+  if {$left_depth > $right_depth} { return -1 }
+  if {$left_depth < $right_depth} { return 1 }
+  return [string compare [lindex $left 1] [lindex $right 1]]
+}
+
+# Collect all nets reached by following ordinary same-tier buffers from a
+# manifest domain root.  The walk intentionally stops at logic, inverters,
+# clock/tie buffers, split buffers, and the opposite tier.  Collection happens
+# before repair so newly-created trees cannot make the traversal unbounded.
+proc ::pin3d_local_tree::collect_buffer_cone_nets {root_net tier max_depth report_fh} {
+  array set visited {}
+  set queue [list [list 0 $root_net]]
+  set queue_idx 0
+  set records {}
+
+  while {$queue_idx < [llength $queue]} {
+    lassign [lindex $queue $queue_idx] depth net
+    incr queue_idx
+    if {$net eq "" || $net eq "NULL"} {
+      continue
+    }
+    set net_name [$net getName]
+    if {[info exists visited($net_name)]} {
+      continue
+    }
+    set visited($net_name) 1
+    lappend records [list $depth $net_name $net]
+
+    if {$depth >= $max_depth} {
+      puts $report_fh "  CONE_LIMIT net=$net_name depth=$depth max_depth=$max_depth"
+      continue
+    }
+
+    foreach load [::pin3d_local_tree::recursive_domain_loads $net $tier] {
+      set inst [$load getInst]
+      if {[_or_inst_tier $inst] ne $tier} {
+        continue
+      }
+      set buffer_io [_pin3d_buffer_inst_io $inst 0]
+      if {$buffer_io eq ""} {
+        continue
+      }
+      set output_net [_pin3d_iterm_net [dict get $buffer_io output]]
+      if {$output_net eq "" || $output_net eq "NULL"} {
+        continue
+      }
+      set sig_type [$output_net getSigType]
+      if {$sig_type in {POWER GROUND CLOCK}} {
+        continue
+      }
+      lappend queue [list [expr {$depth + 1}] $output_net]
+    }
+  }
+  return $records
+}
+
 proc ::pin3d_local_tree::group_centroid {group} {
   set sum_x 0.0
   set sum_y 0.0
@@ -253,6 +335,50 @@ proc ::pin3d_local_tree::build_domain_tree {block root_net loads tier label forc
   return [dict create built 1 buffers $buffer_count levels $level direct_fanout $direct_fanout root_loads [llength $current]]
 }
 
+# Preserve the existing buffer cone and repair only overloaded output nets.
+# Processing deepest nets first avoids changing connectivity that is still
+# needed to discover descendants.  The build itself is idempotent: after a net
+# is repaired its direct fanout is at most branch_factor, so a later stage skips
+# it unless subsequent optimization makes it overloaded again.
+proc ::pin3d_local_tree::repair_buffer_cone {block root_net tier label branch_factor max_depth report_fh} {
+  set records [::pin3d_local_tree::collect_buffer_cone_nets \
+    $root_net $tier $max_depth $report_fh]
+  set checked 0
+  set tree_count 0
+  set buffer_count 0
+  set max_fanout 0
+
+  puts $report_fh "CONE_BEGIN label=$label tier=$tier root_net=[$root_net getName] nets=[llength $records] max_allowed_fanout=$branch_factor max_depth=$max_depth"
+  foreach record [lsort -command ::pin3d_local_tree::compare_cone_depth_desc $records] {
+    lassign $record depth net_name net
+    incr checked
+    set loads [::pin3d_local_tree::recursive_domain_loads $net $tier]
+    set direct_fanout [llength $loads]
+    if {$direct_fanout > $max_fanout} {
+      set max_fanout $direct_fanout
+    }
+    if {[::pin3d_local_tree::net_is_dont_touch $net]} {
+      puts $report_fh "  CONE_NET depth=$depth net=$net_name direct_fanout=$direct_fanout action=skip_dont_touch"
+      continue
+    }
+    if {$direct_fanout <= $branch_factor} {
+      puts $report_fh "  CONE_NET depth=$depth net=$net_name direct_fanout=$direct_fanout action=keep max_allowed_fanout=$branch_factor"
+      continue
+    }
+
+    puts $report_fh "  CONE_NET depth=$depth net=$net_name direct_fanout=$direct_fanout action=repair max_allowed_fanout=$branch_factor"
+    set stats [::pin3d_local_tree::build_domain_tree $block $net $loads $tier \
+      "${label}:cone:d${depth}:${net_name}" 0 [expr {$branch_factor + 1}] \
+      $branch_factor $report_fh]
+    if {[dict get $stats built]} {
+      incr tree_count
+      incr buffer_count [dict get $stats buffers]
+    }
+  }
+  puts $report_fh "CONE_DONE label=$label checked=$checked trees=$tree_count buffers=$buffer_count max_direct_fanout=$max_fanout"
+  return [dict create checked $checked trees $tree_count buffers $buffer_count max_direct_fanout $max_fanout]
+}
+
 proc pin3d_build_local_trees_for_tier {tier args} {
   set tier [string tolower [string trim $tier]]
   if {$tier ni {upper bottom}} {
@@ -282,13 +408,15 @@ proc pin3d_build_local_trees_for_tier {tier args} {
     puts "WARN(OR): PIN3D_LOCAL_TREE_BRANCH_FACTOR must be >= 2; using 2"
     set branch_factor 2
   }
+  set recursive_cone [::pin3d_local_tree::env_flag PIN3D_LOCAL_TREE_RECURSIVE_CONE 0]
+  set recursive_max_depth [::pin3d_local_tree::env_positive_int PIN3D_LOCAL_TREE_RECURSIVE_MAX_DEPTH 64]
 
   if {$opt(-report) eq ""} {
     set opt(-report) [file join [_get LOG_DIR] "pin3d_local_tree_${tier}.rpt"]
   }
   set report_fh [open $opt(-report) w]
   puts $report_fh "# PIN3D tier-local buffer-tree report"
-  puts $report_fh "# tier=$tier min_fanout=$min_fanout port_min_fanout=$port_min_fanout branch_factor=$branch_factor"
+  puts $report_fh "# tier=$tier min_fanout=$min_fanout port_min_fanout=$port_min_fanout branch_factor=$branch_factor recursive_cone=$recursive_cone recursive_max_depth=$recursive_max_depth"
 
   set records [pin3d_read_split_manifest]
   set block [ord::get_db_block]
@@ -300,6 +428,9 @@ proc pin3d_build_local_trees_for_tier {tier args} {
   set buffer_count 0
   # Track BTerm-driven split nets so ordinary port scanning does not rebuild them.
   set port_tree_nets {}
+  set cone_checked 0
+  set cone_tree_count 0
+  set cone_buffer_count 0
   foreach record $records {
     if {![dict exists $record record_type] || [dict get $record record_type] ne "dual_boundary"} {
       continue
@@ -335,6 +466,13 @@ proc pin3d_build_local_trees_for_tier {tier args} {
           "[dict get $record original_net]:source" $is_port $threshold $branch_factor $report_fh]
         if {[dict get $stats built]} { incr tree_count }
         incr buffer_count [dict get $stats buffers]
+        if {$recursive_cone} {
+          set cone_stats [::pin3d_local_tree::repair_buffer_cone $block $root_net $tier \
+            "[dict get $record original_net]:source" $branch_factor $recursive_max_depth $report_fh]
+          incr cone_checked [dict get $cone_stats checked]
+          incr cone_tree_count [dict get $cone_stats trees]
+          incr cone_buffer_count [dict get $cone_stats buffers]
+        }
       }
     }
 
@@ -350,6 +488,13 @@ proc pin3d_build_local_trees_for_tier {tier args} {
           "[dict get $record branch_net]:destination" 0 $min_fanout $branch_factor $report_fh]
         if {[dict get $stats built]} { incr tree_count }
         incr buffer_count [dict get $stats buffers]
+        if {$recursive_cone} {
+          set cone_stats [::pin3d_local_tree::repair_buffer_cone $block $root_net $tier \
+            "[dict get $record branch_net]:destination" $branch_factor $recursive_max_depth $report_fh]
+          incr cone_checked [dict get $cone_stats checked]
+          incr cone_tree_count [dict get $cone_stats trees]
+          incr cone_buffer_count [dict get $cone_stats buffers]
+        }
       }
     }
   }
@@ -382,10 +527,12 @@ proc pin3d_build_local_trees_for_tier {tier args} {
     }
   }
 
-  puts $report_fh "SUMMARY tier=$tier domains=$domain_count trees=$tree_count buffers=$buffer_count"
+  incr tree_count $cone_tree_count
+  incr buffer_count $cone_buffer_count
+  puts $report_fh "SUMMARY tier=$tier domains=$domain_count trees=$tree_count buffers=$buffer_count cone_checked=$cone_checked cone_trees=$cone_tree_count cone_buffers=$cone_buffer_count"
   close $report_fh
   _pin3d_rebuild_name_caches
   pin3d_metrics_invalidate_cache
-  puts "INFO(OR): PIN3D local trees tier=$tier domains=$domain_count trees=$tree_count buffers=$buffer_count report=$opt(-report)"
-  return [dict create domains $domain_count trees $tree_count buffers $buffer_count report $opt(-report)]
+  puts "INFO(OR): PIN3D local trees tier=$tier domains=$domain_count trees=$tree_count buffers=$buffer_count cone_checked=$cone_checked cone_trees=$cone_tree_count cone_buffers=$cone_buffer_count report=$opt(-report)"
+  return [dict create domains $domain_count trees $tree_count buffers $buffer_count cone_checked $cone_checked cone_trees $cone_tree_count cone_buffers $cone_buffer_count report $opt(-report)]
 }
