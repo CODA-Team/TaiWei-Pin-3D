@@ -58,7 +58,8 @@ include $(PLATFORM_DIR)/config.mk
 export DESIGN_NICKNAME ?= $(DESIGN_NAME)
 export FLOW_VARIANT    ?= base   # can be openroad / cadence / hybrid
 export PIN3D_VIEW_IMPL ?= tcl
-export WORK_PLATFORM   ?= $(if $(filter cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
+# 3D frontend targets load config2d.mk but publish into the 3D experiment tree.
+export WORK_PLATFORM   ?= $(if $(filter ord-tier-partition-d3d cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
 
 export LOG_DIR     ?= $(WORK_HOME)/logs/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export OBJECTS_DIR ?= $(WORK_HOME)/objects/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)

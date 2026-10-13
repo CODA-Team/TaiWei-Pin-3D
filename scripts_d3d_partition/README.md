@@ -6,10 +6,16 @@ tier-partition handoff. It does not replace or modify TritonPart.
 Use the explicit target:
 
 ```bash
-make DESIGN_CONFIG=designs/asap7_3D/aes/config.mk \
+make DESIGN_CONFIG=designs/asap7_3D/aes/config2d.mk \
      FLOW_VARIANT=d3d_partition_test \
      ord-tier-partition-d3d
 ```
+
+The D3D stage consumes the ordinary 2D placement database, so it uses
+`config2d.mk` and the base technology LEFs/tie-cell definitions.  As a 3D
+frontend stage, its logs, objects, reports, and results are automatically
+stored under the corresponding `<technology>_3D` experiment directory; users
+do not need to set a separate work-platform option.
 
 The original `ord-tier-partition` continues to run TritonPart. Neither target
 falls back to the other.
@@ -23,9 +29,10 @@ D2D/DREAMPlace bin grids are loaded from:
 scripts_d3d_partition/config/openroad/<platform>/<design>.yaml
 ```
 
-For a platform named `<technology>_3D`, the default config platform is
-`<technology>`. Paths and the CPU device setting are injected by the driver;
-they are not stored in the YAML.
+With `config2d.mk`, `PLATFORM=<technology>` selects the 2D inputs and
+`3D_PLATFORM=<technology>_3D` selects the experiment directory.  The default
+D3D config platform is therefore `<technology>`. Paths and the CPU device
+setting are injected by the driver; they are not stored in the YAML.
 
 The optional top-level `d2d` mapping overrides the four synchronized
 `num_bins_x`/`num_bins_y` values in the generated runtime JSON. All four values
@@ -33,13 +40,13 @@ must be present, positive integers, and identical. A YAML without `d2d` uses
 the shared CPU defaults.
 
 Private runtime data is written below
-`objects/<platform>/<design>/<variant>/d3d_partition/run.*`. After checking
+`objects/<technology>_3D/<design>/<variant>/d3d_partition/run.*`. After checking
 the complete DEF instance set and binary tier labels, the stage publishes:
 
 ```text
-results/<platform>/<design>/<variant>/partition.txt
-reports/<platform>/<design>/<variant>/d3d_partition_summary.json
-logs/<platform>/<design>/<variant>/2_d3d_partition.log
+results/<technology>_3D/<design>/<variant>/partition.txt
+reports/<technology>_3D/<design>/<variant>/d3d_partition_summary.json
+logs/<technology>_3D/<design>/<variant>/2_d3d_partition.log
 ```
 
 `partition.txt` is published last and uses the existing TaiWei convention:

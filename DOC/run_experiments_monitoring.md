@@ -54,6 +54,10 @@ Local mode still works:
 python run_experiments.py --flow cds --jobs 4
 ```
 
+Running the same submission command again skips tasks that already finished
+successfully and retries tasks whose last status is `failed`. Active tasks are
+left running and are not submitted twice.
+
 ## Show Current Active Status Once
 
 This synchronizes task status with dispatch metadata and prints one snapshot.

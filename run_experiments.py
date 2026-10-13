@@ -826,7 +826,10 @@ def run_detached_scheduler(tasks: Sequence[RunConfig], jobs: int,
     initial_payloads = collect_task_statuses(tasks, sync=True)
     pending = [
         task for task, payload in zip(tasks, initial_payloads)
-        if not _status_has_terminal_state(payload)
+        # A previous failure must be retryable by running the same command
+        # again.  Only successful tasks are complete for submission purposes;
+        # failed remains terminal for --show-status/--monitor.
+        if str(payload.get("status", "unknown")) != "ok"
         and not (
             str(payload.get("dispatch_job_id", "")).strip()
             and str(payload.get("status", "unknown")) in ("queued", "running")
