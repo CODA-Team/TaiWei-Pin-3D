@@ -24,6 +24,7 @@ UPPER = "upper"
 TWO_DIMENSIONAL = "2d"
 HETERO_PLATFORM = "asap7_nangate45_3D"
 TRUE_ATTR = "00000000000000000000000000000001"
+ELIMINATE_ATTR = "_3dsyn_eliminate"
 CELL_AREA_CACHE = {}
 
 
@@ -344,6 +345,63 @@ def collect_top_referenced_actual_modules(design, top_name, canonical_contracts)
     return actual_modules
 
 
+def flatten_eliminated_actual_instances(
+        yosys_exe, raw_design, top_name, eliminated_actual_modules, work_dir):
+    eliminated_actual_modules = set(eliminated_actual_modules)
+    if not eliminated_actual_modules:
+        return raw_design, None, 0
+
+    marked_design = raw_design.copy()
+    top_module = marked_design.get_module(top_name)
+    marked_instance_count = 0
+    for cell in top_module.cells.values():
+        if cell.type in eliminated_actual_modules:
+            cell.attributes[ELIMINATE_ATTR] = TRUE_ATTR
+            marked_instance_count += 1
+
+    if marked_instance_count == 0:
+        raise RuntimeError(
+            "no top-level instances found for eliminated actual modules: {}".format(
+                sorted(eliminated_actual_modules)
+            )
+        )
+
+    work_dir = Path(work_dir)
+    marked_json = work_dir / "1_synth_netlist.zero_area_marked.json"
+    pruned_json = work_dir / "1_synth_netlist.zero_area_flattened.json"
+    dump_design(marked_design, marked_json)
+    validate_design(load_design(marked_json))
+
+    flatten_tcl = """
+read_json {marked_json}
+select -assert-count {marked_instance_count} a:{eliminate_attr}=1
+flatten -noscopeinfo a:{eliminate_attr}=1
+select -assert-none a:{eliminate_attr}=1
+write_json {pruned_json}
+""".format(
+        marked_json=marked_json,
+        marked_instance_count=marked_instance_count,
+        eliminate_attr=ELIMINATE_ATTR,
+        pruned_json=pruned_json,
+    )
+    run_yosys_script(yosys_exe, flatten_tcl, "zero-area actual-unit flatten")
+
+    pruned_design = load_design(pruned_json)
+    validate_design(pruned_design)
+    remaining_types = sorted({
+        cell.type
+        for cell in pruned_design.get_module(top_name).cells.values()
+        if cell.type in eliminated_actual_modules
+    })
+    if remaining_types:
+        raise RuntimeError(
+            "top still references eliminated actual modules after flatten: {}".format(
+                remaining_types
+            )
+        )
+    return pruned_design, pruned_json, marked_instance_count
+
+
 def build_active_design(raw_design, top_name, actual_modules):
     modules = OrderedDict()
     modules[top_name] = raw_design.get_module(top_name).copy()
@@ -551,6 +609,76 @@ def compute_module_leaf_area(module_obj, platform, target_tier, map_tables):
     for cell in module_obj.cells.values():
         total += resolve_cell_area(cell.type, platform, target_tier, map_tables)
     return total
+
+
+def should_eliminate_actual_unit(
+        actual_name, bottom_area, upper_area, bottom_cell_count, upper_cell_count):
+    zero_area_candidate = bottom_area == 0.0 and upper_area == 0.0
+    if not zero_area_candidate:
+        return False
+    if bottom_cell_count != 0 or upper_cell_count != 0:
+        raise RuntimeError(
+            "zero-area actual unit {} must have zero cells in both tiers; "
+            "bottom_cell_count={} upper_cell_count={}".format(
+                actual_name,
+                bottom_cell_count,
+                upper_cell_count,
+            )
+        )
+    return True
+
+
+def prepare_actual_variant_data(args, actual_modules):
+    map_tables = build_map_tables(args.platform)
+    variant_data = OrderedDict()
+    eliminated_actual_modules = OrderedDict()
+
+    for actual_name, info in actual_modules.items():
+        bottom_module = info["module"].copy()
+        remap_module_for_target(bottom_module, args.platform, BOTTOM, map_tables)
+        bottom_area = compute_module_leaf_area(
+            bottom_module, args.platform, BOTTOM, map_tables)
+
+        upper_module = info["module"].copy()
+        remap_module_for_target(upper_module, args.platform, UPPER, map_tables)
+        upper_area = compute_module_leaf_area(
+            upper_module, args.platform, UPPER, map_tables)
+
+        bottom_cell_count = len(bottom_module.cells)
+        upper_cell_count = len(upper_module.cells)
+        eliminated = should_eliminate_actual_unit(
+            actual_name,
+            bottom_area,
+            upper_area,
+            bottom_cell_count,
+            upper_cell_count,
+        )
+        data = {
+            "family_name": info["family_name"],
+            "top_instance_count": info["top_instance_count"],
+            "bottom_module": bottom_module,
+            "upper_module": upper_module,
+            "bottom_area": bottom_area,
+            "upper_area": upper_area,
+            "bottom_cell_count": bottom_cell_count,
+            "upper_cell_count": upper_cell_count,
+            "eliminated": eliminated,
+        }
+        variant_data[actual_name] = data
+        if eliminated:
+            eliminated_actual_modules[actual_name] = {
+                "family_name": info["family_name"],
+                "top_instance_count": info["top_instance_count"],
+                "bottom_cell_area": round_to_milli(bottom_area),
+                "upper_cell_area": round_to_milli(upper_area),
+                "bottom_cell_count": bottom_cell_count,
+                "upper_cell_count": upper_cell_count,
+            }
+
+    return {
+        "variant_data": variant_data,
+        "eliminated_actual_modules": eliminated_actual_modules,
+    }
 
 
 def round_to_milli(value):
@@ -773,9 +901,74 @@ syn3d_write_coarse_unit_libs
     run_yosys_script(yosys_exe, lib_tcl, "final coarse-unit LIB generation", env=env)
 
 
-def regenerate_actual_coarse_outputs(args, active_design, actual_modules):
-    del active_design
-    map_tables = build_map_tables(args.platform)
+def collect_macro_names(lef_path):
+    macro_names = set()
+    with open(lef_path, encoding="utf-8") as fp:
+        for line in fp:
+            match = re.match(r"\s*MACRO\s+(\S+)\s*$", line)
+            if match:
+                macro_names.add(match.group(1))
+    return macro_names
+
+
+def validate_published_variant_sets(handoff_dir, retained_actual_names):
+    handoff_dir = Path(handoff_dir)
+    expected = set(retained_actual_names)
+    observed = OrderedDict()
+    observed["coarse_units/bottom"] = {
+        path.stem for path in (handoff_dir / "coarse_units" / BOTTOM).glob("*.v")
+    }
+    observed["coarse_units/upper"] = {
+        path.stem for path in (handoff_dir / "coarse_units" / UPPER).glob("*.v")
+    }
+    observed["metrics/bottom"] = {
+        path.name for path in (handoff_dir / "metrics" / BOTTOM).iterdir() if path.is_dir()
+    }
+    observed["metrics/upper"] = {
+        path.name for path in (handoff_dir / "metrics" / UPPER).iterdir() if path.is_dir()
+    }
+    observed["lib/2d"] = {
+        path.stem
+        for path in (handoff_dir / "lib" / TWO_DIMENSIONAL).glob("*.lib")
+        if path.name != "coarse_units.lib"
+    }
+    observed["lib/bottom"] = {
+        path.name[: -len(".bottom.lib")]
+        for path in (handoff_dir / "lib" / BOTTOM).glob("*.bottom.lib")
+    }
+    observed["lib/upper"] = {
+        path.name[: -len(".upper.lib")]
+        for path in (handoff_dir / "lib" / UPPER).glob("*.upper.lib")
+    }
+
+    lef_expectations = {
+        "lef/2d": expected,
+        "lef/bottom": {"{}_bottom".format(name) for name in expected},
+        "lef/upper": {"{}_upper".format(name) for name in expected},
+    }
+    for view, view_expected in lef_expectations.items():
+        tier = view.split("/", 1)[1]
+        lef_path = handoff_dir / "lef" / tier / "coarse_units.lef"
+        observed[view] = collect_macro_names(lef_path)
+        if observed[view] != view_expected:
+            raise RuntimeError(
+                "published variant set mismatch for {}: expected={} observed={}".format(
+                    view, sorted(view_expected), sorted(observed[view])
+                )
+            )
+
+    for output_name, output_names in observed.items():
+        if output_name.startswith("lef/"):
+            continue
+        if output_names != expected:
+            raise RuntimeError(
+                "published variant set mismatch for {}: expected={} observed={}".format(
+                    output_name, sorted(expected), sorted(output_names)
+                )
+            )
+
+
+def publish_retained_actual_outputs(args, actual_modules, variant_data):
     work_dir = Path(args.work_dir)
     work_dir.mkdir(parents=True, exist_ok=True)
     results_dir = Path(args.output_verilog).resolve().parent
@@ -794,12 +987,16 @@ def regenerate_actual_coarse_outputs(args, active_design, actual_modules):
     actual_report = OrderedDict()
 
     for actual_name, info in actual_modules.items():
+        if actual_name not in variant_data:
+            raise RuntimeError("missing prepared data for retained actual unit {}".format(actual_name))
+        prepared = variant_data[actual_name]
+        if prepared["eliminated"]:
+            raise RuntimeError("eliminated actual unit reached publish stage: {}".format(actual_name))
         family_name = info["family_name"]
         family_metrics = family_metrics_cache[family_name]
 
-        bottom_module = info["module"].copy()
-        remap_module_for_target(bottom_module, args.platform, BOTTOM, map_tables)
-        bottom_area = compute_module_leaf_area(bottom_module, args.platform, BOTTOM, map_tables)
+        bottom_module = prepared["bottom_module"].copy()
+        bottom_area = prepared["bottom_area"]
         write_single_module_verilog(
             args.yosys,
             actual_name,
@@ -809,9 +1006,8 @@ def regenerate_actual_coarse_outputs(args, active_design, actual_modules):
             "bottom",
         )
 
-        upper_module = info["module"].copy()
-        remap_module_for_target(upper_module, args.platform, UPPER, map_tables)
-        upper_area = compute_module_leaf_area(upper_module, args.platform, UPPER, map_tables)
+        upper_module = prepared["upper_module"].copy()
+        upper_area = prepared["upper_area"]
         write_single_module_verilog(
             args.yosys,
             actual_name,
@@ -839,6 +1035,8 @@ def regenerate_actual_coarse_outputs(args, active_design, actual_modules):
             "top_instance_count": info["top_instance_count"],
             "bottom_cell_area": metrics[BOTTOM]["cell_area"],
             "upper_cell_area": metrics[UPPER]["cell_area"],
+            "bottom_cell_count": prepared["bottom_cell_count"],
+            "upper_cell_count": prepared["upper_cell_count"],
             "bottom_footprint_area": metrics[BOTTOM]["footprint_area"],
             "upper_footprint_area": metrics[UPPER]["footprint_area"],
         }
@@ -857,6 +1055,7 @@ def regenerate_actual_coarse_outputs(args, active_design, actual_modules):
         results_dir,
         bottom_modules,
     )
+    validate_published_variant_sets(args.handoff_dir, actual_modules.keys())
 
     return {
         "actual_variants": actual_report,
@@ -885,6 +1084,7 @@ def main():
         return
 
     raw_json = work_dir / "1_synth_netlist.raw.json"
+    pruned_raw_json = None
     active_json = work_dir / "1_synth_netlist.actual_modules.json"
     top_only_json = work_dir / "1_synth_netlist.top_only.json"
 
@@ -907,8 +1107,40 @@ def main():
         module_names,
         work_dir,
     )
-    actual_modules = collect_top_referenced_actual_modules(raw_design, top_module_name, canonical_contracts)
-    active_design = build_active_design(raw_design, top_module_name, actual_modules)
+    pre_actual_modules = collect_top_referenced_actual_modules(
+        raw_design, top_module_name, canonical_contracts)
+    prepared = prepare_actual_variant_data(args, pre_actual_modules)
+    eliminated_actual_modules = prepared["eliminated_actual_modules"]
+
+    (
+        pruned_raw_design,
+        pruned_raw_json,
+        flattened_instance_count,
+    ) = flatten_eliminated_actual_instances(
+        args.yosys,
+        raw_design,
+        top_module_name,
+        eliminated_actual_modules.keys(),
+        work_dir,
+    )
+
+    if eliminated_actual_modules:
+        actual_modules = collect_top_referenced_actual_modules(
+            pruned_raw_design, top_module_name, canonical_contracts)
+    else:
+        actual_modules = pre_actual_modules
+
+    expected_retained = set(pre_actual_modules) - set(eliminated_actual_modules)
+    actual_retained = set(actual_modules)
+    if actual_retained != expected_retained:
+        raise RuntimeError(
+            "retained actual-unit set mismatch after zero-area flatten: "
+            "expected={} observed={}".format(
+                sorted(expected_retained), sorted(actual_retained)
+            )
+        )
+
+    active_design = build_active_design(pruned_raw_design, top_module_name, actual_modules)
     dump_design(active_design, active_json)
     validate_design(load_design(active_json))
 
@@ -918,13 +1150,35 @@ def main():
     validate_design(load_design(top_only_json))
     emit_json_to_verilog(args.yosys, top_only_json, top_module_name, args.output_verilog)
 
-    collateral_report = regenerate_actual_coarse_outputs(args, active_design, actual_modules)
+    collateral_report = publish_retained_actual_outputs(
+        args,
+        actual_modules,
+        prepared["variant_data"],
+    )
+
+    for actual_name, eliminated_info in eliminated_actual_modules.items():
+        print("[3dsyn] eliminated zero-area actual unit:")
+        print("  module={}".format(actual_name))
+        print("  family={}".format(eliminated_info["family_name"]))
+        print("  bottom_area={}".format(eliminated_info["bottom_cell_area"]))
+        print("  upper_area={}".format(eliminated_info["upper_cell_area"]))
+        print("  bottom_cell_count={}".format(eliminated_info["bottom_cell_count"]))
+        print("  upper_cell_count={}".format(eliminated_info["upper_cell_count"]))
+        print("  top_instance_count={}".format(eliminated_info["top_instance_count"]))
+
+    print("[3dsyn] pre_actual_count={}".format(len(pre_actual_modules)))
+    print("[3dsyn] eliminated_actual_count={}".format(len(eliminated_actual_modules)))
+    print("[3dsyn] retained_actual_count={}".format(len(actual_modules)))
 
     report = {
         "design_name": args.design_name,
         "top_module_name": top_module_name,
         "platform": args.platform,
         "module_count": len(module_names),
+        "pre_actual_coarse_unit_type_count": len(pre_actual_modules),
+        "eliminated_actual_coarse_unit_type_count": len(eliminated_actual_modules),
+        "eliminated_actual_coarse_unit_types": eliminated_actual_modules,
+        "flattened_zero_area_instance_count": flattened_instance_count,
         "actual_coarse_unit_type_count": len(actual_modules),
         "actual_coarse_unit_types": collateral_report["actual_variants"],
         "top_level_contract": top_contract,
@@ -932,6 +1186,7 @@ def main():
         "output_verilog": args.output_verilog,
         "active_json": str(active_json),
         "top_only_json": str(top_only_json),
+        "zero_area_flattened_json": str(pruned_raw_json) if pruned_raw_json else None,
         "handoff_dir": args.handoff_dir,
     }
     with open(work_dir / "normalization_report.json", "w", encoding="utf-8") as fp:
