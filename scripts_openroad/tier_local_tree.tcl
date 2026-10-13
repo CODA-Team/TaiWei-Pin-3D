@@ -298,6 +298,8 @@ proc pin3d_build_local_trees_for_tier {tier args} {
   set domain_count 0
   set tree_count 0
   set buffer_count 0
+  # Track BTerm-driven split nets so ordinary port scanning does not rebuild them.
+  set port_tree_nets {}
   foreach record $records {
     if {![dict exists $record record_type] || [dict get $record record_type] ne "dual_boundary"} {
       continue
@@ -325,6 +327,9 @@ proc pin3d_build_local_trees_for_tier {tier args} {
         set loads [::pin3d_local_tree::direct_domain_loads \
           $root_net $tier [list [dict get $record split_src_inst]]]
         set is_port [expr {[dict get $record driver_kind] eq "bterm"}]
+        if {$is_port} {
+          lappend port_tree_nets [dict get $record original_net]
+        }
         set threshold [expr {$is_port ? $port_min_fanout : $min_fanout}]
         set stats [::pin3d_local_tree::build_domain_tree $block $root_net $loads $tier \
           "[dict get $record original_net]:source" $is_port $threshold $branch_factor $report_fh]
@@ -346,6 +351,34 @@ proc pin3d_build_local_trees_for_tier {tier args} {
         if {[dict get $stats built]} { incr tree_count }
         incr buffer_count [dict get $stats buffers]
       }
+    }
+  }
+
+  # Build trees for high-fanout top-level input ports that are not in the
+  # dual-boundary split manifest (for example Ibex rst_ni).
+  if {[::pin3d_local_tree::env_flag PIN3D_PORT_TREE_ENABLE 1]} {
+    foreach bterm [$block getBTerms] {
+      set net [$bterm getNet]
+      if {$net eq "" || $net eq "NULL"} { continue }
+      set net_name [$net getName]
+      if {[lsearch -exact $port_tree_nets $net_name] >= 0} { continue }
+      lappend port_tree_nets $net_name
+
+      set sig_type ""
+      catch {set sig_type [string toupper [$net getSigType]]}
+      if {$sig_type in {CLOCK POWER GROUND}} { continue }
+
+      set io_type ""
+      catch {set io_type [string toupper [$bterm getIoType]]}
+      if {$io_type ne "" && $io_type ni {INPUT INOUT}} { continue }
+
+      set loads [::pin3d_local_tree::direct_domain_loads $net $tier {}]
+      if {[llength $loads] < $port_min_fanout} { continue }
+      set label "${net_name}:port_source"
+      set stats [::pin3d_local_tree::build_domain_tree $block $net $loads $tier \
+        $label 1 $port_min_fanout $branch_factor $report_fh]
+      if {[dict get $stats built]} { incr tree_count }
+      incr buffer_count [dict get $stats buffers]
     }
   }
 
