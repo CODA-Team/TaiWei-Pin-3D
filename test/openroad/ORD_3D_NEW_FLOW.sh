@@ -231,8 +231,8 @@ fi
 if should_run_stage staged-prects; then
   for ((i = 1; i <= OUTER_ITERATIONS; i++)); do
     echo "[run] staged preCTS iteration ${i}/${OUTER_ITERATIONS}"
-    run_make_with_allow_net "upper-only" ord-place-upper
-    run_make_with_allow_net "bottom-only" ord-place-bottom
+    run_make_with_allow_net "all" ord-place-upper
+    run_make_with_allow_net "all" ord-place-bottom
   done
 fi
 if should_run_stage ord-gp2lg; then

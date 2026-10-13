@@ -456,13 +456,13 @@ ord-place-init-bottom:
 ord-place-upper:
 	@echo "[ORD] Place upper"
 	@$(call _mkstdirs)
-	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_upper.log,LEF_FILES="$(LEF_FILES_BOTTOM_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_upper.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_upper.log,TIER_ALLOW_NET=all LEF_FILES="$(LEF_FILES_BOTTOM_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_upper.tcl)
 
 .PHONY: ord-place-bottom
 ord-place-bottom:
 	@echo "[ORD] Place bottom"
 	@$(call _mkstdirs)
-	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_bottom.log,LEF_FILES="$(LEF_FILES_UPPER_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_bottom.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/3_place_bottom.log,TIER_ALLOW_NET=all LEF_FILES="$(LEF_FILES_UPPER_COVER)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/place_bottom.tcl)
 
 .PHONY: ord-3d-floorplan
 ord-3d-floorplan:
