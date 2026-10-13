@@ -9,7 +9,7 @@ export PROCESS ?= 7
 # Opt in with ASAP7_HBT_RDL=1.  The default direct M7/hb_layer/M6_m LEF is
 # unchanged.  The optional view inserts HBM_B/HBM_T and matching transition
 # cuts around hb_layer.
-export ASAP7_HBT_RDL ?= 0
+export ASAP7_HBT_RDL ?= 1
 export ASAP7_HBT_RDL_GCELL_SIZE_UM ?= 1.1
 # A regenerated extraction deck may be supplied here.  The legacy 6M7M deck
 # is deliberately not reused when the two additional routing layers are on.
