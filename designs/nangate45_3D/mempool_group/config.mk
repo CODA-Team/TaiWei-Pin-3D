@@ -2,6 +2,8 @@ export DESIGN_NAME = mempool_group
 export DESIGN_NICKNAME = mempool_group
 export PLATFORM = nangate45_3D
 
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+
 export SC_LEF_UPPER_COVER ?= \
   $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.lef \
   $(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.cover.lef

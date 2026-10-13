@@ -2,6 +2,8 @@ export DESIGN_NAME = mempool_group
 export DESIGN_NICKNAME = mempool_group
 export PLATFORM = asap7_3D
 
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+
 export SC_LEF_UPPER_COVER ?= \
   $(PLATFORM_DIR)/lef_bottom/asap7sc7p5t_28_R_1x_220121a.bottom.lef \
   $(PLATFORM_DIR)/lef_upper/asap7sc7p5t_28_R_1x_220121a.upper.cover.lef

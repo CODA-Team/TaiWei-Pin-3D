@@ -2,6 +2,8 @@ export DESIGN_NICKNAME = ibex
 export DESIGN_NAME = ibex_core
 export PLATFORM    = nangate45_3D
 
+export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
+
 export PLACE_DENSITY_LB_ADDON = 0.10
 export TNS_END_PERCENT        = 100
 export SKIP_GATE_CLONING   = 0
