@@ -32,9 +32,13 @@ foreach input_name {3_place.def 3_place.v 3_place.sdc} {
   }
 }
 
-# Remove only this stage's formal outputs.  A failed rerun must not leave an
-# older 4_cts handoff that looks like the result of the current invocation.
-foreach output_name {4_cts.def 4_cts.v 4_cts.sdc 4_cts.odb} {
+# Remove only this stage's outputs.  A failed rerun must not leave an older
+# canonical or internal handoff that looks like the current invocation.
+foreach output_name {
+  4_cts.def 4_cts.v 4_cts.sdc 4_cts.odb
+  4_cts_3d_raw.def 4_cts_3d_raw.v 4_cts_3d_raw.sdc 4_cts_3d_raw.odb
+  4_cts_3d_owner_legal.def
+} {
   set output_path [file join $::env(RESULTS_DIR) $output_name]
   if {[file exists $output_path]} {
     file delete -force $output_path
@@ -49,6 +53,7 @@ load_design 3_place.def 3_place.sdc "Starting 3D CTS..."
 source $::env(OPENROAD_SCRIPTS_DIR)/placement_utils.tcl
 source $::env(OPENROAD_SCRIPTS_DIR)/floorplan_utils.tcl
 source $::env(SCRIPTS_3DCTS_DIR)/platform_config.tcl
+source $::env(SCRIPTS_3DCTS_DIR)/placement_legalization_utils.tcl
 
 # 3D Construction Policy Engine (Item 1, ): when CTS_POLICY_ENGINE=1,
 # measure design structure from the loaded ODB and decide the 3D-CTS levers
@@ -523,6 +528,20 @@ if {[info exists ::env(CTS_LAYER)]} {
   set cts_layer $::env(CTS_LAYER)
   set fix_layer [expr {$cts_layer eq "bottom" ? "upper" : "bottom"}]
 }
+if {$cts_layer ne "bottom" && $cts_layer ne "upper"} {
+  error "3DCTS CTS_LAYER must be bottom or upper, got '$cts_layer'"
+}
+
+# Capture the stage-entry geometry before repair_clock_inverters creates
+# clones.  This snapshot is the reference for both intermediate owner DPL and
+# the final owner/receive dirty-only legalization passes.
+set _block [ord::get_db_block]
+set _stage_entry_snapshot [cts3d_place::capture_snapshot $_block]
+if {[dict size $_stage_entry_snapshot] == 0} {
+  error "3DCTS stage-entry placement snapshot is empty"
+}
+set _pre_cts_insts $_stage_entry_snapshot
+puts "  Stage-entry instances: [dict size $_stage_entry_snapshot]"
 
 repair_clock_inverters
 
@@ -544,17 +563,6 @@ if {[info exists ::env(CTS_NO_INSERTION_DELAY)] && $::env(CTS_NO_INSERTION_DELAY
 append_env_var cts_args CTS_BUF_DISTANCE -distance_between_buffers 1
 append_env_var cts_args CTS_CLUSTER_SIZE -sink_clustering_size 1
 append_env_var cts_args CTS_CLUSTER_DIAMETER -sink_clustering_max_diameter 1
-
-# Snapshot pre-CTS instances for new-cell detection
-set _pre_cts_insts [dict create]
-set _pre_cts_pos [dict create]
-set _block [ord::get_db_block]
-foreach _inst [$_block getInsts] {
-  set _n [$_inst getName]
-  dict set _pre_cts_insts $_n 1
-  dict set _pre_cts_pos $_n [list [lindex [$_inst getOrigin] 0] [lindex [$_inst getOrigin] 1]]
-}
-puts "  Pre-CTS instances: [dict size $_pre_cts_insts]"
 
 # ---- Conservative useful-skew damping (candidate-E fix: a_i <- lambda * a_i) ----
 # Env-gated, default off. Scales the LP targets before CTS delivery and reloads them
@@ -592,10 +600,13 @@ set _block [ord::get_db_block]
 foreach _inst [$_block getInsts] {
   set _iname [$_inst getName]
   if {[dict exists $_pre_cts_insts $_iname]} { continue }
-  if {[string match "*bottom*" [[$_inst getMaster] getName]]} {
-    lappend _cts_bottom_cells $_iname
-  } else {
-    lappend _cts_upper_cells $_iname
+  set _new_tier [cts3d_place::tier_from_master_name [[$_inst getMaster] getName]]
+  switch -- $_new_tier {
+    bottom { lappend _cts_bottom_cells $_iname }
+    upper { lappend _cts_upper_cells $_iname }
+    default {
+      error "3DCTS new instance cannot be assigned to a tier: $_iname master=[[$_inst getMaster] getName]"
+    }
   }
 }
 puts "  New CTS cells: bottom=[llength $_cts_bottom_cells]  upper=[llength $_cts_upper_cells]"
@@ -952,29 +963,45 @@ puts "  Repair: $_new_bufs new buffers, $_swapped tier-swapped"
 estimate_parasitics -placement
 report_timing_summary "After repair_clock_nets (before DPL)"
 
-# DPL Pass 1 + COVER-tier grid snap
+# Intermediate owner-view DPL
 # Bug fix: HETEROGENEOUS_3D (asap7_nangate45_3D) has no NG45 ROW in DEF.
 # DPL cannot legalize bottom NG45 CTS buffers, and upper DPL displaces
 # buffers up to 182um → hold 10x worse. Skip DPL when SKIP_HETERO_DPL=1.
 set _skip_hetero_dpl [expr {[info exists ::env(SKIP_HETERO_DPL)] && $::env(SKIP_HETERO_DPL) && \
                              [info exists ::env(HETEROGENEOUS_3D)] && $::env(HETEROGENEOUS_3D)}]
 if {!$_skip_hetero_dpl} {
-  puts ">>> Post-repair DPL (FIRM-protected: pre-CTS cells frozen)"
-  # FIRM all pre-CTS cells to prevent data path displacement.
-  # Only CTS buffers + repair buffers (post-CTS insertions) are free to move.
+  puts ">>> Post-repair DPL (FIRM-protected: owner-tier dirty cells only)"
+  set _phase4_dirty [cts3d_place::diff_snapshot $_stage_entry_snapshot $_block]
+  if {[llength [dict get $_phase4_dirty unknown]] != 0} {
+    error "3DCTS Phase-4 dirty instances have unknown tier: [lrange [dict get $_phase4_dirty unknown] 0 9]"
+  }
+  set _phase4_owner_dirty [dict get $_phase4_dirty $cts_layer]
+
+  # This is an owner-view intermediate legalization used by the existing
+  # timing flow.  The final owner/receive pair after all geometry mutations is
+  # still authoritative.
   set _dpl_freed 0
   foreach _inst [$_block getInsts] {
     $_inst setPlacementStatus FIRM
   }
-  foreach _inst [$_block getInsts] {
-    if {![dict exists $_pre_cts_insts [$_inst getName]]} {
-      $_inst setPlacementStatus PLACED
-      incr _dpl_freed
+  foreach _iname $_phase4_owner_dirty {
+    set _inst [$_block findInst $_iname]
+    if {$_inst eq "" || $_inst eq "NULL"} {
+      error "3DCTS Phase-4 dirty instance disappeared: $_iname"
     }
+    set _master [$_inst getMaster]
+    if {[$_master getType] ne "CORE"} {
+      error "3DCTS Phase-4 owner dirty instance is not CORE: $_iname master=[$_master getName] type=[$_master getType]"
+    }
+    $_inst setPlacementStatus PLACED
+    incr _dpl_freed
   }
-  puts "  FIRM: [dict size $_pre_cts_insts] pre-CTS cells, FREE: $_dpl_freed post-CTS cells"
+  if {$_dpl_freed != [llength $_phase4_owner_dirty]} {
+    error "3DCTS Phase-4 released $_dpl_freed cells but expected [llength $_phase4_owner_dirty]"
+  }
+  puts "  Owner dirty: [llength $_phase4_owner_dirty], FREE: $_dpl_freed"
   if {[catch {detailed_placement} err]} {
-    puts "WARNING: Post-repair DPL failed: $err"
+    error "3DCTS intermediate owner detailed placement failed: $err"
   }
   # Restore all to PLACED for subsequent steps
   foreach _inst [$_block getInsts] {
@@ -984,100 +1011,10 @@ if {!$_skip_hetero_dpl} {
   puts ">>> Post-repair DPL: skipped (SKIP_HETERO_DPL=1 + HETEROGENEOUS_3D=1, no NG45 ROW in DEF)"
 }
 
-# Grid snap CTS buffers to ROW grid (required for coarse-grid platforms).
-# Upper cells: always snap to ASAP7 ROW grid (first ROW site in DEF).
-# Bottom cells (HETEROGENEOUS_3D): snap to NG45 grid (0.190um x 1.400um).
-#   Bug fix: original code used ASAP7 grid (54x270) for ALL cells including bottom
-#   NG45 — off-track placement caused DRT-0073 for asap7_nangate45_3D designs.
-#   Cells on different tiers do not conflict, so separate collision sets per tier.
-set _rows [$_block getRows]
-set _row0 [lindex $_rows 0]
-set _site [$_row0 getSite]
-set _site_w [$_site getWidth]
-set _site_h [$_site getHeight]
-set _row_y0 [lindex [$_row0 getOrigin] 1]
-
-# For HETEROGENEOUS_3D, compute NG45 grid from block dbu/um.
-# FreePDK45 site pitch: 0.190um (x) x 1.400um (y).
-# Use $_skip_hetero_dpl (defined before Phase 4) instead of $_is_hetero (local to build_buf_list_3d proc).
-set _bot_site_w $_site_w
-set _bot_site_h $_site_h
-set _bot_row_y0 0
-if {$_skip_hetero_dpl} {
-  set _dbu_per_um [$_block getDbUnitsPerMicron]
-  set _bot_site_w [expr {int(round(0.190 * $_dbu_per_um))}]
-  set _bot_site_h [expr {int(round(1.400 * $_dbu_per_um))}]
-  # Compute NG45 grid y-origin from existing bottom cells (not hardcoded 0).
-  # NG45 rows may not start at y=0 in the merged 3D DEF.
-  foreach _inst [$_block getInsts] {
-    if {[string match "*bottom*" [[$_inst getMaster] getName]]} {
-      set _by [lindex [$_inst getOrigin] 1]
-      set _bot_row_y0 [expr {$_by % $_bot_site_h}]
-      break
-    }
-  }
-  puts "  Grid: upper(ASAP7)=${_site_w}x${_site_h} dbu, bottom(NG45)=${_bot_site_w}x${_bot_site_h} dbu, y0=${_bot_row_y0}"
-}
-
-# Build occupied sets per tier (cells on different tiers don't conflict).
-set _occ_upper [dict create]
-set _occ_bottom [dict create]
-foreach _inst [$_block getInsts] {
-  set _mname [[$_inst getMaster] getName]
-  set _iname [$_inst getName]
-  # Skip CTS cells themselves — they are the ones being snapped.
-  if {[string match "clkbuf_*" $_iname] || [string match "clkload*" $_iname] || \
-      [string match "*relay*" $_iname] || [string match "sg_*" $_iname] || \
-      [string match "*repair*" $_iname]} { continue }
-  set _key "[lindex [$_inst getOrigin] 0],[lindex [$_inst getOrigin] 1]"
-  if {[string match "*upper*" $_mname]} {
-    dict set _occ_upper $_key 1
-  } elseif {[string match "*bottom*" $_mname]} {
-    dict set _occ_bottom $_key 1
-  }
-}
-
-# Helper: snap one list of cells to a given grid with collision avoidance.
-proc _snap_cells_to_grid {cell_list block sw sh y0 occ_var} {
-  upvar $occ_var occ
-  set cnt 0
-  foreach _iname $cell_list {
-    set _inst [$block findInst $_iname]
-    if {$_inst eq "" || $_inst eq "NULL"} { continue }
-    set _ox [lindex [$_inst getOrigin] 0]
-    set _oy [lindex [$_inst getOrigin] 1]
-    set _sx [expr {int(round(double($_ox) / $sw)) * $sw}]
-    set _sy [expr {$y0 + int(round(double($_oy - $y0) / $sh)) * $sh}]
-    if {[dict exists $occ "${_sx},${_sy}"]} {
-      set _found 0
-      for {set _r 1} {$_r <= 10 && !$_found} {incr _r} {
-        foreach _dy [list 0 $_r [expr {-$_r}]] {
-          foreach _dx [list 0 $_r [expr {-$_r}]] {
-            if {$_dx == 0 && $_dy == 0} { continue }
-            set _tx [expr {$_sx + $_dx * $sw}]
-            set _ty [expr {$_sy + $_dy * $sh}]
-            if {![dict exists $occ "${_tx},${_ty}"]} {
-              set _sx $_tx; set _sy $_ty; set _found 1; break
-            }
-          }
-          if {$_found} { break }
-        }
-      }
-    }
-    $_inst setOrigin $_sx $_sy
-    dict set occ "${_sx},${_sy}" 1
-    incr cnt
-  }
-  return $cnt
-}
-
-set _snap_upper  [_snap_cells_to_grid $_cts_upper_cells  $_block $_site_w    $_site_h    $_row_y0     _occ_upper]
-set _snap_bottom [_snap_cells_to_grid $_cts_bottom_cells $_block $_bot_site_w $_bot_site_h $_bot_row_y0 _occ_bottom]
-set _snap_count [expr {$_snap_upper + $_snap_bottom}]
-puts "  Grid-snapped $_snap_count CTS buffers (upper: ${_site_w}x${_site_h}, bottom: ${_bot_site_w}x${_bot_site_h} dbu)"
-
+# Do not change origins after OpenDP.  Both tiers receive footprint-aware,
+# row/site-aware dirty-only legalization after all CTS geometry mutations.
 estimate_parasitics -placement
-report_timing_summary "After DPL"
+report_timing_summary "After intermediate owner DPL"
 
 set _phase4_elapsed [expr {[clock seconds] - $_phase4_t0}]
 puts ">>> Phase 4 elapsed: ${_phase4_elapsed}s ([expr {$_phase4_elapsed/60}]m [expr {$_phase4_elapsed%60}]s)"
@@ -1179,8 +1116,8 @@ if {[info exists ::env(CTS_ENABLE_DEBUG_EXTRACT)] && $::env(CTS_ENABLE_DEBUG_EXT
 # PAPER framework: component of Phase 4 (post-CTS skew-aware optimization,
 # alongside buffer sizing); script-internal phases 4-6 are Phase-4 sub-steps.
 # Re-tap + tap-buffer downsizing with batched real-STA accept gate
-# (TNS objective, WNS no-regression guard). Runs BEFORE "Write outputs",
-# so 4_cts.def / 4_cts_timing.rpt / routing all inherit the result.
+# (TNS objective, WNS no-regression guard). Runs before the raw handoff and
+# final owner/receive legalization, so the canonical 4_cts output inherits it.
 # Gate: CTS_ENABLE_CTR=1. Requires the debug-extract CSVs above.
 # =====================================================================
 if {[info exists ::env(CTS_ENABLE_CTR)] && $::env(CTS_ENABLE_CTR)} {
@@ -1199,12 +1136,35 @@ set _phase6_elapsed [expr {[clock seconds] - $_phase6_t0}]
 puts ">>> Phase 6 elapsed: ${_phase6_elapsed}s ([expr {$_phase6_elapsed/60}]m [expr {$_phase6_elapsed%60}]s)"
 
 # =====================================================================
-# Write outputs
+# Record final mutations and write the internal raw handoff
 # =====================================================================
-write_db $::env(RESULTS_DIR)/4_cts.odb
-write_def $::env(RESULTS_DIR)/4_cts.def
-write_verilog $::env(RESULTS_DIR)/4_cts.v
-write_sdc $::env(RESULTS_DIR)/4_cts.sdc
+set _final_dirty [cts3d_place::diff_snapshot $_stage_entry_snapshot $_block]
+set _dirty_bottom [dict get $_final_dirty bottom]
+set _dirty_upper [dict get $_final_dirty upper]
+set _dirty_unknown [dict get $_final_dirty unknown]
+if {[llength $_dirty_unknown] != 0} {
+  error "3DCTS final dirty instances have unknown tier: [lrange $_dirty_unknown 0 9]"
+}
+
+set _dirty_bottom_file [file join $::env(CTS3D_WORK_DIR) dirty_bottom.tcl]
+set _dirty_upper_file [file join $::env(CTS3D_WORK_DIR) dirty_upper.tcl]
+cts3d_place::write_dirty_list $_dirty_bottom_file bottom $_dirty_bottom
+cts3d_place::write_dirty_list $_dirty_upper_file upper $_dirty_upper
+cts3d_place::write_dirty_report \
+  [file join $::env(REPORTS_DIR) 4_cts_3d_dirty_instances.tsv] $_final_dirty
+
+puts "CTS3D_DIRTY_SUMMARY bottom=[llength $_dirty_bottom] upper=[llength $_dirty_upper] unknown=0 new=[dict get $_final_dirty new_count] master=[dict get $_final_dirty master_count] position=[dict get $_final_dirty position_count] orientation=[dict get $_final_dirty orientation_count] removed=[dict get $_final_dirty removed_count]"
+
+write_db $::env(RESULTS_DIR)/4_cts_3d_raw.odb
+write_def $::env(RESULTS_DIR)/4_cts_3d_raw.def
+write_verilog $::env(RESULTS_DIR)/4_cts_3d_raw.v
+write_sdc $::env(RESULTS_DIR)/4_cts_3d_raw.sdc
+foreach raw_name {4_cts_3d_raw.odb 4_cts_3d_raw.def 4_cts_3d_raw.v 4_cts_3d_raw.sdc} {
+  set raw_path [file join $::env(RESULTS_DIR) $raw_name]
+  if {![file isfile $raw_path] || [file size $raw_path] == 0} {
+    error "3DCTS failed to write non-empty raw handoff: $raw_path"
+  }
+}
 
 # Cross-tier statistics
 report_cross_tier_stats
@@ -1216,13 +1176,14 @@ report_cross_tier_stats
 # than the actual post-sizing result.
 estimate_parasitics -placement
 
-# Timing report file
+# Pre-legalization timing report; the receive finalizer writes the canonical
+# 4_cts_timing.rpt after both tier passes.
 report_checks -path_delay max -slack_max 0 -group_count 10 \
-  > $::env(REPORTS_DIR)/4_cts_timing.rpt
+  > $::env(REPORTS_DIR)/4_cts_3d_raw_timing.rpt
 report_checks -path_delay min -slack_max 0 -group_count 10 \
-  >> $::env(REPORTS_DIR)/4_cts_timing.rpt
+  >> $::env(REPORTS_DIR)/4_cts_3d_raw_timing.rpt
 
-set rpt_file [open $::env(REPORTS_DIR)/4_cts_timing.rpt a]
+set rpt_file [open $::env(REPORTS_DIR)/4_cts_3d_raw_timing.rpt a]
 puts $rpt_file "\n========== Summary =========="
 puts $rpt_file [format "setup_tns %.2f ps" [expr {[sta::total_negative_slack_cmd "max"] * 1e12}]]
 puts $rpt_file [format "setup_wns %.2f ps" [expr {[clamp_wns [sta::worst_slack_cmd "max"]] * 1e12}]]
@@ -1294,12 +1255,14 @@ if {[info exists ::env(CTS_REALM_DUMP_ARRIVALS)] && $::env(CTS_REALM_DUMP_ARRIVA
   if {$_rerr1 ne ""} { puts ">>> \[REALM-dump\] first error: $_rerr1" }
 }
 
-# Final summary (parasitics already refreshed above)
-puts "\n========== 3D CTS Final Summary =========="
-report_timing_summary "FINAL"
+# Raw summary (parasitics already refreshed above).  Canonical output is
+# produced by the two tier finalizers invoked by ord-cts-3d.
+puts "\n========== 3D CTS Pre-Legalization Summary =========="
+report_timing_summary "PRE-LEGALIZATION"
 puts "  CTS cells: bottom=[llength $_cts_bottom_cells]  upper=[llength $_cts_upper_cells]"
-puts "  Report: $::env(REPORTS_DIR)/4_cts_timing.rpt"
-puts "========== 3D CTS Complete ==========\n"
+puts "  Dirty cells: bottom=[llength $_dirty_bottom]  upper=[llength $_dirty_upper]"
+puts "  Report: $::env(REPORTS_DIR)/4_cts_3d_raw_timing.rpt"
+puts "========== 3D CTS Raw Handoff Complete ==========\n"
 
 # Image generation is optional and must not initialize Qt/X11 on a headless
 # batch node.  Match TaiWei's native handoff policy: render only with a display
@@ -1309,11 +1272,11 @@ set _cts_qt_offscreen [expr {
   [info exists ::env(QT_QPA_PLATFORM)] && $::env(QT_QPA_PLATFORM) eq "offscreen"
 }]
 if {$_cts_display_ok || $_cts_qt_offscreen} {
-  if {[catch {save_image -resolution 0.1 $::env(LOG_DIR)/4_cts.webp} _cts_image_err]} {
-    puts "WARN(3DCTS): failed to write image $::env(LOG_DIR)/4_cts.webp : $_cts_image_err"
+  if {[catch {save_image -resolution 0.1 $::env(LOG_DIR)/4_cts_3d_raw.webp} _cts_image_err]} {
+    puts "WARN(3DCTS): failed to write image $::env(LOG_DIR)/4_cts_3d_raw.webp : $_cts_image_err"
   }
 } else {
-  puts "INFO(3DCTS): skip image output $::env(LOG_DIR)/4_cts.webp in headless mode"
+  puts "INFO(3DCTS): skip image output $::env(LOG_DIR)/4_cts_3d_raw.webp in headless mode"
 }
 
 exit

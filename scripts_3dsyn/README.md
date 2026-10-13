@@ -158,6 +158,7 @@ driver.
 | `SYN3D_BACKEND` | `cds` | Physical backend used by coarse partition and handoff: `cds` or `ord`. |
 | `SYN3D_COARSE_UNIT_KEEP_MODE` | `all` | Coarse-unit categories to preserve: `all`, `arithmetic`, `multibit_ff`, or `none`. |
 | `SYN3D_FIXED_UTIL` | unset | Optional fixed coarse-unit utilization in `(0, 1]`; when unset, the area model predicts utilization. |
+| `SYN3D_GENUS_OPT_MODE` | `normal` | Genus optimization mode shared by coarse and per-tier synthesis: `normal` runs `syn_opt`; `low_effort` runs `syn_opt -incr -effort low`. |
 | `SYN3D_HBT_MODEL_MODE` | `scale` | HBT model mode: `scale` or `direct`. |
 | `SYN3D_HBT_R_SCALE` | `0` | Producer-tier drive-resistance scale in `scale` mode. |
 | `SYN3D_HBT_C_SCALE` | `0.25` | Consumer-tier input-capacitance scale in `scale` mode. |

@@ -41,6 +41,7 @@ from flow_config import (
     GENUS_LOG_PREFIX,
     GENUS_OUTPUT_JSON,
     GENUS_OUTPUT_V,
+    GENUS_OPT_MODE,
     GENUS_PLAN_JSON,
     GENUS_POST_SDC,
     GENUS_REPORT_DIR,
@@ -104,6 +105,14 @@ GENUS_UNCLOCKED_SOURCE_RE = re.compile(
 )
 D2D_EXTRA_RC_TCL = os.path.join(GENUS_TMP_DIR, "06_hbt_model.tcl")
 D2D_EXTRA_RC_JSON = os.path.join(GENUS_TMP_DIR, "06_hbt_model.json")
+
+
+def genus_syn_opt_command():
+    if GENUS_OPT_MODE == "normal":
+        return "syn_opt"
+    if GENUS_OPT_MODE == "low_effort":
+        return "syn_opt -incr -effort low"
+    raise AssertionError("Unsupported SYN3D_GENUS_OPT_MODE: {}".format(GENUS_OPT_MODE))
 
 
 def normalize_genus_primary_interface(output_design, reference_design, output_json):
@@ -786,28 +795,14 @@ puts "SYN3D_BOTTOM_UNGROUP_OK=[get_db $bottom_mod .ungroup_ok]"
 puts "SYN3D_UPPER_BOUNDARY_OPTO=[get_db $upper_mod .boundary_opto]"
 puts "SYN3D_BOTTOM_BOUNDARY_OPTO=[get_db $bottom_mod .boundary_opto]"
 source $d2d_extra_rc_tcl
+puts "INFO: SYN3D_GENUS_OPT_MODE = {genus_opt_mode}"
 
 check_design -unresolved > {check_design}
 check_timing_intent -verbose > {timing_intent}
 report_timing > {pre_timing}
 
-# syn_generic
-# set_db syn_generic_effort low
-# syn_generic
-# write_reports -directory $report_dir -tag generic
-# write_db [file join $db_dir {wrapper_top}_generic.db]
-#
-# syn_map
-# set_db syn_map_effort low
-# syn_map
-# write_reports -directory $report_dir -tag map
-# write_db [file join $db_dir {wrapper_top}_map.db]
-#
-# syn_opt
-# set_db syn_opt_effort low
-# syn_opt
-# 2026-07-08: minimize homogeneous Genus intervention; run only low-effort incremental syn_opt.
-syn_opt -incr -effort low
+# Optimize the existing mapped netlist using the configured mode.
+{syn_opt_command}
 write_reports -directory $report_dir -tag final
 write_db [file join $db_dir {wrapper_top}_opt.db]
 
@@ -847,6 +842,8 @@ exit
         upper_instance=WRAPPER_UPPER_INSTANCE_NAME,
         bottom_instance=WRAPPER_BOTTOM_INSTANCE_NAME,
         protected_top_names=format_tcl_list(protected_top_names),
+        genus_opt_mode=GENUS_OPT_MODE,
+        syn_opt_command=genus_syn_opt_command(),
         constant_tie_configuration=render_constant_tie_configuration(homogeneous_constant_tie_specs()),
         **{key: tcl_quote(value) for key, value in reports.items()}
     )
@@ -857,6 +854,7 @@ exit
     assert "ungroup $internal_design_hinsts" in loaded, "06 Tcl missing explicit internal hinst ungroup"
     assert "set_db $upper_mod .boundary_opto strict_no" in loaded, "06 Tcl missing upper boundary guard"
     assert "source $d2d_extra_rc_tcl" in loaded, "06 Tcl missing d2d extra RC source"
+    assert "\n{}\n".format(genus_syn_opt_command()) in loaded, "06 Tcl missing configured syn_opt command"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "06 Tcl missing duplicate constant tie mapping"
     assert "Unable to resolve post-synthesis upper hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     assert "Unable to resolve post-synthesis bottom hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
@@ -1243,6 +1241,7 @@ def build_genus_plan(
                         ("library", LIBRARY),
                         ("flow_variant", FLOW_VARIANT),
                         ("synth_mode", SYNTH_MODE),
+                        ("genus_opt_mode", GENUS_OPT_MODE),
                         ("mapping_mode", CELL_NAME_MAPPING_MODE),
                     ]
                 ),
@@ -1838,6 +1837,7 @@ puts "SYN3D_PROTECTED_TOP_OBJECT_COUNT=$protected_top_object_count"
 puts "SYN3D_AUTO_UNGROUP=[get_db / .auto_ungroup]"
 puts "SYN3D_OUTPUT_LOAD_STATUS=disabled_by_policy"
 source $d2d_extra_rc_tcl
+puts "INFO: SYN3D_GENUS_OPT_MODE = {genus_opt_mode}"
 
 check_design -unresolved > {check_design}
 check_timing_intent > {timing_intent}
@@ -1847,11 +1847,8 @@ report_ungroup_modules > {ungroup}
 report_boundary_opt $active_hinst > {active_boundary_before}
 report_boundary_opt $frozen_hinst > {frozen_boundary_before}
 
-# set syn_opt_rc [catch {{ syn_opt -incr }} syn_opt_msg]
-# set_db syn_opt_effort low
-# set syn_opt_rc [catch {{ syn_opt -incr }} syn_opt_msg]
-# 2026-07-08: minimize heterogeneous Genus intervention; run only low-effort incremental syn_opt.
-set syn_opt_rc [catch {{ syn_opt -incr -effort low }} syn_opt_msg]
+# Optimize the existing mapped netlist using the configured mode.
+set syn_opt_rc [catch {{ {syn_opt_command} }} syn_opt_msg]
 
 write_reports -directory $report_dir -tag final
 report_messages > {post_messages}
@@ -1889,6 +1886,8 @@ exit
         pass_name=desc["pass_name"],
         active_tier=desc["active_tier"],
         frozen_tier=desc["frozen_tier"],
+        genus_opt_mode=GENUS_OPT_MODE,
+        syn_opt_command=genus_syn_opt_command(),
         constant_tie_configuration=render_constant_tie_configuration(
             tier_constant_tie_specs(desc["active_tier"])
         ),
@@ -1901,7 +1900,8 @@ exit
     assert "set_max_transition" not in loaded, "Hetero Tcl must not set max transition"
     assert "set_db auto_ungroup both" in loaded, "Hetero Tcl must allow selective internal ungroup"
     assert "ungroup $active_internal_design_hinsts" in loaded, "Hetero Tcl missing explicit active internal hinst ungroup"
-    assert "syn_opt -incr -effort low" in loaded, "Hetero Tcl must run low-effort incremental syn_opt"
+    expected_syn_opt = "set syn_opt_rc [catch {{ {} }} syn_opt_msg]".format(genus_syn_opt_command())
+    assert expected_syn_opt in loaded, "Hetero Tcl missing configured syn_opt command"
     assert "source $d2d_extra_rc_tcl" in loaded, "Hetero Tcl missing d2d extra RC source"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "Hetero Tcl missing duplicate constant tie mapping"
     return db_opt
@@ -2192,6 +2192,7 @@ def build_hetero_genus_plan(liberty_checks, timing_constraints, d2d_extra_rc_mod
                         ("library", LIBRARY),
                         ("flow_variant", FLOW_VARIANT),
                         ("synth_mode", SYNTH_MODE),
+                        ("genus_opt_mode", GENUS_OPT_MODE),
                         ("mapping_mode", CELL_NAME_MAPPING_MODE),
                     ]
                 ),

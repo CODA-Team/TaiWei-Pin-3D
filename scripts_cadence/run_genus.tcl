@@ -11,6 +11,22 @@ source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
 
+proc run_configured_syn_opt {} {
+  set mode [_get SYN3D_GENUS_OPT_MODE normal]
+  puts "INFO: SYN3D_GENUS_OPT_MODE = $mode"
+  switch -- $mode {
+    normal {
+      syn_opt
+    }
+    low_effort {
+      syn_opt -incr -effort low
+    }
+    default {
+      error "SYN3D_GENUS_OPT_MODE must be normal or low_effort: '$mode'"
+    }
+  }
+}
+
 proc configure_constant_tie_cells {} {
   set tie_cells {}
   foreach variable_name {TIELO_CELL_AND_PORT TIEHI_CELL_AND_PORT} {
@@ -184,7 +200,7 @@ time_info MAPPED
 write_reports -directory ${REPORTS_DIR} -tag map
 write_db  ${OBJECTS_DIR}/${DESIGN}_map.db
 
-syn_opt
+run_configured_syn_opt
 time_info OPT
 write_db ${OBJECTS_DIR}/${DESIGN}_opt.db
 

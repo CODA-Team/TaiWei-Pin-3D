@@ -6,6 +6,7 @@ required_variables=(
   PYTHON_EXE
   YOSYS_EXE
   GENUS_EXE
+  SYN3D_GENUS_OPT_MODE
   DESIGN_NAME
   FLOW_VARIANT
   SYN3D_PLATFORM
@@ -45,6 +46,14 @@ case "${SYN3D_PLATFORM}" in
   asap7_3D|nangate45_3D|asap7_nangate45_3D) ;;
   *)
     echo "[3D-Syn] Unsupported platform: ${SYN3D_PLATFORM}" >&2
+    exit 1
+    ;;
+esac
+
+case "${SYN3D_GENUS_OPT_MODE}" in
+  normal|low_effort) ;;
+  *)
+    echo "[3D-Syn] Unsupported SYN3D_GENUS_OPT_MODE: ${SYN3D_GENUS_OPT_MODE}" >&2
     exit 1
     ;;
 esac

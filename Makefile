@@ -564,6 +564,8 @@ ord-cts-3d:
 	@$(call _mkstdirs)
 	@mkdir -p "$(CTS3D_WORK_DIR)"
 	$(call _run_with_tmp_log,$(LOG_DIR)/4_cts_3d.log,. "$(SCRIPTS_3DCTS_DIR)/cts_params.env"; LEF_FILES="$(LEF_FILES_CTS_OWNER)" COVER_LAYER="$(COVER_LAYER)" $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DCTS_DIR)/cts_3d.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/4_cts_3d_owner_legalize.log,LEF_FILES="$(LEF_FILES_CTS_OWNER)" COVER_LAYER="$(COVER_LAYER)" CTS3D_ACTIVE_TIER="$(CTS_LAYER)" CTS3D_LEGALIZE_INPUT_DEF="$(RESULTS_DIR)/4_cts_3d_raw.def" CTS3D_LEGALIZE_OUTPUT_DEF="$(RESULTS_DIR)/4_cts_3d_owner_legal.def" CTS3D_LEGALIZE_DIRTY_FILE="$(CTS3D_WORK_DIR)/dirty_$(CTS_LAYER).tcl" CTS3D_WRITE_CANONICAL=0 $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DCTS_DIR)/cts_3d_finalize_tier.tcl)
+	$(call _run_with_tmp_log,$(LOG_DIR)/4_cts_3d_receive_legalize.log,LEF_FILES="$(LEF_FILES_CTS_RECEIVE)" COVER_LAYER="$(COVER_LAYER)" CTS3D_ACTIVE_TIER="$(COVER_LAYER)" CTS3D_LEGALIZE_INPUT_DEF="$(RESULTS_DIR)/4_cts_3d_owner_legal.def" CTS3D_LEGALIZE_OUTPUT_DEF="$(RESULTS_DIR)/4_cts.def" CTS3D_LEGALIZE_DIRTY_FILE="$(CTS3D_WORK_DIR)/dirty_$(COVER_LAYER).tcl" CTS3D_WRITE_CANONICAL=1 $(TIME_CMD) $(OPENROAD_CMD) $(SCRIPTS_3DCTS_DIR)/cts_3d_finalize_tier.tcl)
 
 .PHONY: ord-route
 ord-route:
@@ -716,6 +718,7 @@ export SYN3D_PLATFORM ?= $(3D_PLATFORM)
 export SYN3D_PLATFORM_DIR ?= $(3D_PLATFORM_DIR)
 export SYN3D_PER_TIER_SYNTH_DIR ?= $(OBJECTS_DIR)/3dsyn/per_tier_synth
 export SYN3D_HANDOFF_DIR ?= $(OBJECTS_DIR)/3dsyn/handoff
+export SYN3D_GENUS_OPT_MODE ?= normal
 export SYN3D_HBT_MODEL_MODE ?= scale
 export SYN3D_HBT_R_SCALE ?= 0
 export SYN3D_HBT_C_SCALE ?= 0.25

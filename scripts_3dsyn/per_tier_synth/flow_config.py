@@ -119,6 +119,12 @@ SYNTH_MODE = _env_or_default("SYN3D_PER_TIER_SYNTH_MODE", _default_synth_mode).l
 SUPPORTED_SYNTH_MODES = {"genus_homo", "genus_hetero"}
 assert SYNTH_MODE in SUPPORTED_SYNTH_MODES, "Unsupported SYNTH_MODE: {}".format(SYNTH_MODE)
 
+GENUS_OPT_MODE = _env_or_default("SYN3D_GENUS_OPT_MODE", "normal").lower()
+SUPPORTED_GENUS_OPT_MODES = {"normal", "low_effort"}
+assert GENUS_OPT_MODE in SUPPORTED_GENUS_OPT_MODES, (
+    "Unsupported SYN3D_GENUS_OPT_MODE: {}".format(GENUS_OPT_MODE)
+)
+
 # TritonPart partition encoding
 PARTITION_BOTTOM_VALUE = "0"
 PARTITION_TOP_VALUE = "1"

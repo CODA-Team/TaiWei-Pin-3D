@@ -5,6 +5,26 @@ set area_report $::env(SYN3D_UNIT_AREA_REPORT)
 set area_value $::env(SYN3D_UNIT_AREA_VALUE)
 set lib_files $::env(SYN3D_UNIT_LIB_FILES)
 
+proc run_configured_syn_opt {} {
+  set mode normal
+  if {[info exists ::env(SYN3D_GENUS_OPT_MODE)] && $::env(SYN3D_GENUS_OPT_MODE) ne ""} {
+    set mode $::env(SYN3D_GENUS_OPT_MODE)
+  }
+
+  puts "INFO: SYN3D_GENUS_OPT_MODE = $mode"
+  switch -- $mode {
+    normal {
+      syn_opt
+    }
+    low_effort {
+      syn_opt -incr -effort low
+    }
+    default {
+      error "SYN3D_GENUS_OPT_MODE must be normal or low_effort: '$mode'"
+    }
+  }
+}
+
 proc read_cell_area {report_path design_name} {
   set fp [open $report_path r]
   set text [read $fp]
@@ -37,9 +57,9 @@ read_hdl -sv $input_netlist
 elaborate $design_name
 init_design
 
-# This characterization step intentionally has no SDC. It matches the old
-# coarse-unit flow and only refines an already technology-mapped netlist.
-syn_opt -incr -effort low
+# This characterization step intentionally has no SDC and only optimizes an
+# already technology-mapped netlist.
+run_configured_syn_opt
 report_area > $area_report
 write_hdl > $output_netlist
 
