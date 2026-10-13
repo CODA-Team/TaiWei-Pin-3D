@@ -35,9 +35,9 @@ partition, and 3D floorplan views consumed by the existing TaiWei backend.
 | Flow stage | Paper step | Make target | Primary output |
 | --- | --- | --- | --- |
 | `coarse_synth` | Coarse-Grained Netlist Construction and Routability-Aware Area Estimation | `cds-coarse-synth` | `1_synth.v`, `1_synth.sdc`, coarse-unit LEF/Liberty and tier netlists |
-| `coarse_partition` | Coarse-Grained Tier Partitioning | `cds-coarse-partition` or `ord-coarse-partition` | `2_2_floorplan_io.v/.def/.odb`, `partition.txt` |
+| `coarse_partition` | Coarse-Grained Tier Partitioning | `cds-coarse-partition` or `ord-coarse-partition` | `2_2_floorplan_io.v/.def/.odb`, `partition.coarse.txt` |
 | `per_tier_synth` | HBT-Aware Per-Tier Synthesis | `cds-per-tier-synth` | `base.v`, `partition_from_flow.txt` |
-| `handoff` | TaiWei backend interface | `cds-3dsyn-handoff` or `ord-3dsyn-handoff` | `<design>_3D.fp.v/.def`, `partition.backend.txt` |
+| `handoff` | TaiWei backend interface | `cds-3dsyn-handoff` or `ord-3dsyn-handoff` | `<design>_3D.fp.v/.def`, `partition.txt` |
 
 The complete stage sequence is:
 

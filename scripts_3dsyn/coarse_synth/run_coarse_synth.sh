@@ -13,6 +13,7 @@ required_variables=(
   DESIGN_NAME
   LIB_FILES
   SDC_FILE
+  OBJECTS_DIR
   RESULTS_DIR
   LOG_DIR
 )
@@ -110,7 +111,7 @@ fi
 env \
   GENUS_INPUT_NETLIST="${hierarchy_dir}/input.v" \
   GENUS_OUTPUT_NETLIST="${hierarchy_dir}/output.raw.v" \
-  GENUS_OUTPUT_SDC="${RESULTS_DIR}/1_synth.sdc" \
+  GENUS_OUTPUT_SDC="${OBJECTS_DIR}/1_synth.genus.sdc" \
   GENUS_LIB_FILES="${LIB_FILES}" \
   SYN3D_COARSE_UNIT_LIST_FILE="${hierarchy_dir}/coarse_units.list" \
   "${GENUS_EXE}" -overwrite -log "${LOG_DIR}/cadence_1_3dsyn_hierarchy.log" \
@@ -127,6 +128,8 @@ env \
   --family-metrics-dir "${characterization_dir}/metrics" \
   --handoff-dir "${handoff_dir}" \
   --work-dir "${hierarchy_dir}/finalize_work"
+
+cp -f -- "${SDC_FILE}" "${RESULTS_DIR}/1_synth.sdc"
 
 test -s "${RESULTS_DIR}/1_synth.v"
 test -s "${RESULTS_DIR}/1_synth.sdc"

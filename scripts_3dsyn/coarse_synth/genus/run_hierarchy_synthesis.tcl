@@ -76,39 +76,6 @@ proc configure_constant_tie_cells {} {
   puts "INFO: Constant tie-cell mapping = duplicate"
 }
 
-proc normalize_sdc_for_openroad {sdc_path} {
-  if {![file exists $sdc_path]} {
-    error "SDC output does not exist for normalization: $sdc_path"
-  }
-
-  set in_fp [open $sdc_path r]
-  set text [read $in_fp]
-  close $in_fp
-
-  set changed 0
-  set out_lines {}
-  foreach line [split $text "\n"] {
-    if {[regexp {^(\s*)set_dont_use\s+true\s+(.+?)\s*$} $line -> indent target]} {
-      lappend out_lines "${indent}set_dont_use ${target}"
-      set changed 1
-      continue
-    }
-    if {[regexp {^\s*set_dont_use\s+false\s+.+?\s*$} $line]} {
-      set changed 1
-      continue
-    }
-    lappend out_lines $line
-  }
-
-  if {!$changed} {
-    return
-  }
-
-  set out_fp [open $sdc_path w]
-  puts -nonewline $out_fp [join $out_lines "\n"]
-  close $out_fp
-}
-
 proc read_module_name_list {path} {
   set names {}
   if {$path eq ""} {
@@ -255,7 +222,6 @@ write_reports -directory ${REPORTS_DIR} -tag final
 
 write_hdl > $OUT_V
 write_sdc > $OUT_SDC
-normalize_sdc_for_openroad $OUT_SDC
 
 puts "INFO: Wrote $OUT_V"
 puts "INFO: Wrote $OUT_SDC"

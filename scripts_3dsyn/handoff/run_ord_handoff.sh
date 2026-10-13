@@ -72,7 +72,7 @@ backend_floorplan_odb="${RESULTS_DIR}/2_1_floorplan.backend.odb"
 backend_v="${RESULTS_DIR}/2_2_floorplan_io.backend.v"
 backend_def="${RESULTS_DIR}/2_2_floorplan_io.backend.def"
 backend_odb="${RESULTS_DIR}/2_2_floorplan_io.backend.odb"
-backend_partition="${RESULTS_DIR}/partition.backend.txt"
+backend_partition="${RESULTS_DIR}/partition.txt"
 fp_v="${RESULTS_DIR}/${DESIGN_NAME}_3D.fp.v"
 fp_def="${RESULTS_DIR}/${DESIGN_NAME}_3D.fp.def"
 manifest="${RESULTS_DIR}/backend_handoff_manifest.json"
@@ -167,7 +167,7 @@ payload = {
         "preplace_netlist": os.path.join(results_dir, "2_2_floorplan_io.backend.v"),
         "preplace_def": os.path.join(results_dir, "2_2_floorplan_io.backend.def"),
         "preplace_odb": os.path.join(results_dir, "2_2_floorplan_io.backend.odb"),
-        "partition": os.path.join(results_dir, "partition.backend.txt"),
+        "partition": os.path.join(results_dir, "partition.txt"),
     },
     "backend_outputs": {
         "netlist": os.path.join(results_dir, design + "_3D.fp.v"),

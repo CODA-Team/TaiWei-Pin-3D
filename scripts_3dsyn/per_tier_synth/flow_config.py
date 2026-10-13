@@ -151,7 +151,7 @@ DESIGN_DIR = _repo_path("designs", LIBRARY, DESIGN)
 # Inputs: TritonPart netlist + partition result
 NETLIST_V = os.path.join(RESULTS_DIR, "2_2_floorplan_io.v")
 SOURCE_DEF = os.path.join(RESULTS_DIR, "2_2_floorplan_io.def")
-SOURCE_PARTITION_TXT = os.path.join(RESULTS_DIR, "partition.txt")
+SOURCE_PARTITION_TXT = os.path.join(RESULTS_DIR, "partition.coarse.txt")
 PARTITION_TXT = _norm(os.getenv("PARTITION_TXT") or SOURCE_PARTITION_TXT)
 
 COARSE_HANDOFF_DIR = os.path.join(COARSE_SYNTH_DIR, "handoff")

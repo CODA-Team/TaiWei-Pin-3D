@@ -84,6 +84,11 @@ for output in \
   require_file "coarse partition output" "${RESULTS_DIR}/${output}"
 done
 
+mv -f -- \
+  "${RESULTS_DIR}/partition.txt" \
+  "${RESULTS_DIR}/partition.coarse.txt"
+require_file "coarse partition output" "${RESULTS_DIR}/partition.coarse.txt"
+
 echo "[3D-Syn] Coarse partition netlist : ${RESULTS_DIR}/2_2_floorplan_io.v"
 echo "[3D-Syn] Coarse partition floorplan: ${RESULTS_DIR}/2_2_floorplan_io.def"
-echo "[3D-Syn] Coarse partition result  : ${RESULTS_DIR}/partition.txt"
+echo "[3D-Syn] Coarse partition result  : ${RESULTS_DIR}/partition.coarse.txt"
