@@ -75,6 +75,28 @@ puts $fh [format "upper_bottom_io %d" [dict get $final_cross_tier_stats upper_bo
 puts $fh [format "unknown %d" [dict get $final_cross_tier_stats unknown]]
 close $fh
 
+if {[info exists ::env(RCX_RULES)]} {
+  if {[_get PIN3D_REQUIRE_RCX_LAYER_MATCH 0]} {
+    if {![file isfile $::env(RCX_RULES)]} {
+      error "RCX rules file is missing: $::env(RCX_RULES)"
+    }
+    set model_fh [open $::env(RCX_RULES) r]
+    set model_header [read $model_fh 4096]
+    close $model_fh
+    if {![regexp {LayerCount\s+(\d+)} $model_header -> model_layers]} {
+      error "Cannot determine LayerCount from $::env(RCX_RULES)"
+    }
+    set routing_layers 0
+    foreach layer [[ord::get_db_tech] getLayers] {
+      if {[$layer getRoutingLevel] > 0} { incr routing_layers }
+    }
+    if {$model_layers != $routing_layers} {
+      error "RCX layer mismatch: rules=$model_layers technology=$routing_layers; refusing extraction."
+    }
+    puts "INFO(RC): verified RCX rules=$::env(RCX_RULES) routing_layers=$routing_layers"
+  }
+}
+
 puts "Writing final design files"
 handoff_write_stage_outputs $stage_paths \
   -write_db 1 \
@@ -93,6 +115,12 @@ if {[info exists ::env(RCX_RULES)]} {
   write_spef $::env(RESULTS_DIR)/6_final.spef
   file delete $::env(DESIGN_NAME).totCap
   read_spef $::env(RESULTS_DIR)/6_final.spef
+  set rc_meta [open [file join $LOG_DIR openrcx_config.txt] w]
+  puts $rc_meta "rcx_rules=$::env(RCX_RULES)"
+  puts $rc_meta "technology_lef=[_get TECH_LEF]"
+  puts $rc_meta "spef=$::env(RESULTS_DIR)/6_final.spef"
+  puts $rc_meta "model_scope=research; physical 3D calibration is not certified"
+  close $rc_meta
 } else {
   puts "OpenRCX is not enabled for this platform."
 }

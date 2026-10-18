@@ -12,16 +12,21 @@ puts "Setting up MMC timing libraries and corners"
 create_library_set -name WC_LIB -timing $libworst
 create_library_set -name BC_LIB -timing $libbest
  
-# If QRC tech files exist, use them; otherwise fall back to default rc corners
-if {[info exists qrc_max] && $qrc_max ne "" && [file exists $qrc_max]} {
-    create_rc_corner -name Cmax -qx_tech_file $qrc_max
-} else {
-    create_rc_corner -name Cmax
+# Never silently replace a requested QRC model with an approximate model.
+set cds_rc_mode [string tolower [_get CDS_RC_MODE qrc]]
+if {$cds_rc_mode ni {qrc lef}} {
+    error "CDS_RC_MODE must be qrc or lef; got '$cds_rc_mode'"
 }
-if {[info exists qrc_min] && $qrc_min ne "" && [file exists $qrc_min]} {
-    create_rc_corner -name Cmin -qx_tech_file $qrc_min
-} else {
-    create_rc_corner -name Cmin
+foreach {corner variable} {Cmax qrc_max Cmin qrc_min} {
+    if {$cds_rc_mode eq "qrc"} {
+        if {![info exists $variable] || [set $variable] eq "" || ![file isfile [set $variable]]} {
+            error "Requested QRC extraction but $variable is missing. Supply a validated technology file or explicitly set CDS_RC_MODE=lef for approximate research evaluation."
+        }
+        create_rc_corner -name $corner -qx_tech_file [set $variable]
+    } else {
+        puts "WARN(RC): $corner explicitly uses approximate LEF/basic RC; not a validated 3D QRC model."
+        create_rc_corner -name $corner
+    }
 }
 
 create_delay_corner -name WC -library_set WC_LIB -rc_corner Cmax

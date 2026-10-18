@@ -47,7 +47,8 @@ export LIB_FILES = $(SC_LIB) \
 # Directory/Extracted files (Cadence)
 export LIB_DIR ?= $(dir $(SC_LIB))
 export LEF_DIR ?= $(dir $(TECH_LEF))
-export QRC_FILE ?= $(PLATFORM_DIR)/qrc/NG45.tch
+# No validated 3D QRC file is distributed. Set this explicitly with CDS_RC_MODE=qrc.
+export QRC_FILE ?=
 
 # Layout/GDS (supplement for OpenROAD)
 export GDS_FILES = $(sort $(wildcard $(PLATFORM_DIR)/gds/*.gds)) \
@@ -141,7 +142,14 @@ export GDS_ALLOW_EMPTY ?= fakeram.*
 # -------- Signoff / RCX / IR --------
 export CDL_FILE           = $(PLATFORM_DIR)/cdl/NangateOpenCellLibrary.cdl
 export TEMPLATE_PGA_CFG  ?= $(PLATFORM_DIR)/template_pga.cfg
-export RCX_RULES          = $(PLATFORM_DIR)/NangateOpenCellLibrary.tech.rcx_patterns.rules
+# Preserve command-line/USE_FLOW overrides. tech21.lef has 19 routing layers.
+export RCX_RULES         ?= $(PLATFORM_DIR)/NangateOpenCellLibrary.tech.rcx_patterns.rules
+export PIN3D_REQUIRE_RCX_LAYER_MATCH ?= 1
+# No validated 3D Quantus technology file is bundled. Intermediate Cadence
+# stages explicitly use LEF approximation; final comparison imports OpenRCX SPEF.
+export CDS_RC_MODE       ?= lef
+export CDS_FINAL_RC_MODE ?= spef
+export CDS_SI_AWARE      ?= 1
 
 # IR drop settings (consistent for both tiers)
 export PWR_NETS_VOLTAGES ?= "VDD 1.1"

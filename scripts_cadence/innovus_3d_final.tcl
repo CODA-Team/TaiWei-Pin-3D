@@ -63,6 +63,38 @@ _common_setup
 defIn $DEF_IN
 # }
 puts "READ DEF: $DEF_IN"
+
+# Explicit final extraction/analysis policy; no hidden native-RC fallback.
+set final_rc_mode [string tolower [_get CDS_FINAL_RC_MODE native]]
+set si_aware [_get CDS_SI_AWARE 1]
+if {$si_aware ni {0 1}} { error "CDS_SI_AWARE must be 0 or 1" }
+setDelayCalMode -siAware [expr {$si_aware ? "true" : "false"}]
+if {$final_rc_mode eq "spef"} {
+  set final_spef [_get CDS_FINAL_SPEF [file join $RESULTS_DIR 6_final.spef]]
+  if {![file isfile $final_spef]} {
+    error "Final SPEF is missing: $final_spef; run ord-final first or explicitly select CDS_FINAL_RC_MODE=native."
+  }
+  foreach source_file [list $DEF_IN $V_IN] {
+    if {[file mtime $final_spef] < [file mtime $source_file]} {
+      error "Final SPEF predates routed input $source_file; regenerate it before evaluation."
+    }
+  }
+  spefIn -rc_corner Cmax $final_spef
+  spefIn -rc_corner Cmin $final_spef
+} elseif {$final_rc_mode ne "native"} {
+  error "CDS_FINAL_RC_MODE must be spef or native"
+}
+file mkdir $LOG_DIR
+set rc_meta [open [file join $LOG_DIR extraction_config.txt] w]
+puts $rc_meta "final_rc_mode=$final_rc_mode"
+puts $rc_meta "corner_initialization=$cds_rc_mode"
+puts $rc_meta "si_aware=$si_aware"
+puts $rc_meta "qrc_file=$QRC_FILE"
+if {$final_rc_mode eq "spef"} { puts $rc_meta "spef=$final_spef" }
+puts $rc_meta "model_scope=research; physical 3D calibration is not certified"
+close $rc_meta
+puts "INFO(RC): final_rc_mode=$final_rc_mode si_aware=$si_aware"
+
 set_default_switching_activity -seq_activity 0.2
 
 dumpToGIF $LOG_DIR/6_final.png
