@@ -98,6 +98,14 @@ if {$::PIN_PARTITION_MODE_B != 0 && $::PIN_PARTITION_MODE_B != 1} {
 # ------------------------------------------------------------
 load_design 2_2_floorplan_io.odb 1_synth.sdc "Start Triton Partitioning (N-point sweep)"
 
+# STA parasitics are not persisted in the OpenDB checkpoint. Rebuild them in
+# this process before timing-aware partitioning when IO feedback is enabled.
+# The independent switch permits an RC-matched control without moving its IO.
+if {[_get PIN3D_IO_FEEDBACK 0] || [_get PIN3D_PARTITION_ESTIMATE_RC 0]} {
+  estimate_parasitics -placement
+  puts "IO-FEEDBACK: refreshed placement parasitics before timing-aware partitioning"
+}
+
 set fp_def [file join $::env(RESULTS_DIR) 2_2_floorplan_io.def]
 if {![file exists $fp_def]} {
   utl::error PAR 961 "Floorplan DEF not found: $fp_def"
