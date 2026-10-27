@@ -46,6 +46,15 @@ if {$block eq "" || $block eq "NULL"} {
   error "3DCTS tier finalizer loaded no design block"
 }
 
+source $::env(OPENROAD_SCRIPTS_DIR)/placement_utils.tcl
+set site_env [expr {$active_tier eq "upper" ? "UPPER_SITE" : "BOTTOM_SITE"}]
+if {![info exists ::env($site_env)] || $::env($site_env) eq ""} {
+  error "3DCTS tier finalizer requires $site_env for $active_tier-tier legalization"
+}
+set active_site $::env($site_env)
+or_rebuild_rows_for_site $active_site $active_tier
+puts "CTS3D_ROW_REBUILD tier=$active_tier site=$active_site"
+
 unset -nocomplain ::cts3d_dirty_tier ::cts3d_dirty_count ::cts3d_dirty_cells
 source $dirty_file
 foreach variable {cts3d_dirty_tier cts3d_dirty_count cts3d_dirty_cells} {
