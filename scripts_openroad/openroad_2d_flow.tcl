@@ -1,12 +1,54 @@
 source $::env(OPENROAD_SCRIPTS_DIR)/load.tcl
 source $::env(OPENROAD_SCRIPTS_DIR)/util.tcl
 
+proc save_2d_stage {stage_name} {
+  set result_base [file join $::env(RESULTS_DIR) $stage_name]
+  set image_path [file join $::env(LOG_DIR) "${stage_name}.webp"]
+
+  puts "INFO(OR): Saving 2D stage '$stage_name'"
+  write_db "${result_base}.odb"
+  write_def "${result_base}.def"
+  write_verilog "${result_base}.v"
+  write_sdc -no_timestamp "${result_base}.sdc"
+
+  set display_ok [expr {[info exists ::env(DISPLAY)] && $::env(DISPLAY) ne ""}]
+  set qt_offscreen [expr {
+    [info exists ::env(QT_QPA_PLATFORM)] &&
+    $::env(QT_QPA_PLATFORM) eq "offscreen"
+  }]
+  if {$display_ok || $qt_offscreen} {
+    if {[catch {save_image -resolution 0.1 $image_path} image_error]} {
+      puts "WARN(OR): failed to write 2D stage image $image_path : $image_error"
+    }
+  } else {
+    puts "INFO(OR): skip 2D stage image $image_path in headless mode"
+  }
+}
+
+proc legalize_inserted_cells {stage_name} {
+  puts "INFO(OR): Legalizing cells inserted during $stage_name"
+  set failed [catch {log_cmd detailed_placement} message options]
+  if {$failed} {
+    if {![string match "*DPL-0036*" $message]} {
+      return -options $options $message
+    }
+    puts "WARN(OR): Initial detailed placement failed during $stage_name: $message"
+    puts "INFO(OR): Running improve_placement before strict legalization retry"
+    improve_placement
+    optimize_mirroring
+    log_cmd detailed_placement
+  }
+  check_placement -verbose
+}
+
 set DEF_IN 2_2_floorplan_io.def
 
 load_design $DEF_IN 1_synth.sdc "start 2D flow from start"
 source $::env(OPENROAD_SCRIPTS_DIR)/placement_utils.tcl
 
 source $::env(OPENROAD_SCRIPTS_DIR)/io_place.tcl
+source $::env(OPENROAD_SCRIPTS_DIR)/place_macro_util.tcl
+save_2d_stage 2_5_floorplan_macro
 
 source $::env(PDN_TCL)
 if {[catch {
@@ -18,6 +60,7 @@ if {[catch {
 if { [info exists ::env(POST_PDN_TCL)] && [file exists $::env(POST_PDN_TCL)] } {
   source $::env(POST_PDN_TCL)
 }
+save_2d_stage 2_floorplan
 
 set place_density [calculate_placement_density]
 fastroute_setup
@@ -33,11 +76,11 @@ global_placement -density $place_density \
 estimate_parasitics -placement
 source $::env(OPENROAD_SCRIPTS_DIR)/report_metrics.tcl
 report_metrics 3 "global place" false false
-save_image -resolution 0.1 $::env(LOG_DIR)/3_3_place_gpl.webp 
+save_2d_stage 3_3_place_gpl
 
 source $::env(OPENROAD_SCRIPTS_DIR)/opt_lg_design.tcl
 report_metrics 3 "detailed place_upper" true false
-save_image -resolution 0.1 $::env(LOG_DIR)/3_4_opt_lg.webp
+save_2d_stage 3_place
 
 repair_clock_inverters
 
@@ -64,6 +107,7 @@ log_cmd clock_tree_synthesis {*}$cts_args
 utl::push_metrics_stage "cts__{}__pre_repair_timing"
 estimate_parasitics -placement
 utl::pop_metrics_stage
+save_2d_stage 4_0_cts
 
 set_placement_padding -global \
   -left $::env(CELL_PAD_IN_SITES_DETAIL_PLACEMENT) \
@@ -73,7 +117,7 @@ set_placement_padding -global \
 log_cmd repair_clock_nets
 
 # place clock buffers
-log_cmd detailed_placement 
+legalize_inserted_cells post_cts
 
 estimate_parasitics -placement
 
@@ -92,6 +136,7 @@ if { $::env(SKIP_CTS_REPAIR_TIMING) } {
 }
 
 source_env_var_if_exists POST_CTS_TCL
+save_2d_stage 4_cts
 
 # This proc is here to allow us to use 'return' to return early from this
 # file which is sourced
@@ -140,7 +185,7 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    legalize_inserted_cells post_repair_design
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_design.rpt
@@ -154,7 +199,7 @@ proc global_route_helper { } {
     # Running DPL to fix overlapped instances
     # Run to get modified net by DPL
     log_cmd global_route -start_incremental
-    log_cmd detailed_placement
+    legalize_inserted_cells post_repair_timing
     # Route only the modified net by DPL
     log_cmd global_route -end_incremental \
       -congestion_report_file $::env(REPORTS_DIR)/congestion_post_repair_timing.rpt
@@ -176,8 +221,7 @@ proc global_route_helper { } {
   # Use make target update_sdc_clock to install the updated sdc.
   source [file join $::env(OPENROAD_SCRIPTS_DIR) "write_ref_sdc.tcl"]
   write_guides $::env(RESULTS_DIR)/route.guide
-  write_db $::env(RESULTS_DIR)/5_1_grt.odb
-  write_sdc -no_timestamp $::env(RESULTS_DIR)/5_1_grt.sdc
+  save_2d_stage 5_1_grt
 }
 
 global_route_helper
@@ -242,12 +286,9 @@ if { ![design_is_routed] } {
 }
 
 # report_metrics 5 "detailed route"
-set DEF_OUT 5_route.def
-set VERILOG_OUT 5_route.v
-
-write_db $::env(RESULTS_DIR)/5_2_route.odb
-write_def $::env(RESULTS_DIR)/$DEF_OUT
-write_verilog $::env(RESULTS_DIR)/$VERILOG_OUT
-write_sdc $::env(RESULTS_DIR)/5_route.sdc
+save_2d_stage 5_route
+file copy -force \
+  $::env(RESULTS_DIR)/5_route.odb \
+  $::env(RESULTS_DIR)/5_2_route.odb
 
 exit
