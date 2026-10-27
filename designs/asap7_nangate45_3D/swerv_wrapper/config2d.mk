@@ -10,6 +10,8 @@ override export CLKGATE_MAP_FILE :=
 
 export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef/fakeram/*.lef))
 export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib/fakeram/*.lib))
+export SYN3D_BOTTOM_ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_HOME)/asap7_nangate45_3D/lib_bottom/fakeram/*.lib))
+export SYN3D_UPPER_ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_HOME)/asap7_nangate45_3D/lib_upper/NLDM/fakeram/*.lib))
 
 export CORE_MARGIN = 2
 export ASPECT_RATIO = 1.0

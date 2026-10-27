@@ -271,16 +271,35 @@ def canonical_type(wrapper_name: str) -> str:
 
 
 # ── bitwidth vector from port_schema ──────────────────────────────────────────
-def build_bitwidth_vec(ctype: str, netlist_ports: dict, schema: dict) -> list:
+def parse_wrapper_port_widths(wrapper_name: str, schema_port_names: set) -> dict:
+    widths = {}
+    for token in wrapper_name.lstrip("\\_").split("_")[1:]:
+        matches = [
+            name for name in schema_port_names
+            if token.startswith(name) and token[len(name):].isdigit()
+        ]
+        if not matches:
+            continue
+        name = max(matches, key=len)
+        assert name not in widths, (
+            f"Duplicate width token for {name} in coarse-unit name {wrapper_name!r}"
+        )
+        widths[name] = int(token[len(name):])
+    return widths
+
+
+def build_bitwidth_vec(ctype: str, netlist_ports: dict, schema: dict,
+                       wrapper_name: str) -> list:
     """
     Build a VECTOR_LEN-dim bitwidth vector using slot_idx ordering from
-    port_schema.json.  Asserts that netlist port names exactly match the
-    union of parameterized_ports and fixed_ports names in the schema.
+    port_schema.json.  A parameterized port may be absent only when the
+    coarse-unit name encodes a zero width.
 
     Args:
         ctype         : canonical module type, e.g. "DFFE"
         netlist_ports : {port_name: {"dir": ..., "width": int}} from parse_netlist
         schema        : loaded port_schema.json dict
+        wrapper_name  : coarse-unit module name containing encoded port widths
 
     Returns:
         list of ints, length VECTOR_LEN, zero-padded
@@ -292,13 +311,18 @@ def build_bitwidth_vec(ctype: str, netlist_ports: dict, schema: dict) -> list:
     param_ports = sorted(entry["parameterized_ports"], key=lambda p: p["slot_idx"])
     fixed_names = {p["name"] for p in entry.get("fixed_ports", [])}
 
-    schema_port_names  = {p["name"] for p in param_ports} | fixed_names
+    param_names = {p["name"] for p in param_ports}
+    schema_port_names  = param_names | fixed_names
     netlist_port_names = set(netlist_ports.keys())
+    encoded_widths = parse_wrapper_port_widths(wrapper_name, schema_port_names)
 
-    assert schema_port_names == netlist_port_names, (
-        f"Port mismatch for {ctype} — schema and netlist ports do not match.\n"
-        f"  schema : {sorted(schema_port_names)}\n"
-        f"  netlist: {sorted(netlist_port_names)}"
+    unexpected_ports = sorted(netlist_port_names - schema_port_names)
+    assert not unexpected_ports, (
+        f"Unexpected netlist ports for {ctype}: {unexpected_ports}"
+    )
+    missing_fixed_ports = sorted(fixed_names - netlist_port_names)
+    assert not missing_fixed_ports, (
+        f"Fixed ports missing from {ctype} netlist: {missing_fixed_ports}"
     )
 
     vec = [0] * VECTOR_LEN
@@ -307,7 +331,23 @@ def build_bitwidth_vec(ctype: str, netlist_ports: dict, schema: dict) -> list:
         name = p["name"]
         assert idx < VECTOR_LEN, \
             f"slot_idx {idx} out of range (VECTOR_LEN={VECTOR_LEN}) for {ctype}.{name}"
-        vec[idx] = netlist_ports[name]["width"]
+        encoded_width = encoded_widths.get(name, 0)
+        if name not in netlist_ports:
+            assert encoded_width == 0, (
+                f"Positive-width port {ctype}.{name} is missing from the netlist; "
+                f"coarse-unit name {wrapper_name!r} encodes width {encoded_width}"
+            )
+            continue
+        actual_width = netlist_ports[name]["width"]
+        assert encoded_width > 0, (
+            f"Netlist port {ctype}.{name} exists but coarse-unit name "
+            f"{wrapper_name!r} does not encode a positive width"
+        )
+        assert actual_width == encoded_width, (
+            f"Port width mismatch for {ctype}.{name}: netlist={actual_width}, "
+            f"coarse-unit name={encoded_width}"
+        )
+        vec[idx] = actual_width
 
     return vec
 
@@ -405,7 +445,7 @@ def main():
 
     # ── canonical type & bitwidth vector ──────────────────────────────────────
     ctype       = canonical_type(wrapper_name)
-    bw_vec_list = build_bitwidth_vec(ctype, module["ports"], schema)
+    bw_vec_list = build_bitwidth_vec(ctype, module["ports"], schema, wrapper_name)
 
     # ── graph & features ──────────────────────────────────────────────────────
     G, net_to_insts, edge_index = build_cell_graph(module)
