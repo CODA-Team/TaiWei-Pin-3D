@@ -19,7 +19,6 @@ export CADENCE_SCRIPTS_DIR  ?= $(FLOW_HOME)/scripts_cadence
 export SCRIPTS_3DSYN_DIR    ?= $(FLOW_HOME)/scripts_3dsyn
 export SCRIPTS_3DCTS_DIR    ?= $(FLOW_HOME)/scripts_3dcts
 export SCRIPTS_3DDP_DIR     ?= $(FLOW_HOME)/scripts_3ddp
-export D3D_PARTITION_SCRIPTS_DIR ?= $(FLOW_HOME)/scripts_d3d_partition
 export UTILS_DIR            ?= $(FLOW_HOME)/util
 
 # ---------------- Design config ----------------
@@ -60,39 +59,13 @@ export DESIGN_NICKNAME ?= $(DESIGN_NAME)
 export FLOW_VARIANT    ?= base
 export PIN3D_VIEW_IMPL ?= tcl
 # 3D frontend targets load config2d.mk but publish into the 3D experiment tree.
-export WORK_PLATFORM   ?= $(if $(filter ord-tier-partition-d3d cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
+export WORK_PLATFORM   ?= $(if $(filter cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
 
 export LOG_DIR     ?= $(WORK_HOME)/logs/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export OBJECTS_DIR ?= $(WORK_HOME)/objects/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export REPORTS_DIR ?= $(WORK_HOME)/reports/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export RESULTS_DIR ?= $(WORK_HOME)/results/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export CTS3D_WORK_DIR ?= $(OBJECTS_DIR)/3dcts
-
-# Optional standalone CPU-only D3D Partitioner.  All paths are derived from
-# the current flow checkout and can be overridden without editing this file.
-export ORFS_RESEARCH_HOME ?= $(abspath $(FLOW_HOME)/../ORFS-Research)
-export D3D_PARTITIONER_ROOT ?= $(ORFS_RESEARCH_HOME)/tools/D3D-Partitioner
-export D3D_PARTITION_DRIVER_HOME ?= $(D3D_PARTITIONER_ROOT)/d3d-partition-driver
-export D3D_PARTITION_PREFIX ?= $(ORFS_RESEARCH_HOME)/tools/install/d3d-partitioner
-export D3D_PARTITION_ENV_PREFIX ?= $(ORFS_RESEARCH_HOME)/.conda/taiwei-d3d-cpu
-export D3D_PARTITION_PYTHON ?= $(D3D_PARTITION_ENV_PREFIX)/bin/python
-export D3D_PARTITION_DRIVER ?= $(D3D_PARTITION_DRIVER_HOME)/run_partition.py
-export D3D_PARTITION_CHECK ?= $(D3D_PARTITION_DRIVER_HOME)/check_install.py
-export D3D_PARTITION_CONFIG_PLATFORM ?= $(patsubst %_3D,%,$(PLATFORM))
-export D3D_PARTITION_CONFIG ?= $(D3D_PARTITION_SCRIPTS_DIR)/config/openroad/$(D3D_PARTITION_CONFIG_PLATFORM)/$(DESIGN_NICKNAME).yaml
-export D3D_PARTITION_CASE_NAME ?= $(DESIGN_NICKNAME)
-export D3D_PARTITION_RUNTIME_ROOT ?= $(OBJECTS_DIR)/d3d_partition
-export D3D_PARTITION_DEF ?= $(RESULTS_DIR)/2_2_floorplan_io.def
-export D3D_PARTITION_VERILOG ?= $(RESULTS_DIR)/2_2_floorplan_io.v
-export D3D_PARTITION_SDC ?= $(RESULTS_DIR)/2_floorplan.sdc
-export D3D_PARTITION_LEFS ?= $(LEF_FILES)
-export D3D_PARTITION_NUM_THREADS ?= $(NUM_CORES)
-export D3D_PARTITION_OUTPUT ?= $(RESULTS_DIR)/partition.txt
-export D3D_PARTITION_SUMMARY ?= $(REPORTS_DIR)/d3d_partition_summary.json
-export D3D_PARTITION_DEFER_TIE_CELLS ?= 1
-export D3D_PARTITION_DEFERRED_TIES ?= $(RESULTS_DIR)/d3d_deferred_ties.json
-export D3D_TIE_PORT_TIER ?= bottom
-export D3D_TIE_INSTANTIATION_SUMMARY ?= $(REPORTS_DIR)/d3d_tie_instantiation_summary.json
 
 # ---------------- Shell / time ----------------
 SHELL       := /usr/bin/env bash
@@ -355,21 +328,6 @@ ord-tier-partition:
 	  cp -rf $(RESULTS_DIR)/* $(WORK_HOME)/results/$(3D_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)/ || true; \
 	fi
 
-.PHONY: ord-tier-partition-d3d
-ord-tier-partition-d3d:
-	@echo "[ORD] D2D -> Differentiable-3D tier partition (CPU)"
-	@$(call _mkstdirs)
-	@mkdir -p "$(D3D_PARTITION_RUNTIME_ROOT)"
-	$(call _run_with_tmp_log,$(LOG_DIR)/2_d3d_partition.log,$(TIME_CMD) "$(D3D_PARTITION_SCRIPTS_DIR)/run_d3d_partition.sh")
-
-.PHONY: ord-check-tier-partition-d3d
-ord-check-tier-partition-d3d:
-	@echo "[ORD] Check installed CPU-only D3D tier partitioner"
-	@$(MAKE) --no-print-directory -C "$(D3D_PARTITION_DRIVER_HOME)" check \
-		ENV_PREFIX="$(D3D_PARTITION_ENV_PREFIX)" \
-		PYTHON_EXECUTABLE="$(D3D_PARTITION_PYTHON)" \
-		INSTALL_PREFIX="$(D3D_PARTITION_PREFIX)"
-
 .PHONY: ord-test-partition
 ord-test-partition:
 	@echo "[ORD] Tier partition experiment"
@@ -410,28 +368,6 @@ ord-pre:
 		tcl|"") $(MAKE) --no-print-directory ord-pre-tcl ;; \
 		*) echo "[ERROR][ORD] Unsupported PIN3D_VIEW_IMPL='$(PIN3D_VIEW_IMPL)'"; exit 1 ;; \
 	esac
-	@if [[ -f "$(D3D_PARTITION_DEFERRED_TIES)" ]]; then \
-	  echo "[ORD] Restore deferred tie nets as logical constants"; \
-	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/defer_tie_cells.py" rewrite-netlist \
-	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
-	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
-	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)"; \
-	  echo "[ORD] Instantiate tier-local tie cells for deferred constants"; \
-	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/instantiate_tie_cells.py" \
-	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
-	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.v" \
-	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)" \
-	    --upper-tiehi "$(UPPER_TIEHI_CELL_AND_PORT)" \
-	    --upper-tielo "$(UPPER_TIELO_CELL_AND_PORT)" \
-	    --bottom-tiehi "$(BOTTOM_TIEHI_CELL_AND_PORT)" \
-	    --bottom-tielo "$(BOTTOM_TIELO_CELL_AND_PORT)" \
-	    --port-tier "$(D3D_TIE_PORT_TIER)" \
-	    --summary "$(D3D_TIE_INSTANTIATION_SUMMARY)"; \
-	  "$(D3D_PARTITION_PYTHON)" "$(D3D_PARTITION_SCRIPTS_DIR)/defer_tie_cells.py" rewrite-def \
-	    --input "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.def" \
-	    --output "$(RESULTS_DIR)/$(DESIGN_NAME)_3D.fp.def" \
-	    --manifest "$(D3D_PARTITION_DEFERRED_TIES)"; \
-	fi
 
 # ----- Place -----
 .PHONY: ord-place-init
