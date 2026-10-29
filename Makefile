@@ -25,6 +25,9 @@ export UTILS_DIR            ?= $(FLOW_HOME)/util
 # DESIGN_CONFIG ?= ./designs/nangate45_3D/gcd/config.mk
 include $(DESIGN_CONFIG)
 
+# Preserve the generic route setting unless a design defines a 3D-CTS override.
+export CTS3D_SKIP_INCREMENTAL_REPAIR ?= $(SKIP_INCREMENTAL_REPAIR)
+
 # ---------------- Platform names ----------------
 export 2D_PLATFORM ?= $(PLATFORM)
 export 3D_PLATFORM ?= $(PLATFORM)_3D
@@ -510,6 +513,10 @@ ord-route:
 	@$(call _mkstdirs)
 	$(call _run_with_tmp_log,$(LOG_DIR)/5_1_grt.log,LEF_FILES="$(LEF_FILES)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/global_route.tcl)
 	$(call _run_with_tmp_log,$(LOG_DIR)/5_2_route.log,LEF_FILES="$(LEF_FILES)" $(TIME_CMD) $(OPENROAD_CMD) $(OPENROAD_SCRIPTS_DIR)/detail_route.tcl)
+
+.PHONY: ord-route-3d-cts
+ord-route-3d-cts: export SKIP_INCREMENTAL_REPAIR := $(CTS3D_SKIP_INCREMENTAL_REPAIR)
+ord-route-3d-cts: ord-route
 
 .PHONY: ord-final
 ord-final:
