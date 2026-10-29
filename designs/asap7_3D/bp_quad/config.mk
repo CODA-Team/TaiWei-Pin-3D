@@ -14,14 +14,54 @@ export SC_LEF_BOTTOM_COVER ?= \
   $(PLATFORM_DIR)/lef_bottom/asap7sc7p5t_28_R_1x_220121a.bottom.cover.lef \
   $(PLATFORM_DIR)/lef_upper/asap7sc7p5t_28_R_1x_220121a.upper.lef
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LEFS_UPPER_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                                     $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_cover/*.lef))
-export ADDITIONAL_LEFS_BOTTOM_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_cover/*.lef)) \
-                                      $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/*.lib)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_116x128_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_124x64_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_32x32_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_48x256_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_62x64_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_64x512_1rw.bottom.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_116x128_1rw.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_124x64_1rw.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_32x32_1rw.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_48x256_1rw.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_62x64_1rw.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_64x512_1rw.upper.lef
+export ADDITIONAL_LEFS_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_116x128_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_124x64_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_32x32_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_48x256_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_62x64_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/sram_asap7_64x512_1rw.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_116x128_1rw.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_124x64_1rw.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_32x32_1rw.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_48x256_1rw.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_62x64_1rw.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/sram_asap7_64x512_1rw.upper.cover.lef
+export ADDITIONAL_LEFS_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_116x128_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_124x64_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_32x32_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_48x256_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_62x64_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/sram_asap7_64x512_1rw.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_116x128_1rw.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_124x64_1rw.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_32x32_1rw.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_48x256_1rw.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_62x64_1rw.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/sram_asap7_64x512_1rw.upper.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_116x128_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_124x64_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_32x32_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_48x256_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_62x64_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/NLDM/fakeram/sram_asap7_64x512_1rw.bottom.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_116x128_1rw.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_124x64_1rw.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_32x32_1rw.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_48x256_1rw.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_62x64_1rw.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/NLDM/fakeram/sram_asap7_64x512_1rw.upper.lib
 
 export CORE_UTILIZATION = 50
 export CORE_ASPECT_RATIO = 1

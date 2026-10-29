@@ -9,8 +9,18 @@ export VERILOG_FILES = $(DESIGN_HOME)/asap7_3D/$(DESIGN_NICKNAME)/bsg_chip_block
 
 export SDC_FILE      = $(DESIGN_HOME)/asap7_3D/$(DESIGN_NICKNAME)/bsg_chip.sdc
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef/fakeram/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib/NLDM/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef/fakeram/sram_asap7_116x128_1rw.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/sram_asap7_124x64_1rw.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/sram_asap7_32x32_1rw.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/sram_asap7_48x256_1rw.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/sram_asap7_62x64_1rw.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/sram_asap7_64x512_1rw.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_116x128_1rw.lib \
+                         $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_124x64_1rw.lib \
+                         $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_32x32_1rw.lib \
+                         $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_48x256_1rw.lib \
+                         $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_62x64_1rw.lib \
+                         $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_64x512_1rw.lib
 
 export CORE_UTILIZATION ?= 60
 export CORE_ASPECT_RATIO = 1

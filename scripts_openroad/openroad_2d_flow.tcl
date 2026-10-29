@@ -27,7 +27,12 @@ proc save_2d_stage {stage_name} {
 
 proc legalize_inserted_cells {stage_name} {
   puts "INFO(OR): Legalizing cells inserted during $stage_name"
-  set failed [catch {log_cmd detailed_placement} message options]
+  set dpl_args {}
+  if {[info exists ::env(PLATFORM)] && $::env(PLATFORM) eq "asap7"} {
+    set dpl_args [list -max_displacement {100 100}]
+  }
+
+  set failed [catch {log_cmd detailed_placement {*}$dpl_args} message options]
   if {$failed} {
     if {![string match "*DPL-0036*" $message]} {
       return -options $options $message
@@ -36,7 +41,7 @@ proc legalize_inserted_cells {stage_name} {
     puts "INFO(OR): Running improve_placement before strict legalization retry"
     improve_placement
     optimize_mirroring
-    log_cmd detailed_placement
+    log_cmd detailed_placement {*}$dpl_args
   }
   check_placement -verbose
 }

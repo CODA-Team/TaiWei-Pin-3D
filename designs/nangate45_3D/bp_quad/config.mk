@@ -12,14 +12,54 @@ export SC_LEF_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.ma
 export SC_LEF_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.lef \
                              $(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.lef 
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LEFS_UPPER_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                                     $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_cover/*.lef))
-export ADDITIONAL_LEFS_BOTTOM_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_cover/*.lef)) \
-                                      $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib_bottom/fakeram/*.lib)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lib_upper/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_128x116.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_256x48.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_32x32.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_512x64.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_64x124.bottom.lef \
+                         $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_64x62.bottom.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_128x116.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_256x48.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_32x32.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_512x64.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_64x124.upper.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_64x62.upper.lef
+export ADDITIONAL_LEFS_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_128x116.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_256x48.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_32x32.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_512x64.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_64x124.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_64x62.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_128x116.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_256x48.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_32x32.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_512x64.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_64x124.upper.cover.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_64x62.upper.cover.lef
+export ADDITIONAL_LEFS_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_128x116.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_256x48.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_32x32.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_512x64.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_64x124.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_64x62.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_128x116.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_256x48.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_32x32.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_512x64.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_64x124.upper.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_64x62.upper.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_128x116.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_256x48.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_32x32.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_512x64.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_64x124.bottom.lib \
+                         $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_64x62.bottom.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_128x116.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_256x48.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_32x32.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_512x64.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_64x124.upper.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_64x62.upper.lib
 
 export CORE_UTILIZATION = 50
 export CORE_ASPECT_RATIO = 1

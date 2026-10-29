@@ -39,11 +39,13 @@ if {$U_target <= 0.0 || $U_target > 1.0} {
 }
 
 set aspect_ratio 1.0
-if {[info exists ::env(ASPECT_RATIO)] && $::env(ASPECT_RATIO) ne ""} {
+if {[info exists ::env(CORE_ASPECT_RATIO)] && $::env(CORE_ASPECT_RATIO) ne ""} {
+  set aspect_ratio [expr {double($::env(CORE_ASPECT_RATIO))}]
+} elseif {[info exists ::env(ASPECT_RATIO)] && $::env(ASPECT_RATIO) ne ""} {
   set aspect_ratio [expr {double($::env(ASPECT_RATIO))}]
 }
 if {$aspect_ratio <= 0.0} {
-  utl::error FP 101 "ASPECT_RATIO must be > 0. got $aspect_ratio"
+  utl::error FP 101 "CORE_ASPECT_RATIO (or legacy ASPECT_RATIO) must be > 0. got $aspect_ratio"
 }
 
 set mL 0.0; set mR 0.0; set mT 0.0; set mB 0.0

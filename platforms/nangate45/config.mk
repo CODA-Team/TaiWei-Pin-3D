@@ -64,8 +64,8 @@ export PDN_TCL                 ?= $(PLATFORM_DIR)/grid_strategy-M1-M4-M7.tcl
 export TAPCELL_TCL              = $(PLATFORM_DIR)/tapcell.tcl
 
 # 宏块留白
-export MACRO_PLACE_HALO        ?= 22.4 15.12
-export MACRO_PLACE_CHANNEL     ?= 18.8 19.95
+export MACRO_PLACE_HALO        ?= 10 10
+# export MACRO_PLACE_CHANNEL     ?= 18.8 19.95
 
 # =====================================================
 # Place

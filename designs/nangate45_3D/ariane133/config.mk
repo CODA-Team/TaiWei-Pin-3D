@@ -12,14 +12,14 @@ export SC_LEF_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.ma
 export SC_LEF_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.lef \
                              $(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.lef 
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LEFS_UPPER_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_block/*.lef)) \
-                                     $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_cover/*.lef))
-export ADDITIONAL_LEFS_BOTTOM_COVER = $(sort $(wildcard $(PLATFORM_DIR)/lef_bottom/fakeram_cover/*.lef)) \
-                                      $(sort $(wildcard $(PLATFORM_DIR)/lef_upper/fakeram_block/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib_bottom/fakeram/*.lib)) \
-                         $(sort $(wildcard $(PLATFORM_DIR)/lib_upper/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_256x16.bottom.lef \
+                         $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_256x16.upper.lef
+export ADDITIONAL_LEFS_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_block/fakeram45_256x16.bottom.lef \
+                                     $(PLATFORM_DIR)/lef_upper/fakeram_cover/fakeram45_256x16.upper.cover.lef
+export ADDITIONAL_LEFS_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/fakeram_cover/fakeram45_256x16.bottom.cover.lef \
+                                      $(PLATFORM_DIR)/lef_upper/fakeram_block/fakeram45_256x16.upper.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib_bottom/fakeram/fakeram45_256x16.bottom.lib \
+                         $(PLATFORM_DIR)/lib_upper/fakeram/fakeram45_256x16.upper.lib
 
 export CORE_UTILIZATION = 50
 export CORE_ASPECT_RATIO = 1

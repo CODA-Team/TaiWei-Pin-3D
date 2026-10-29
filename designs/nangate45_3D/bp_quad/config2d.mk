@@ -9,8 +9,18 @@ export VERILOG_FILES = $(DESIGN_HOME)/nangate45_3D/$(DESIGN_NICKNAME)/bsg_chip_b
 
 export SDC_FILE      = $(DESIGN_HOME)/nangate45_3D/$(DESIGN_NICKNAME)/bsg_chip.sdc
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef/fakeram/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef/fakeram/fakeram45_128x116.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/fakeram45_256x48.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/fakeram45_32x32.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/fakeram45_512x64.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/fakeram45_64x124.lef \
+                         $(PLATFORM_DIR)/lef/fakeram/fakeram45_64x62.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/fakeram/fakeram45_128x116.lib \
+                         $(PLATFORM_DIR)/lib/fakeram/fakeram45_256x48.lib \
+                         $(PLATFORM_DIR)/lib/fakeram/fakeram45_32x32.lib \
+                         $(PLATFORM_DIR)/lib/fakeram/fakeram45_512x64.lib \
+                         $(PLATFORM_DIR)/lib/fakeram/fakeram45_64x124.lib \
+                         $(PLATFORM_DIR)/lib/fakeram/fakeram45_64x62.lib
 
 export CORE_UTILIZATION = 50
 export CORE_ASPECT_RATIO = 1

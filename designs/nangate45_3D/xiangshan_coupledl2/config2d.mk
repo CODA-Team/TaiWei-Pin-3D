@@ -22,7 +22,7 @@ export ADDITIONAL_LIBS = \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x164.lib \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/xiangshan_coupledl2/array_256x8_0.lib
 export CORE_MARGIN = 1
-export CORE_UTILIZATION ?= 60
+export CORE_UTILIZATION ?= 50
 export NUM_CORES ?= 32
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
 export GLOBAL_ROUTE_ARGS ?= -verbose -congestion_iterations 30

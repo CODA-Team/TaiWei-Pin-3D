@@ -8,8 +8,8 @@ export VERILOG_FILES = $(DESIGN_HOME)/nangate45_3D/ariane133/ariane.v
 
 export SDC_FILE      = $(DESIGN_HOME)/nangate45_3D/ariane133/ariane.sdc
 
-export ADDITIONAL_LEFS = $(sort $(wildcard $(PLATFORM_DIR)/lef/fakeram/*.lef))
-export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib/fakeram/*.lib))
+export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef/fakeram/fakeram45_256x16.lef
+export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/fakeram/fakeram45_256x16.lib
 
 export CORE_UTILIZATION ?= 60
 export CORE_ASPECT_RATIO = 1
