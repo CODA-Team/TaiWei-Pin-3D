@@ -92,6 +92,12 @@ export IO_PLACER_V               = M5
 export PAR_BAL_LO ?= 1.0
 export PAR_BAL_HI ?= 6.0
 export PAR_BAL_ITERATION ?= 11
+
+# Macro placement and row keep-out halos
+export MACRO_PLACE_HALO         ?= 10 10
+export MACRO_ROWS_HALO_X        ?= 2
+export MACRO_ROWS_HALO_Y        ?= 2
+
 # PDN (fixed default strategy)
 export PDN_TCL                  ?= $(PLATFORM_DIR)/openRoad/pdn/grid_strategy-M1-M2-M5-M6.tcl
 export TAPCELL_TCL              ?= $(PLATFORM_DIR)/openRoad/tapcell.tcl

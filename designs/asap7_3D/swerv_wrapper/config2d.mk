@@ -13,7 +13,7 @@ export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib/NLDM/fakeram/*.li
 
 export CORE_MARGIN = 2
 export ASPECT_RATIO = 1.0
-export CORE_UTILIZATION = 50
+export CORE_UTILIZATION = 30
 
 export PLACE_DENSITY_LB_ADDON = 0.08
 export TNS_END_PERCENT        = 100

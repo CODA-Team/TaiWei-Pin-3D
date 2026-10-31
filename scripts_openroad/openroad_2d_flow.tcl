@@ -55,6 +55,12 @@ source $::env(OPENROAD_SCRIPTS_DIR)/io_place.tcl
 source $::env(OPENROAD_SCRIPTS_DIR)/place_macro_util.tcl
 save_2d_stage 2_5_floorplan_macro
 
+if {[env_var_exists_and_non_empty TAPCELL_TCL]} {
+  source $::env(TAPCELL_TCL)
+} else {
+  cut_rows
+}
+
 source $::env(PDN_TCL)
 if {[catch {
     pdngen

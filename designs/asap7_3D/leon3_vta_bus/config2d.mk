@@ -26,7 +26,7 @@ export ADDITIONAL_LIBS = \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_tensorFile_0_ext.lib \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/leon3_vta_bus/ht_asap7_leon3vtabus_vta_q_512x128.lib
 export CORE_MARGIN = 0.2
-export CORE_UTILIZATION ?= 60
+export CORE_UTILIZATION ?= 30
 export NUM_CORES ?= 32
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
 export GLOBAL_ROUTE_ARGS ?= -verbose -congestion_iterations 30

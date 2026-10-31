@@ -11,7 +11,8 @@ export SDC_FILE      = $(DESIGN_HOME)/asap7_3D/ariane133/ariane.sdc
 export ADDITIONAL_LEFS = $(PLATFORM_DIR)/lef/fakeram/sram_asap7_16x256_1rw.lef
 export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_16x256_1rw.lib
 
-export CORE_UTILIZATION ?= 60
+export CORE_UTILIZATION ?= 30
+export MACRO_PLACE_HALO = 5 5
 export CORE_ASPECT_RATIO = 1
 export CORE_MARGIN = 5
 export GEN_EFF medium

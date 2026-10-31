@@ -22,7 +22,7 @@ export ADDITIONAL_LIBS = $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_116x128_1rw
                          $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_62x64_1rw.lib \
                          $(PLATFORM_DIR)/lib/NLDM/fakeram/sram_asap7_64x512_1rw.lib
 
-export CORE_UTILIZATION ?= 60
+export CORE_UTILIZATION ?= 30
 export CORE_ASPECT_RATIO = 1
 export CORE_MARGIN = 5
 export GEN_EFF medium

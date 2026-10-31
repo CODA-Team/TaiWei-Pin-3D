@@ -22,7 +22,7 @@ export ADDITIONAL_LIBS = \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x7.lib \
   $(PLATFORM_DIR)/lib/NLDM/fakeram/blackparrot_2/ht_asap7_blackparrot_64x96.lib
 export CORE_MARGIN = 0.2
-export CORE_UTILIZATION ?= 60
+export CORE_UTILIZATION ?= 30
 export NUM_CORES ?= 32
 export PIN3D_SPLIT_PORT_DRIVEN_NETS ?= 1
 export GLOBAL_ROUTE_ARGS ?= -verbose -congestion_iterations 30
