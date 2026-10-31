@@ -34,22 +34,22 @@ DRIVERS = {"upper": "BUFx2_ASAP7_75t_R_upper", "bottom": "BUF_X1_bottom"}
 
 
 class HbtModelTest(unittest.TestCase):
-    def test_default_scale_configuration(self):
+    def test_default_direct_configuration(self):
         config = resolve_hbt_config({})
-        self.assertEqual(config["mode"], "scale")
-        self.assertEqual(config["r_scale"], 0.0)
-        self.assertEqual(config["c_scale"], 0.25)
+        self.assertEqual(config["mode"], "direct")
+        self.assertEqual(config["r_ohm"], 1.0)
+        self.assertEqual(config["c_fF"], 0.5)
 
         model = build_hbt_model(wrapper_plan(), "asap7_nangate45_3D", config, DRIVERS)
         entries = {entry["net_name"]: entry for entry in model["entries"]}
-        self.assertEqual(entries["bottom_to_upper"]["applied_res_kohm"], 0.0)
-        self.assertAlmostEqual(entries["bottom_to_upper"]["applied_cap_fF"], 0.1442605)
-        self.assertAlmostEqual(entries["upper_to_bottom"]["applied_cap_fF"], 0.24366475)
+        self.assertEqual(entries["bottom_to_upper"]["applied_res_kohm"], 0.001)
+        self.assertEqual(entries["upper_to_bottom"]["applied_res_ohm"], 1.0)
+        self.assertEqual(entries["bottom_to_upper"]["applied_cap_fF"], 0.5)
+        self.assertEqual(entries["upper_to_bottom"]["applied_cap_fF"], 0.5)
 
         tcl = render_hbt_tcl(model)
-        self.assertNotIn("set_resistance", tcl)
-        self.assertIn("set_load -wire_load 0.1442605", tcl)
-        self.assertIn("set_load -wire_load 0.24366475", tcl)
+        self.assertEqual(tcl.count("set_resistance 0.001"), 2)
+        self.assertEqual(tcl.count("set_load -wire_load 0.5"), 2)
 
     def test_scale_applies_producer_r_and_consumer_c(self):
         config = resolve_hbt_config(
@@ -95,12 +95,10 @@ class HbtModelTest(unittest.TestCase):
     def test_invalid_public_configurations(self):
         with self.assertRaisesRegex(ValueError, "Unsupported"):
             resolve_hbt_config({"SYN3D_HBT_MODEL_MODE": "unknown"})
-        with self.assertRaisesRegex(ValueError, "requires"):
-            resolve_hbt_config({"SYN3D_HBT_MODEL_MODE": "direct", "SYN3D_HBT_R_OHM": "1"})
         with self.assertRaisesRegex(ValueError, "non-negative"):
-            resolve_hbt_config({"SYN3D_HBT_R_SCALE": "-1"})
-        with self.assertRaisesRegex(ValueError, "require"):
-            resolve_hbt_config({"SYN3D_HBT_R_OHM": "1"})
+            resolve_hbt_config({"SYN3D_HBT_MODEL_MODE": "scale", "SYN3D_HBT_R_SCALE": "-1"})
+        with self.assertRaisesRegex(ValueError, "non-negative"):
+            resolve_hbt_config({"SYN3D_HBT_MODEL_MODE": "direct", "SYN3D_HBT_C_FF": "-1"})
 
     def test_driver_mismatch_is_rejected(self):
         with self.assertRaisesRegex(AssertionError, "ABC driver"):

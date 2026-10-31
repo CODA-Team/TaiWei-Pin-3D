@@ -28,6 +28,11 @@ from flow_config import (
     ABC_DRV_CELL_UPPER,
     BOTTOM_LIB_DIR,
     BOTTOM_LIB_FILES,
+    DNU_FOR_BOTTOM,
+    DNU_FOR_UPPER,
+    GENUS_DONT_USE_EXCEPTIONS_BOTTOM,
+    GENUS_DONT_USE_EXCEPTIONS_UPPER,
+    GENUS_DONT_USE_TCL,
     CELL_MAPPING_PLAN_JSON,
     CELL_NAME_MAPPING_MODE,
     CLOCK_PORT_MAP_JSON,
@@ -56,6 +61,8 @@ from flow_config import (
     SYNTHESIS_2D_LIB_DIR,
     SYNTHESIS_2D_LIB_FILES,
     SYNTHESIS_2D_PLATFORM_DIR,
+    SYN3D_2D_DONT_USE_CELLS,
+    SYN3D_2D_GENUS_DONT_USE_EXCEPTIONS,
     SYNTH_MODE,
     TIEHI_CELL_BOTTOM,
     TIEHI_CELL_UPPER,
@@ -85,6 +92,7 @@ from yosys_json_toolkit import (
     normalize_module_port_shapes,
     validate_design,
 )
+from constant_tie_normalization import normalize_design_constants
 from hbt_model import build_hbt_model, render_hbt_tcl, resolve_hbt_config
 
 
@@ -194,6 +202,26 @@ def tier_constant_tie_specs(tier):
     if tier == "upper":
         return [(TIELO_CELL_UPPER, TIELO_PIN_UPPER), (TIEHI_CELL_UPPER, TIEHI_PIN_UPPER)]
     raise AssertionError("Unsupported tier for tie-cell configuration: {}".format(tier))
+
+
+def constant_tie_spec_map(ordered_specs):
+    assert len(ordered_specs) == 2, "Expected ordered TIELO/TIEHI specifications"
+    return OrderedDict(
+        [
+            (
+                "0",
+                OrderedDict(
+                    [("cell_type", ordered_specs[0][0]), ("output_pin", ordered_specs[0][1])]
+                ),
+            ),
+            (
+                "1",
+                OrderedDict(
+                    [("cell_type", ordered_specs[1][0]), ("output_pin", ordered_specs[1][1])]
+                ),
+            ),
+        ]
+    )
 
 
 def render_constant_tie_configuration(tie_specs):
@@ -334,6 +362,35 @@ write_json {out_json}
     assert os.path.exists(out_json), "GENUS_OUTPUT_JSON was not created: {}".format(out_json)
 
 
+def emit_json_to_verilog(in_json, top_module_name, out_v):
+    tcl = """
+read_json {in_json}
+hierarchy -check -top {top_module_name}
+write_verilog -norename -noexpr -noattr {out_v}
+""".format(
+        in_json=in_json,
+        top_module_name=top_module_name,
+        out_v=out_v,
+    )
+    run_yosys_script(tcl, "normalized json -> genus verilog ({})".format(top_module_name))
+    assert os.path.isfile(out_v) and os.path.getsize(out_v) > 0, (
+        "Normalized GENUS_OUTPUT_V was not created: {}".format(out_v)
+    )
+
+
+def normalize_and_publish_constants(output_design, module_configs):
+    stats = normalize_design_constants(output_design, module_configs)
+    dump_design(output_design, GENUS_OUTPUT_JSON)
+    reloaded = load_design(GENUS_OUTPUT_JSON)
+    validate_design(reloaded)
+    emit_json_to_verilog(
+        GENUS_OUTPUT_JSON,
+        WRAPPER_TOP_MODULE_NAME,
+        GENUS_OUTPUT_V,
+    )
+    return stats
+
+
 def load_inputs():
     for path in [
         WRAPPER_JSON,
@@ -342,6 +399,7 @@ def load_inputs():
         CLOCK_PORT_MAP_JSON,
         CELL_MAPPING_PLAN_JSON,
         DESIGN_SDC_FILE,
+        GENUS_DONT_USE_TCL,
     ]:
         assert os.path.isfile(path), "Required 06 input missing: {}".format(path)
     wrapper_design = load_design(WRAPPER_JSON)
@@ -699,6 +757,7 @@ def report_paths():
             ("ungroup", os.path.join(GENUS_REPORT_DIR, "{}_ungroup_modules.rpt".format(prefix))),
             ("upper_boundary", os.path.join(GENUS_REPORT_DIR, "{}_inst_upper_boundary_opt.rpt".format(prefix))),
             ("bottom_boundary", os.path.join(GENUS_REPORT_DIR, "{}_inst_bottom_boundary_opt.rpt".format(prefix))),
+            ("dont_use", os.path.join(GENUS_REPORT_DIR, "genus_dont_use.rpt")),
         ]
     )
 
@@ -746,6 +805,11 @@ init_design
 read_sdc $in_sdc
 
 {constant_tie_configuration}
+source {genus_dont_use_tcl}
+configure_genus_dont_use \
+  [list {dont_use_patterns}] \
+  [list {dont_use_exceptions}] \
+  {dont_use}
 
 set upper_mod [get_db modules {upper_module}]
 set bottom_mod [get_db modules {bottom_module}]
@@ -844,6 +908,9 @@ exit
         protected_top_names=format_tcl_list(protected_top_names),
         genus_opt_mode=GENUS_OPT_MODE,
         syn_opt_command=genus_syn_opt_command(),
+        genus_dont_use_tcl=tcl_quote(GENUS_DONT_USE_TCL),
+        dont_use_patterns=format_tcl_list(SYN3D_2D_DONT_USE_CELLS),
+        dont_use_exceptions=format_tcl_list(SYN3D_2D_GENUS_DONT_USE_EXCEPTIONS),
         constant_tie_configuration=render_constant_tie_configuration(homogeneous_constant_tie_specs()),
         **{key: tcl_quote(value) for key, value in reports.items()}
     )
@@ -856,6 +923,7 @@ exit
     assert "source $d2d_extra_rc_tcl" in loaded, "06 Tcl missing d2d extra RC source"
     assert "\n{}\n".format(genus_syn_opt_command()) in loaded, "06 Tcl missing configured syn_opt command"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "06 Tcl missing duplicate constant tie mapping"
+    assert "configure_genus_dont_use" in loaded, "06 Tcl missing Genus dont-use configuration"
     assert "Unable to resolve post-synthesis upper hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     assert "Unable to resolve post-synthesis bottom hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     return reports
@@ -1352,7 +1420,24 @@ def run_homogeneous_genus():
     emit_verilog_to_json(GENUS_OUTPUT_V, WRAPPER_TOP_MODULE_NAME, GENUS_OUTPUT_JSON, SYNTHESIS_2D_LIB_FILES)
     output_design = load_design(GENUS_OUTPUT_JSON)
     normalized_ports = normalize_genus_primary_interface(output_design, wrapper_design, GENUS_OUTPUT_JSON)
+    homogeneous_tie_specs = constant_tie_spec_map(homogeneous_constant_tie_specs())
+    constant_normalization = normalize_and_publish_constants(
+        output_design,
+        OrderedDict(
+            [
+                (
+                    UPPER_COARSE_MODULE_NAME,
+                    {"leaf_cell_types": lib_cells, "tie_specs": homogeneous_tie_specs},
+                ),
+                (
+                    BOTTOM_COARSE_MODULE_NAME,
+                    {"leaf_cell_types": lib_cells, "tie_specs": homogeneous_tie_specs},
+                ),
+            ]
+        ),
+    )
     output_checks = assert_hierarchical_output_contract(output_design, wrapper_plan, lib_cells)
+    output_checks["constant_normalization"] = constant_normalization
     output_checks["normalized_primary_port_count"] = len(normalized_ports)
     output_checks["normalized_primary_ports"] = normalized_ports
     report_checks = analyze_reports(reports, wrapper_design, wrapper_plan)
@@ -1692,6 +1777,7 @@ def hetero_report_paths(paths):
             ("frozen_boundary_before", os.path.join(report_dir, "frozen_boundary_before.rpt")),
             ("active_boundary_after", os.path.join(report_dir, "active_boundary_after.rpt")),
             ("frozen_boundary_after", os.path.join(report_dir, "frozen_boundary_after.rpt")),
+            ("dont_use", os.path.join(report_dir, "genus_dont_use.rpt")),
         ]
     )
 
@@ -1721,6 +1807,12 @@ def build_hetero_pass_descriptors(upper_lib_cells, bottom_lib_cells, wrapper_pla
         active_lib_files = list(UPPER_LIB_FILES) if active_tier == "upper" else list(BOTTOM_LIB_FILES)
         frozen_lib_files = list(UPPER_LIB_FILES) if frozen_tier == "upper" else list(BOTTOM_LIB_FILES)
         frozen_lib_cells = upper_lib_cells if frozen_tier == "upper" else bottom_lib_cells
+        dont_use_patterns = DNU_FOR_UPPER if active_tier == "upper" else DNU_FOR_BOTTOM
+        dont_use_exceptions = (
+            GENUS_DONT_USE_EXCEPTIONS_UPPER
+            if active_tier == "upper"
+            else GENUS_DONT_USE_EXCEPTIONS_BOTTOM
+        )
         descriptors[pass_name] = OrderedDict(
             [
                 ("pass_name", pass_name),
@@ -1734,6 +1826,8 @@ def build_hetero_pass_descriptors(upper_lib_cells, bottom_lib_cells, wrapper_pla
                 ("frozen_lib_files", frozen_lib_files),
                 ("dont_use_pattern", dont_use_pattern_for_frozen_tier(frozen_tier)),
                 ("dont_use_cell_count", len(frozen_lib_cells)),
+                ("dont_use_patterns", list(dont_use_patterns)),
+                ("dont_use_exceptions", list(dont_use_exceptions)),
                 ("protected_top_names", protected_top_names),
                 ("output_load_status", "disabled_by_policy"),
                 ("paths", paths),
@@ -1779,6 +1873,11 @@ init_design
 read_sdc $in_sdc
 
 {constant_tie_configuration}
+source {genus_dont_use_tcl}
+configure_genus_dont_use \
+  [list {dont_use_patterns}] \
+  [list {dont_use_exceptions}] \
+  {dont_use}
 
 set upper_mod [get_db modules {upper_module}]
 set bottom_mod [get_db modules {bottom_module}]
@@ -1825,7 +1924,16 @@ foreach one_name [list {protected_top_names}] {{
 
 set frozen_lib_cells [get_db lib_cells {dont_use_pattern}]
 if {{[llength $frozen_lib_cells] == 0}} {{ error "No frozen lib cells matched {dont_use_pattern}" }}
-set_dont_use $frozen_lib_cells
+set frozen_avoid_failures {{}}
+foreach frozen_lib_cell $frozen_lib_cells {{
+  set avoid_value [get_db $frozen_lib_cell .avoid]
+  if {{$avoid_value ni {{true 1}}}} {{
+    lappend frozen_avoid_failures "[get_db $frozen_lib_cell .name] avoid=$avoid_value"
+  }}
+}}
+if {{[llength $frozen_avoid_failures] > 0}} {{
+  error "Frozen-tier dont-use verification failed: $frozen_avoid_failures"
+}}
 
 puts "SYN3D_HETERO_PASS={pass_name}"
 puts "SYN3D_ACTIVE_TIER={active_tier}"
@@ -1883,6 +1991,9 @@ exit
         frozen_instance=desc["frozen_instance"],
         protected_top_names=format_tcl_list(desc["protected_top_names"]),
         dont_use_pattern=desc["dont_use_pattern"],
+        dont_use_patterns=format_tcl_list(desc["dont_use_patterns"]),
+        dont_use_exceptions=format_tcl_list(desc["dont_use_exceptions"]),
+        genus_dont_use_tcl=tcl_quote(GENUS_DONT_USE_TCL),
         pass_name=desc["pass_name"],
         active_tier=desc["active_tier"],
         frozen_tier=desc["frozen_tier"],
@@ -1904,6 +2015,7 @@ exit
     assert expected_syn_opt in loaded, "Hetero Tcl missing configured syn_opt command"
     assert "source $d2d_extra_rc_tcl" in loaded, "Hetero Tcl missing d2d extra RC source"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "Hetero Tcl missing duplicate constant tie mapping"
+    assert "configure_genus_dont_use" in loaded, "Hetero Tcl missing Genus dont-use configuration"
     return db_opt
 
 
@@ -2160,6 +2272,8 @@ def run_hetero_pass(desc, wrapper_design, wrapper_plan, upper_lib_cells, bottom_
             ("db_file", db_file),
             ("dont_use_pattern", desc["dont_use_pattern"]),
             ("dont_use_cell_count", desc["dont_use_cell_count"]),
+            ("dont_use_patterns", desc["dont_use_patterns"]),
+            ("dont_use_exceptions", desc["dont_use_exceptions"]),
             ("protected_top_name_count", len(desc["protected_top_names"])),
             ("output_load_status", desc["output_load_status"]),
             ("top", top_checks),
@@ -2328,7 +2442,29 @@ def run_heterogeneous_genus():
     promote_hetero_final_outputs(descriptors["bottom_final"])
     final_design = load_design(GENUS_OUTPUT_JSON)
     normalized_ports = normalize_genus_primary_interface(final_design, wrapper_design, GENUS_OUTPUT_JSON)
+    constant_normalization = normalize_and_publish_constants(
+        final_design,
+        OrderedDict(
+            [
+                (
+                    UPPER_COARSE_MODULE_NAME,
+                    {
+                        "leaf_cell_types": upper_lib_cells,
+                        "tie_specs": constant_tie_spec_map(tier_constant_tie_specs("upper")),
+                    },
+                ),
+                (
+                    BOTTOM_COARSE_MODULE_NAME,
+                    {
+                        "leaf_cell_types": bottom_lib_cells,
+                        "tie_specs": constant_tie_spec_map(tier_constant_tie_specs("bottom")),
+                    },
+                ),
+            ]
+        ),
+    )
     final_checks = assert_hetero_top_shell_contract(final_design, wrapper_plan)
+    final_checks["constant_normalization"] = constant_normalization
     final_checks["normalized_primary_port_count"] = len(normalized_ports)
     final_checks["normalized_primary_ports"] = normalized_ports
     final_checks.update(assert_no_wrong_lib_cells(final_design, upper_lib_cells, bottom_lib_cells))

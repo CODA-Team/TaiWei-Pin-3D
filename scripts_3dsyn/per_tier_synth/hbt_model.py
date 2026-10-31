@@ -106,7 +106,7 @@ def _nonnegative(value, label):
 def resolve_hbt_config(env):
     """Resolve and validate the public HBT environment interface."""
 
-    mode = str(env.get("SYN3D_HBT_MODEL_MODE", "scale")).strip().lower()
+    mode = str(env.get("SYN3D_HBT_MODEL_MODE", "direct")).strip().lower()
     if mode not in SUPPORTED_MODES:
         raise ValueError("Unsupported SYN3D_HBT_MODEL_MODE: {}".format(mode))
 
@@ -121,10 +121,8 @@ def resolve_hbt_config(env):
             ]
         )
 
-    r_raw = env.get("SYN3D_HBT_R_OHM")
-    c_raw = env.get("SYN3D_HBT_C_FF")
-    if r_raw in (None, "") or c_raw in (None, ""):
-        raise ValueError("direct mode requires SYN3D_HBT_R_OHM and SYN3D_HBT_C_FF")
+    r_raw = env.get("SYN3D_HBT_R_OHM") or "1.0"
+    c_raw = env.get("SYN3D_HBT_C_FF") or "0.5"
     return OrderedDict(
         [
             ("mode", mode),

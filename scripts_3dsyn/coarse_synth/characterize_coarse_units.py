@@ -4,12 +4,28 @@ import json
 import math
 import os
 import re
+import shlex
 import shutil
 import subprocess
 from pathlib import Path
 
 
 SUPPORTED_PLATFORMS = {"asap7_3D", "nangate45_3D", "asap7_nangate45_3D"}
+
+
+def environment_cell_list(name, required=False):
+    cells = shlex.split(os.getenv(name, ""))
+    if required and not cells:
+        raise RuntimeError("Required cell policy is empty: {}".format(name))
+    return cells
+
+
+def tier_cell_policy(tier):
+    suffix = tier.upper()
+    return {
+        "dont_use": environment_cell_list("SYN3D_DONT_USE_CELLS_{}".format(suffix), required=True),
+        "exceptions": environment_cell_list("SYN3D_GENUS_DONT_USE_EXCEPTIONS_{}".format(suffix)),
+    }
 
 
 def parse_args():
@@ -32,6 +48,67 @@ def require_file(path, label):
     path = Path(path)
     if not path.is_file() or path.stat().st_size == 0:
         raise RuntimeError("{} is missing or empty: {}".format(label, path))
+
+
+def read_unit_manifest(path):
+    path = Path(path)
+    if not path.is_file():
+        raise RuntimeError("coarse-unit manifest is missing: {}".format(path))
+    units = []
+    seen = set()
+    for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+        unit_name = line.strip()
+        if not unit_name or unit_name.startswith("#"):
+            continue
+        if unit_name in seen:
+            raise RuntimeError(
+                "duplicate coarse-unit type {!r} in {} at line {}".format(
+                    unit_name, path, line_number
+                )
+            )
+        if any(character.isspace() for character in unit_name):
+            raise RuntimeError(
+                "coarse-unit type contains whitespace in {} at line {}: {!r}".format(
+                    path, line_number, unit_name
+                )
+            )
+        seen.add(unit_name)
+        units.append(unit_name)
+    return units
+
+
+def validate_manifest_sources(units, source_dir):
+    source_dir = Path(source_dir)
+    expected = set(units)
+    if not source_dir.exists():
+        if expected:
+            raise RuntimeError("coarse-unit source directory is missing: {}".format(source_dir))
+        return
+    if not source_dir.is_dir():
+        raise RuntimeError("coarse-unit source path is not a directory: {}".format(source_dir))
+    observed = {path.stem for path in source_dir.glob("*.rtlil") if path.is_file()}
+    if observed != expected:
+        raise RuntimeError(
+            "coarse-unit manifest/source mismatch: missing={} extra={}".format(
+                sorted(expected - observed), sorted(observed - expected)
+            )
+        )
+
+
+def write_empty_characterization(output_dir, platform):
+    output_dir = Path(output_dir)
+    for path in [
+        output_dir / "implementation",
+        output_dir / "metrics" / "bottom",
+        output_dir / "metrics" / "upper",
+        output_dir / "library",
+    ]:
+        path.mkdir(parents=True, exist_ok=True)
+    summary = {"platform": platform, "unit_count": 0, "units": {}}
+    (output_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2) + "\n", encoding="utf-8"
+    )
+    return summary
 
 
 def collect_libs(path):
@@ -102,12 +179,13 @@ def prepare_yosys_liberty(libs, output_path, flow_home, library_name):
     return output_path
 
 
-def yosys_map(unit_name, rtlil_path, liberty, output_path, work_dir, yosys):
+def yosys_map(unit_name, rtlil_path, liberty, output_path, work_dir, yosys, dont_use_patterns):
     work_dir.mkdir(parents=True, exist_ok=True)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     script = work_dir / "map.ys"
     log_path = work_dir / "yosys.log"
     liberty_arg = " -liberty {}".format(liberty)
+    dont_use_args = "".join(" -dont_use {}".format(pattern) for pattern in dont_use_patterns)
     script.write_text(
         "\n".join([
             "read_rtlil {}".format(rtlil_path),
@@ -115,9 +193,9 @@ def yosys_map(unit_name, rtlil_path, liberty, output_path, work_dir, yosys):
             "techmap -map +/techmap.v",
             "techmap",
             "opt -fast",
-            "abc{}".format(liberty_arg),
-            "dfflibmap{}".format(liberty_arg),
-            "abc{}".format(liberty_arg),
+            "abc{}{}".format(liberty_arg, dont_use_args),
+            "dfflibmap{}{}".format(liberty_arg, dont_use_args),
+            "abc{}{}".format(liberty_arg, dont_use_args),
             "stat{}".format(liberty_arg),
             "write_verilog -noattr -noexpr {}".format(output_path),
             "",
@@ -140,7 +218,7 @@ def yosys_map(unit_name, rtlil_path, liberty, output_path, work_dir, yosys):
     return area
 
 
-def genus_refine(unit_name, input_path, libs, output_path, work_dir, genus, genus_script):
+def genus_refine(unit_name, input_path, libs, output_path, work_dir, genus, genus_script, policy):
     work_dir.mkdir(parents=True, exist_ok=True)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     area_report = work_dir / "area.rpt"
@@ -154,6 +232,9 @@ def genus_refine(unit_name, input_path, libs, output_path, work_dir, genus, genu
         "SYN3D_UNIT_AREA_REPORT": str(area_report),
         "SYN3D_UNIT_AREA_VALUE": str(area_value),
         "SYN3D_UNIT_LIB_FILES": " ".join(str(path) for path in libs),
+        "SYN3D_UNIT_DONT_USE_CELLS": " ".join(policy["dont_use"]),
+        "SYN3D_UNIT_GENUS_DONT_USE_EXCEPTIONS": " ".join(policy["exceptions"]),
+        "SYN3D_UNIT_DONT_USE_REPORT": str(work_dir / "genus_dont_use.rpt"),
     })
     command = [genus, "-no_gui", "-batch", "-abort_on_error", "-overwrite",
                "-log", str(log_path), "-files", str(genus_script)]
@@ -207,13 +288,13 @@ def predict_utilization(args, cfg, unit_name, netlist_path, tier, work_dir):
     return raw, used, "gnn"
 
 
-def synthesize(unit_name, rtlil_path, libs, yosys_liberty, root, yosys, genus, genus_script):
+def synthesize(unit_name, rtlil_path, libs, yosys_liberty, root, yosys, genus, genus_script, policy):
     yosys_netlist = root / "yosys" / "{}.v".format(unit_name)
     yosys_area = yosys_map(unit_name, rtlil_path, yosys_liberty, yosys_netlist,
-                           root / "work" / "yosys" / unit_name, yosys)
+                           root / "work" / "yosys" / unit_name, yosys, policy["dont_use"])
     genus_netlist = root / "genus" / "{}.v".format(unit_name)
     genus_area = genus_refine(unit_name, yosys_netlist, libs, genus_netlist,
-                              root / "work" / "genus" / unit_name, genus, genus_script)
+                              root / "work" / "genus" / unit_name, genus, genus_script, policy)
     if genus_area is not None:
         return genus_netlist, genus_area, "genus_incremental"
     return yosys_netlist, yosys_area, "yosys_fallback"
@@ -226,14 +307,19 @@ def write_metric(path, metric):
 
 def main():
     args = parse_args()
-    for path, label in [(args.manifest, "coarse-unit manifest"),
-                        (args.yosys, "Yosys executable"),
+    units = read_unit_manifest(args.manifest)
+    validate_manifest_sources(units, args.source_dir)
+    if not units:
+        write_empty_characterization(args.output_dir, args.platform)
+        print("Characterized 0 coarse-unit types for {}".format(args.platform))
+        return
+
+    for path, label in [(args.yosys, "Yosys executable"),
                         (args.genus_script, "coarse-unit Genus script"),
                         (args.predict_util, "utilization predictor")]:
         require_file(path, label)
     cfg = platform_config(args.flow_home.resolve(), args.platform)
-    units = [line.strip() for line in args.manifest.read_text(encoding="utf-8").splitlines()
-             if line.strip() and not line.lstrip().startswith("#")]
+    primary_tier_policy = tier_cell_policy(cfg["primary_tier"])
     args.output_dir.mkdir(parents=True, exist_ok=True)
     implementation_dir = args.output_dir / "implementation"
     library_dir = args.output_dir / "library"
@@ -255,7 +341,7 @@ def main():
         common_netlist, common_area, common_source = synthesize(
             unit_name, rtlil_path, cfg["common_libs"], common_yosys_liberty,
             args.output_dir / "common",
-            args.yosys, args.genus, args.genus_script)
+            args.yosys, args.genus, args.genus_script, primary_tier_policy)
         raw_util, used_util, util_source = predict_utilization(
             args, cfg, unit_name, common_netlist, cfg["primary_tier"],
             args.output_dir / "common" / "work" / "gnn" / unit_name)
@@ -268,7 +354,7 @@ def main():
             final_netlist, final_area, final_source = synthesize(
                 unit_name, rtlil_path, cfg["native_libs"], native_yosys_liberty,
                 args.output_dir / "native",
-                args.yosys, args.genus, args.genus_script)
+                args.yosys, args.genus, args.genus_script, primary_tier_policy)
             lib_role = "native"
 
         implementation_dir.mkdir(parents=True, exist_ok=True)

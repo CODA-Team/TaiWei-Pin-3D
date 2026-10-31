@@ -34,6 +34,13 @@ def _required_env(name: str) -> str:
     return value
 
 
+def _env_cell_list(name: str, required: bool = False) -> list:
+    cells = shlex.split(os.getenv(name, ""))
+    if required and not cells:
+        raise RuntimeError("Required cell policy is empty: {}".format(name))
+    return cells
+
+
 def _repo_path(*parts: str) -> str:
     return _norm(os.path.join(REPO_ROOT, *parts))
 
@@ -346,6 +353,15 @@ CELL_NAME_MAPPING_MODE = (
 )
 BOTTOM_CELL_SUFFIX = "_bottom"
 UPPER_CELL_SUFFIX = "_upper"
+GENUS_DONT_USE_TCL = _norm(_required_env("SYN3D_GENUS_DONT_USE_TCL"))
+SYN3D_2D_DONT_USE_CELLS = _env_cell_list("DONT_USE_CELLS", required=True)
+SYN3D_2D_GENUS_DONT_USE_EXCEPTIONS = _env_cell_list("GENUS_DONT_USE_EXCEPTIONS")
+DONT_USE_CELLS_UPPER = _env_cell_list("SYN3D_DONT_USE_CELLS_UPPER", required=True)
+DONT_USE_CELLS_BOTTOM = _env_cell_list("SYN3D_DONT_USE_CELLS_BOTTOM", required=True)
+DNU_FOR_UPPER = _env_cell_list("SYN3D_DNU_FOR_UPPER", required=True)
+DNU_FOR_BOTTOM = _env_cell_list("SYN3D_DNU_FOR_BOTTOM", required=True)
+GENUS_DONT_USE_EXCEPTIONS_UPPER = _env_cell_list("SYN3D_GENUS_DONT_USE_EXCEPTIONS_UPPER")
+GENUS_DONT_USE_EXCEPTIONS_BOTTOM = _env_cell_list("SYN3D_GENUS_DONT_USE_EXCEPTIONS_BOTTOM")
 TECH_LEF_FILE = LIBRARY_CONFIG["tech_lef_file"]
 ADDER_MAP_FILE = LIBRARY_CONFIG["adder_map_file"]
 LATCH_MAP_FILE = LIBRARY_CONFIG["latch_map_file"]

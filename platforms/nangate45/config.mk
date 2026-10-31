@@ -48,6 +48,10 @@ export ADDER_MAP_FILE          ?= $(PLATFORM_DIR)/cells_adders.v
 
 # 不使用的单元 & 填充单元
 export DONT_USE_CELLS           = TAPCELL_X1 FILLCELL_X1 AOI211_X1 OAI211_X1
+export SYN3D_DONT_USE_CELLS_UPPER = TAPCELL_X1_upper FILLCELL_X1_upper AOI211_X1_upper OAI211_X1_upper
+export SYN3D_DONT_USE_CELLS_BOTTOM = TAPCELL_X1_bottom FILLCELL_X1_bottom AOI211_X1_bottom OAI211_X1_bottom
+export SYN3D_DNU_FOR_UPPER = $(SYN3D_DONT_USE_CELLS_UPPER) *_bottom
+export SYN3D_DNU_FOR_BOTTOM = $(SYN3D_DONT_USE_CELLS_BOTTOM) *_upper
 export FILL_CELLS               = FILLCELL_X1 FILLCELL_X2 FILLCELL_X4 FILLCELL_X8 FILLCELL_X16 FILLCELL_X32
 
 # =====================================================

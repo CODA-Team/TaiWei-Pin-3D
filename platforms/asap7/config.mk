@@ -63,6 +63,14 @@ export ADDER_MAP_FILE           ?= $(PLATFORM_DIR)/yoSys/cells_adders_R.v
 
 # Do-not-use and filler cells
 export DONT_USE_CELLS            = *x1p*_ASAP7* *xp*_ASAP7* SDF* ICG*
+# Yosys can instantiate these two cells outside ABC's -dont_use, thus allow Genus to use them
+export GENUS_DONT_USE_EXCEPTIONS = HAxp5_ASAP7_75t_R ICGx1_ASAP7_75t_R
+export SYN3D_DONT_USE_CELLS_UPPER = *x1p*_ASAP7*_upper *xp*_ASAP7*_upper SDF*_upper ICG*_upper
+export SYN3D_DONT_USE_CELLS_BOTTOM = *x1p*_ASAP7*_bottom *xp*_ASAP7*_bottom SDF*_bottom ICG*_bottom
+export SYN3D_DNU_FOR_UPPER = $(SYN3D_DONT_USE_CELLS_UPPER) *_bottom
+export SYN3D_DNU_FOR_BOTTOM = $(SYN3D_DONT_USE_CELLS_BOTTOM) *_upper
+export SYN3D_GENUS_DONT_USE_EXCEPTIONS_UPPER = HAxp5_ASAP7_75t_R_upper ICGx1_ASAP7_75t_R_upper
+export SYN3D_GENUS_DONT_USE_EXCEPTIONS_BOTTOM = HAxp5_ASAP7_75t_R_bottom ICGx1_ASAP7_75t_R_bottom
 export FILL_CELLS                = \
   FILLERxp5_ASAP7_75t_R \
   FILLER_ASAP7_75t_R \

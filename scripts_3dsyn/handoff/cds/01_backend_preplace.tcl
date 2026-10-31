@@ -51,7 +51,7 @@ floorPlan -r $aspect_ratio $util $core_margin $core_margin $core_margin $core_ma
 generateTracks
 source $::env(CADENCE_SCRIPTS_DIR)/place_pin.tcl
 
-set enable_opt [_get SYN3D_BACKEND_PREPLACE_OPT 0]
+set enable_opt [_get SYN3D_BACKEND_PREPLACE_OPT 1]
 if {$enable_opt eq "0"} {
   puts "INFO: 3D-Syn backend preplace uses place_design -noPrePlaceOpt"
   place_design -noPrePlaceOpt

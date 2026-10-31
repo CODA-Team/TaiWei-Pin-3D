@@ -4,6 +4,13 @@ set output_netlist $::env(SYN3D_UNIT_OUTPUT_NETLIST)
 set area_report $::env(SYN3D_UNIT_AREA_REPORT)
 set area_value $::env(SYN3D_UNIT_AREA_VALUE)
 set lib_files $::env(SYN3D_UNIT_LIB_FILES)
+set dont_use_patterns $::env(SYN3D_UNIT_DONT_USE_CELLS)
+set dont_use_exceptions {}
+if {[info exists ::env(SYN3D_UNIT_GENUS_DONT_USE_EXCEPTIONS)]} {
+  set dont_use_exceptions $::env(SYN3D_UNIT_GENUS_DONT_USE_EXCEPTIONS)
+}
+set dont_use_report $::env(SYN3D_UNIT_DONT_USE_REPORT)
+source $::env(SYN3D_GENUS_DONT_USE_TCL)
 
 proc run_configured_syn_opt {} {
   set mode normal
@@ -56,6 +63,8 @@ set_db library $lib_files
 read_hdl -sv $input_netlist
 elaborate $design_name
 init_design
+
+configure_genus_dont_use $dont_use_patterns $dont_use_exceptions $dont_use_report
 
 # This characterization step intentionally has no SDC and only optimizes an
 # already technology-mapped netlist.

@@ -46,11 +46,12 @@ run_logged() {
   return "${command_status}"
 }
 
-preplace_opt="${SYN3D_BACKEND_PREPLACE_OPT:-0}"
+preplace_opt="${SYN3D_BACKEND_PREPLACE_OPT:-1}"
 if [[ "${preplace_opt}" != "0" && "${preplace_opt}" != "1" ]]; then
   echo "[3D-Syn] SYN3D_BACKEND_PREPLACE_OPT must be 0 or 1: ${preplace_opt}" >&2
   exit 1
 fi
+export SYN3D_BACKEND_PREPLACE_OPT="${preplace_opt}"
 
 for tool in "${OPENROAD_EXE}" "${PYTHON_EXE}" "${YOSYS_EXE}"; do
   if [[ ! -x "${tool}" ]]; then

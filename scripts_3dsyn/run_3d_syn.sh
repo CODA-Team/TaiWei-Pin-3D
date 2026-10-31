@@ -24,18 +24,26 @@ SYN3D_BACKEND="${SYN3D_BACKEND:-cds}"
 SYN3D_COARSE_UNIT_KEEP_MODE="${SYN3D_COARSE_UNIT_KEEP_MODE:-all}"
 
 # HBT model: scale or direct.
-SYN3D_HBT_MODEL_MODE="${SYN3D_HBT_MODEL_MODE:-scale}"
+SYN3D_HBT_MODEL_MODE="${SYN3D_HBT_MODEL_MODE:-direct}"
 
 # Scale-mode HBT parameters.
 SYN3D_HBT_R_SCALE="${SYN3D_HBT_R_SCALE:-0}"
 SYN3D_HBT_C_SCALE="${SYN3D_HBT_C_SCALE:-0.25}"
 
-# Direct-mode HBT parameters.
-SYN3D_HBT_R_OHM="${SYN3D_HBT_R_OHM:-}"
-SYN3D_HBT_C_FF="${SYN3D_HBT_C_FF:-}"
+# Scale mode keeps direct HBT parameters unset unless supplied so the mode
+# validation can reject mixed configuration explicitly.
+if [[ "${SYN3D_HBT_MODEL_MODE}" == "direct" ]]; then
+  # Cross-tier interconnect resistance in ohms.
+  SYN3D_HBT_R_OHM="${SYN3D_HBT_R_OHM:-1.0}"
+  # Cross-tier interconnect capacitance in fF.
+  SYN3D_HBT_C_FF="${SYN3D_HBT_C_FF:-0.5}"
+else
+  SYN3D_HBT_R_OHM="${SYN3D_HBT_R_OHM:-}"
+  SYN3D_HBT_C_FF="${SYN3D_HBT_C_FF:-}"
+fi
 
 # Backend preplace optimization: 0 disables it; 1 enables it.
-SYN3D_BACKEND_PREPLACE_OPT="${SYN3D_BACKEND_PREPLACE_OPT:-0}"
+SYN3D_BACKEND_PREPLACE_OPT="${SYN3D_BACKEND_PREPLACE_OPT:-1}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 FLOW_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"

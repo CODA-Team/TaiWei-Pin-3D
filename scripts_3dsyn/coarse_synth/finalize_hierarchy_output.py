@@ -174,12 +174,23 @@ write_verilog -norename -noexpr -noattr {out_v}
 
 
 def read_module_list(path):
+    path = Path(path)
+    if not path.is_file():
+        raise RuntimeError("coarse-unit list is missing: {}".format(path))
     module_names = []
-    with open(path, encoding="utf-8") as fp:
-        for line in fp:
+    seen = set()
+    with path.open(encoding="utf-8") as fp:
+        for line_number, line in enumerate(fp, 1):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
+            if line in seen:
+                raise RuntimeError(
+                    "duplicate coarse-unit type {!r} in {} at line {}".format(
+                        line, path, line_number
+                    )
+                )
+            seen.add(line)
             module_names.append(line)
     return module_names
 
@@ -901,6 +912,40 @@ syn3d_write_coarse_unit_libs
     run_yosys_script(yosys_exe, lib_tcl, "final coarse-unit LIB generation", env=env)
 
 
+def write_empty_coarse_unit_libs(handoff_dir, platform):
+    handoff_dir = Path(handoff_dir)
+    for view in [TWO_DIMENSIONAL, BOTTOM, UPPER]:
+        library_name = "syn3d_{}_coarse_units_{}".format(platform, view)
+        path = handoff_dir / "lib" / view / "coarse_units.lib"
+        path.write_text(
+            "library ({}) {{\n"
+            "  delay_model : table_lookup;\n"
+            "  time_unit : \"1ns\";\n"
+            "  voltage_unit : \"1V\";\n"
+            "  current_unit : \"1mA\";\n"
+            "  pulling_resistance_unit : \"1kohm\";\n"
+            "  capacitive_load_unit (1, pf);\n"
+            "}}\n".format(library_name),
+            encoding="utf-8",
+        )
+
+
+def publish_empty_handoff(handoff_dir, platform):
+    prepare_output_locations(handoff_dir)
+    empty_modules = OrderedDict()
+    empty_metrics = OrderedDict()
+    for view in [BOTTOM, UPPER, TWO_DIMENSIONAL]:
+        write_macro_lef(
+            Path(handoff_dir) / "lef" / view / "coarse_units.lef",
+            empty_modules,
+            empty_metrics,
+            platform,
+            view,
+        )
+    write_empty_coarse_unit_libs(handoff_dir, platform)
+    validate_published_variant_sets(handoff_dir, [])
+
+
 def collect_macro_names(lef_path):
     macro_names = set()
     with open(lef_path, encoding="utf-8") as fp:
@@ -1070,12 +1115,35 @@ def main():
 
     module_names = read_module_list(args.coarse_unit_list)
     if not module_names:
-        shutil.copyfile(args.input_verilog, args.output_verilog)
+        raw_json = work_dir / "1_synth_netlist.raw.json"
+        top_only_json = work_dir / "1_synth_netlist.top_only.json"
+        top_module_name = args.design_name
+        try:
+            verilog_to_json(args.yosys, args.input_verilog, top_module_name, raw_json)
+        except RuntimeError as exc:
+            if "verilog -> json" not in str(exc):
+                raise
+            top_module_name = infer_top_module_name(args.yosys, args.input_verilog, work_dir)
+            verilog_to_json(args.yosys, args.input_verilog, top_module_name, raw_json)
+        raw_design = load_design(raw_json)
+        validate_design(raw_design)
+        validate_top_level_contract(raw_design, top_module_name, set())
+        top_only_design = build_top_only_design(raw_design, top_module_name)
+        dump_design(top_only_design, top_only_json)
+        validate_design(load_design(top_only_json))
+        Path(args.output_verilog).parent.mkdir(parents=True, exist_ok=True)
+        emit_json_to_verilog(args.yosys, top_only_json, top_module_name, args.output_verilog)
+        publish_empty_handoff(args.handoff_dir, args.platform)
         report = {
             "design_name": args.design_name,
+            "top_module_name": top_module_name,
             "platform": args.platform,
             "module_count": 0,
-            "status": "no coarse units; copied raw Genus output",
+            "input_verilog": args.input_verilog,
+            "output_verilog": args.output_verilog,
+            "top_only_json": str(top_only_json),
+            "handoff_dir": args.handoff_dir,
+            "status": "no coarse units; validated netlist and published empty handoff",
         }
         with open(work_dir / "normalization_report.json", "w", encoding="utf-8") as fp:
             json.dump(report, fp, indent=2, sort_keys=True)

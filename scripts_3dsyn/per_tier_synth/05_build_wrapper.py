@@ -75,7 +75,7 @@ TIER_INSTANCES = {
     TIER_BOTTOM: WRAPPER_BOTTOM_INSTANCE_NAME,
     TIER_UPPER: WRAPPER_UPPER_INSTANCE_NAME,
 }
-SUPPORTED_SOURCE_PORT_DIRECTIONS = {"input", "output"}
+SUPPORTED_SOURCE_PORT_DIRECTIONS = {"input", "output", "inout"}
 SUPPORTED_CELL_PIN_DIRECTIONS = {"input", "output"}
 
 
@@ -340,7 +340,7 @@ def index_primary_bits(split_plan):
     for item in split_plan["primary_bits"]:
         label = item["bit_label"]
         assert label not in by_label, "Duplicate primary bit label in split plan: {}".format(label)
-        assert item["kind"] in {"PI", "PO"}, "Unexpected primary bit kind: {}".format(item)
+        assert item["kind"] in {"PI", "PO", "INOUT"}, "Unexpected primary bit kind: {}".format(item)
         by_label[label] = item
     return by_label
 
@@ -358,39 +358,77 @@ def analyze_primary_output_aliases(primary_by_label):
             continue
 
         kinds = {item["kind"] for item in items}
-        assert kinds == {"PO"}, (
-            "Unsupported aliased primary bit {} with kinds {}: {}".format(
-                source_bit, sorted(kinds), [item["bit_label"] for item in items]
+        if kinds == {"PO"}:
+            signatures = {
+                (
+                    item["case"],
+                    item["owner_tier"],
+                    item.get("driver_tier"),
+                    tuple(item.get("user_tiers", [])),
+                )
+                for item in items
+            }
+            assert len(signatures) == 1, (
+                "Aliased primary outputs for source bit {} have incompatible split semantics: {}".format(
+                    source_bit,
+                    [
+                        {
+                            "bit_label": item["bit_label"],
+                            "case": item["case"],
+                            "owner_tier": item["owner_tier"],
+                            "driver_tier": item.get("driver_tier"),
+                            "user_tiers": item.get("user_tiers", []),
+                        }
+                        for item in items
+                    ],
+                )
             )
-        )
-        signatures = {
-            (
-                item["case"],
-                item["owner_tier"],
-                item.get("driver_tier"),
-                tuple(item.get("user_tiers", [])),
-            )
-            for item in items
-        }
-        assert len(signatures) == 1, (
-            "Aliased primary outputs for source bit {} have incompatible split semantics: {}".format(
-                source_bit,
+            signature = next(iter(signatures))
+            canonical = items[0]["bit_label"]
+            aliases = [item["bit_label"] for item in items[1:]]
+            group_kind = "PO_TO_PO"
+            split_signature = OrderedDict(
                 [
-                    {
-                        "bit_label": item["bit_label"],
-                        "case": item["case"],
-                        "owner_tier": item["owner_tier"],
-                        "driver_tier": item.get("driver_tier"),
-                        "user_tiers": item.get("user_tiers", []),
-                    }
-                    for item in items
-                ],
+                    ("case", signature[0]),
+                    ("owner_tier", signature[1]),
+                    ("driver_tier", signature[2]),
+                    ("user_tiers", list(signature[3])),
+                ]
             )
-        )
-
-        signature = next(iter(signatures))
-        canonical = items[0]["bit_label"]
-        aliases = [item["bit_label"] for item in items[1:]]
+        elif kinds == {"PI", "PO"}:
+            inputs = [item for item in items if item["kind"] == "PI"]
+            outputs = [item for item in items if item["kind"] == "PO"]
+            assert len(inputs) == 1 and outputs, (
+                "PI-to-PO alias must contain exactly one PI and at least one PO: {}".format(items)
+            )
+            canonical_item = inputs[0]
+            canonical = canonical_item["bit_label"]
+            aliases = [item["bit_label"] for item in outputs]
+            for item in items:
+                assert item.get("alias_group_kind") == "PI_TO_PO", (
+                    "PI-to-PO split metadata missing alias kind: {}".format(item)
+                )
+                assert item.get("canonical_bit_label") == canonical, (
+                    "PI-to-PO canonical label mismatch: expected {} got {}".format(canonical, item)
+                )
+            for item in outputs:
+                assert item["case"] == "PO-5", "PI-to-PO alias output must use PO-5: {}".format(item)
+                assert item.get("driver_tier") is None, "PO-5 must not have a tier driver: {}".format(item)
+            group_kind = "PI_TO_PO"
+            split_signature = OrderedDict(
+                [
+                    ("case", canonical_item["case"]),
+                    ("owner_tier", canonical_item["owner_tier"]),
+                    ("driver_tier", None),
+                    ("user_tiers", list(canonical_item.get("user_tiers", []))),
+                ]
+            )
+        else:
+            raise AssertionError(
+                "Unsupported aliased primary bit {} with kinds {}: {}".format(
+                    source_bit, sorted(kinds), [item["bit_label"] for item in items]
+                )
+            )
         for alias in aliases:
             assert alias not in alias_to_canonical, "Duplicate primary output alias: {}".format(alias)
             alias_to_canonical[alias] = canonical
@@ -398,19 +436,10 @@ def analyze_primary_output_aliases(primary_by_label):
             OrderedDict(
                 [
                     ("source_bit", source_bit),
+                    ("kind", group_kind),
                     ("canonical_bit_label", canonical),
                     ("alias_bit_labels", aliases),
-                    (
-                        "split_signature",
-                        OrderedDict(
-                            [
-                                ("case", signature[0]),
-                                ("owner_tier", signature[1]),
-                                ("driver_tier", signature[2]),
-                                ("user_tiers", list(signature[3])),
-                            ]
-                        ),
-                    ),
+                    ("split_signature", split_signature),
                 ]
             )
         )
@@ -563,7 +592,10 @@ def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_po
         removed_legacy_ports = []
         assert owner in {TIER_BOTTOM, TIER_UPPER}, "Unexpected primary owner tier: {}".format(item)
 
-        if item["kind"] == "PI":
+        if item["kind"] == "INOUT":
+            assert item["case"] == "INOUT-1", "Unsupported wrapper-only inout case: {}".format(item)
+            assert not item.get("user_tiers") and item.get("driver_tier") is None, item
+        elif item["kind"] == "PI":
             owner_name = canonical_name("pi", item["port_name"], item["bit_index"])
             cross_name = canonical_name("d2d_pi", item["port_name"], item["bit_index"])
             if item["case"] == "PI-1":
@@ -590,7 +622,12 @@ def build_tier_action_plans(tier_modules, split_plan, source_port_plan, clock_po
             cross_name = canonical_name("d2d_po", item["port_name"], item["bit_index"])
             alias_of = primary_alias_to_canonical.get(bit_label)
             if alias_of is not None:
-                if item["case"] == "PO-1":
+                if item["case"] == "PO-5":
+                    assert primary_by_label[alias_of]["kind"] == "PI", (
+                        "PO-5 alias must reference a canonical PI: {}".format(item)
+                    )
+                    assert item.get("canonical_bit_label") == alias_of, item
+                elif item["case"] == "PO-1":
                     remove_primary(owner, owner_name, "output", item, "redundant aliased primary output carrier")
                     removed_legacy_ports.append({"tier": owner, "port": owner_name})
                 elif item["case"] == "PO-2":

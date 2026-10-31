@@ -7,6 +7,7 @@ required_variables=(
   YOSYS_EXE
   GENUS_EXE
   SYN3D_GENUS_OPT_MODE
+  SCRIPTS_3DSYN_DIR
   DESIGN_NAME
   FLOW_VARIANT
   SYN3D_PLATFORM
@@ -17,6 +18,11 @@ required_variables=(
   OBJECTS_DIR
   LOG_DIR
   REPORTS_DIR
+  DONT_USE_CELLS
+  SYN3D_DONT_USE_CELLS_UPPER
+  SYN3D_DONT_USE_CELLS_BOTTOM
+  SYN3D_DNU_FOR_UPPER
+  SYN3D_DNU_FOR_BOTTOM
 )
 
 for name in "${required_variables[@]}"; do
@@ -58,9 +64,11 @@ case "${SYN3D_GENUS_OPT_MODE}" in
     ;;
 esac
 
-stage_script_dir="${FLOW_HOME}/scripts_3dsyn/per_tier_synth"
+stage_script_dir="${SCRIPTS_3DSYN_DIR}/per_tier_synth"
+genus_dont_use_script="${SCRIPTS_3DSYN_DIR}/coarse_synth/genus/genus_dont_use.tcl"
 coarse_handoff_dir="${SYN3D_COARSE_SYNTH_DIR}/handoff"
 require_file "stage driver" "${stage_script_dir}/run_flow.py"
+require_file "Genus dont-use helper" "${genus_dont_use_script}"
 require_file "coarse-partition netlist" "${RESULTS_DIR}/2_2_floorplan_io.v"
 require_file "coarse-partition floorplan" "${RESULTS_DIR}/2_2_floorplan_io.def"
 require_file "coarse partition" "${RESULTS_DIR}/partition.coarse.txt"
@@ -88,11 +96,12 @@ rm -f -- \
   "${RESULTS_DIR}/partition_from_flow.txt" \
   "${RESULTS_DIR}/per_tier_synth_manifest.json"
 mkdir -p "${SYN3D_PER_TIER_SYNTH_DIR}" "${RESULTS_DIR}" "${LOG_DIR}" "${REPORTS_DIR}"
+export SYN3D_GENUS_DONT_USE_TCL="${genus_dont_use_script}"
 
 echo "[3D-Syn] Starting per-tier synthesis"
 echo "[3D-Syn] Platform : ${SYN3D_PLATFORM}"
 echo "[3D-Syn] Variant  : ${FLOW_VARIANT}"
-echo "[3D-Syn] HBT mode : ${SYN3D_HBT_MODEL_MODE:-scale}"
+echo "[3D-Syn] HBT mode : ${SYN3D_HBT_MODEL_MODE:-direct}"
 "${PYTHON_EXE}" "${stage_script_dir}/run_flow.py"
 
 require_file "per-tier base netlist" "${RESULTS_DIR}/base.v"

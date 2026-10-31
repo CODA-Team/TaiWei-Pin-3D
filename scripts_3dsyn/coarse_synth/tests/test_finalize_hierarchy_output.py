@@ -144,5 +144,27 @@ class PublishedVariantSetTest(unittest.TestCase):
                 finalize.validate_published_variant_sets(root, [actual])
 
 
+class EmptyHandoffTest(unittest.TestCase):
+    def test_empty_handoff_has_complete_parseable_shape(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            root = Path(temp_dir) / "handoff"
+            finalize.publish_empty_handoff(root, "nangate45_3D")
+
+            for tier in ["2d", "bottom", "upper"]:
+                lef_path = root / "lef" / tier / "coarse_units.lef"
+                lib_path = root / "lib" / tier / "coarse_units.lib"
+                self.assertTrue(lef_path.is_file())
+                self.assertTrue(lib_path.is_file())
+                self.assertEqual(finalize.collect_macro_names(lef_path), set())
+                self.assertIn("END LIBRARY", lef_path.read_text(encoding="utf-8"))
+                self.assertIn("library (", lib_path.read_text(encoding="utf-8"))
+
+            for tier in ["bottom", "upper"]:
+                self.assertTrue((root / "coarse_units" / tier).is_dir())
+                self.assertEqual(list((root / "coarse_units" / tier).iterdir()), [])
+
+            finalize.validate_published_variant_sets(root, [])
+
+
 if __name__ == "__main__":
     unittest.main()

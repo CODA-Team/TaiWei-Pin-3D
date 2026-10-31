@@ -67,15 +67,17 @@ from yosys_json_toolkit import (
     replace_bit_references,
     validate_design,
 )
+from primary_port_contract import annotate_primary_alias_groups
 
 TIER_BOTTOM = "bottom"
 TIER_UPPER = "upper"
-SUPPORTED_PORT_DIRECTIONS = {"input", "output"}
+SUPPORTED_PORT_DIRECTIONS = {"input", "output", "inout"}
 SUPPORTED_CELL_PIN_DIRECTIONS = {"input", "output"}
 SUPPORTED_CONST_PORT_BITS = {"0", "1"}
 SUPPORTED_CONST_BITS = {"0", "1", "x", "z"}
 BIT_KIND_PI = "PI"
 BIT_KIND_PO = "PO"
+BIT_KIND_INOUT = "INOUT"
 BIT_KIND_INTERNAL = "internal"
 CLOCK_PIN_NAMES_BY_LIBRARY = {
     "asap7_3D": frozenset(["CLK", "clk"]),
@@ -295,29 +297,19 @@ def build_primary_port_entries(module):
             }
             assert bit_label not in label_to_entry, "Duplicate primary bit label: {}".format(bit_label)
             label_to_entry[bit_label] = entry
-            if port.direction == "input":
-                assert isinstance(bit, int), "Primary input bit must be an integer bit id: {} -> {!r}".format(bit_label, bit)
+            if port.direction in {"input", "inout"}:
+                assert isinstance(bit, int), "Primary {} bit must be an integer bit id: {} -> {!r}".format(
+                    port.direction, bit_label, bit
+                )
             elif isinstance(bit, str):
                 assert bit in SUPPORTED_CONST_PORT_BITS, (
                     "Primary output constant must be 0/1 only: {} -> {!r}".format(bit_label, bit)
                 )
             if isinstance(bit, int):
-                alias_entries = int_bit_to_entries[bit]
-                if alias_entries:
-                    alias_labels = [item["bit_label"] for item in alias_entries] + [bit_label]
-                    alias_directions = {item["direction"] for item in alias_entries}
-                    alias_directions.add(port.direction)
-                    assert len(alias_directions) == 1, (
-                        "Mixed-direction primary bit alias is unsupported: bit {} used by {}".format(
-                            bit, alias_labels
-                        )
-                    )
-                    assert port.direction == "output", (
-                        "Primary input alias is unsupported: bit {} used by {}".format(bit, alias_labels)
-                    )
-                alias_entries.append(entry)
+                int_bit_to_entries[bit].append(entry)
             entries.append(entry)
 
+    annotate_primary_alias_groups(entries)
     return entries, label_to_entry, dict(int_bit_to_entries)
 
 
@@ -736,6 +728,12 @@ def canonical_name(kind, port_name, bit_index):
     return "__{}_{}_{}".format(kind, port_name, bit_index)
 
 
+def add_primary_alias_metadata(result, entry):
+    result["alias_group_kind"] = entry["alias_group_kind"]
+    result["canonical_bit_label"] = entry["canonical_bit_label"]
+    return result
+
+
 def classify_primary_input(entry, owner_tier, bit_references, cell_tiers):
     bit = entry["bit"]
     drivers, users, driver_tiers, user_tiers = summarize_cell_refs(bit_references, bit, cell_tiers)
@@ -755,7 +753,7 @@ def classify_primary_input(entry, owner_tier, bit_references, cell_tiers):
     else:
         raise AssertionError("Unexpected PI tier usage pattern for {}: {}".format(entry["bit_label"], user_tiers))
 
-    return {
+    return add_primary_alias_metadata({
         "kind": BIT_KIND_PI,
         "case": case_name,
         "port_name": entry["port_name"],
@@ -766,13 +764,13 @@ def classify_primary_input(entry, owner_tier, bit_references, cell_tiers):
         "driver_tier": None,
         "user_tiers": user_tiers,
         "debug_name": entry["bit_label"],
-    }
+    }, entry)
 
 
 def classify_primary_output(entry, owner_tier, bit_references, cell_tiers):
     bit = entry["bit"]
     if isinstance(bit, str):
-        return {
+        return add_primary_alias_metadata({
             "kind": BIT_KIND_PO,
             "case": "PO-4",
             "port_name": entry["port_name"],
@@ -783,9 +781,30 @@ def classify_primary_output(entry, owner_tier, bit_references, cell_tiers):
             "driver_tier": None,
             "user_tiers": [],
             "debug_name": entry["bit_label"],
-        }
+        }, entry)
 
     drivers, users, driver_tiers, user_tiers = summarize_cell_refs(bit_references, bit, cell_tiers)
+    if entry["alias_group_kind"] == "PI_TO_PO":
+        assert not driver_tiers, (
+            "PI-to-PO alias bit is also driven by a cell: {} -> {}".format(
+                entry["bit_label"], driver_tiers
+            )
+        )
+        assert entry["canonical_bit_label"] != entry["bit_label"], (
+            "PI-to-PO output alias cannot be canonical: {}".format(entry)
+        )
+        return add_primary_alias_metadata({
+            "kind": BIT_KIND_PO,
+            "case": "PO-5",
+            "port_name": entry["port_name"],
+            "bit_label": entry["bit_label"],
+            "bit_index": entry["bit_index"],
+            "bit": bit,
+            "owner_tier": owner_tier,
+            "driver_tier": None,
+            "user_tiers": user_tiers,
+            "debug_name": entry["bit_label"],
+        }, entry)
     assert driver_tiers, "Non-constant PO has no driver: {}".format(entry["bit_label"])
     assert len(driver_tiers) == 1, "PO has multiple driver tiers: {} -> {}".format(entry["bit_label"], driver_tiers)
     driver_tier = driver_tiers[0]
@@ -800,7 +819,7 @@ def classify_primary_output(entry, owner_tier, bit_references, cell_tiers):
     else:
         raise AssertionError("Unexpected PO classification state for {}".format(entry["bit_label"]))
 
-    return {
+    return add_primary_alias_metadata({
         "kind": BIT_KIND_PO,
         "case": case_name,
         "port_name": entry["port_name"],
@@ -811,7 +830,34 @@ def classify_primary_output(entry, owner_tier, bit_references, cell_tiers):
         "driver_tier": driver_tier,
         "user_tiers": user_tiers,
         "debug_name": entry["bit_label"],
-    }
+    }, entry)
+
+
+def classify_primary_inout(entry, owner_tier, bit_references, cell_tiers):
+    bit = entry["bit"]
+    assert isinstance(bit, int), "Inout primary bit must be an integer: {}".format(entry)
+    drivers, users, driver_tiers, user_tiers = summarize_cell_refs(bit_references, bit, cell_tiers)
+    if drivers or users:
+        raise AssertionError(
+            "Connected inout primary bit is unsupported: {} drivers={} users={}".format(
+                entry["bit_label"],
+                [ref.owner_name + "." + ref.field_name for ref, _tier in drivers],
+                [ref.owner_name + "." + ref.field_name for ref, _tier in users],
+            )
+        )
+    assert not driver_tiers and not user_tiers
+    return add_primary_alias_metadata({
+        "kind": BIT_KIND_INOUT,
+        "case": "INOUT-1",
+        "port_name": entry["port_name"],
+        "bit_label": entry["bit_label"],
+        "bit_index": entry["bit_index"],
+        "bit": bit,
+        "owner_tier": owner_tier,
+        "driver_tier": None,
+        "user_tiers": [],
+        "debug_name": entry["bit_label"],
+    }, entry)
 
 
 def classify_internal_bit(bit, bit_references, cell_tiers, debug_name):
@@ -858,8 +904,11 @@ def classify_bits(module, primary_entries, primary_owner_tiers, cell_tiers):
         owner_tier = primary_owner_tiers[entry["bit_label"]]
         if entry["direction"] == "input":
             classified_primary.append(classify_primary_input(entry, owner_tier, bit_references, cell_tiers))
-        else:
+        elif entry["direction"] == "output":
             classified_primary.append(classify_primary_output(entry, owner_tier, bit_references, cell_tiers))
+        else:
+            assert entry["direction"] == "inout"
+            classified_primary.append(classify_primary_inout(entry, owner_tier, bit_references, cell_tiers))
 
     internal_bits = OrderedDict()
     for bit, refs in bit_references.items():
@@ -922,6 +971,11 @@ def populate_ports(upper_module, bottom_module, primary_cases, internal_cases):
         non_owner_module = module_for_tier(non_owner_tier)
         non_owner_state = state_for_tier(non_owner_tier)
 
+        if item["kind"] == BIT_KIND_INOUT:
+            assert item["case"] == "INOUT-1", "Unsupported inout case: {}".format(item)
+            assert not item["user_tiers"] and item["driver_tier"] is None
+            continue
+
         if item["kind"] == BIT_KIND_PI:
             owner_name = canonical_name("pi", port_name, bit_index)
             cross_name = canonical_name("d2d_pi", port_name, bit_index)
@@ -958,6 +1012,9 @@ def populate_ports(upper_module, bottom_module, primary_cases, internal_cases):
             add_canonical_port(owner_module, owner_state, owner_name, "output", bit)
         elif item["case"] == "PO-4":
             add_canonical_port(owner_module, owner_state, owner_name, "output", bit)
+        elif item["case"] == "PO-5":
+            assert item["alias_group_kind"] == "PI_TO_PO", item
+            assert item["canonical_bit_label"] != item["bit_label"], item
         else:
             raise AssertionError("Unsupported PO case: {}".format(item["case"]))
 

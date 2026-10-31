@@ -27,6 +27,130 @@ proc run_configured_syn_opt {} {
   }
 }
 
+proc get_genus_verilog_defines {} {
+  if {![info exists ::env(VERILOG_DEFINES)] || [string trim $::env(VERILOG_DEFINES)] eq ""} {
+    return {}
+  }
+
+  # OpenROAD's Yosys flow accepts compiler-style "-D NAME" and "-DNAME"
+  # arguments.  Genus read_hdl expects only NAME or NAME=value after -define.
+  set definitions {}
+  set expect_definition false
+  foreach token $::env(VERILOG_DEFINES) {
+    if {$expect_definition} {
+      if {$token eq "" || [string match {-*} $token]} {
+        error "VERILOG_DEFINES has '-D' without a following macro definition"
+      }
+      lappend definitions $token
+      set expect_definition false
+    } elseif {$token eq "-D"} {
+      set expect_definition true
+    } elseif {[string match {-D*} $token]} {
+      set definition [string range $token 2 end]
+      if {$definition eq ""} {
+        error "VERILOG_DEFINES has an empty -D macro definition"
+      }
+      lappend definitions $definition
+    } elseif {[string match {-*} $token]} {
+      error "Unsupported VERILOG_DEFINES option for Genus: '$token'"
+    } else {
+      # Also accept the bare NAME[=value] form used by other Yosys frontends.
+      lappend definitions $token
+    }
+  }
+  if {$expect_definition} {
+    error "VERILOG_DEFINES ends with '-D' without a macro definition"
+  }
+  return $definitions
+}
+
+proc configure_genus_dont_use {} {
+  if {![info exists ::env(DONT_USE_CELLS)] || [string trim $::env(DONT_USE_CELLS)] eq ""} {
+    error "DONT_USE_CELLS is empty; refusing to run Genus synthesis without a cell-use policy"
+  }
+
+  set matched_cells {}
+  set pattern_rows {}
+  foreach pattern $::env(DONT_USE_CELLS) {
+    set hits [get_db lib_cells */$pattern]
+    set hit_count [llength $hits]
+    puts "INFO: GENUS_DONT_USE_PATTERN pattern=$pattern matched=$hit_count"
+    lappend pattern_rows [list $pattern $hit_count]
+    foreach hit $hits {
+      lappend matched_cells $hit
+    }
+  }
+
+  set matched_cells [lsort -unique $matched_cells]
+  if {[llength $matched_cells] > 0} {
+    set_dont_use $matched_cells
+  } else {
+    puts "INFO: DONT_USE_CELLS matched no loaded Genus library cells; no cells need to be avoided"
+  }
+
+  # The platform must enumerate every Yosys direct-mapping cell that also
+  # matches DONT_USE_CELLS, including cells reachable through optional paths.
+  set exception_names {}
+  if {[info exists ::env(GENUS_DONT_USE_EXCEPTIONS)]} {
+    set exception_names $::env(GENUS_DONT_USE_EXCEPTIONS)
+  }
+
+  set exception_cells {}
+  foreach cell_name $exception_names {
+    if {[regexp {[\[\]*?]} $cell_name]} {
+      error "GENUS_DONT_USE_EXCEPTIONS must contain exact cell names; invalid value '$cell_name'"
+    }
+    set hits [get_db lib_cells */$cell_name]
+    if {[llength $hits] != 1} {
+      error "GENUS_DONT_USE_EXCEPTIONS cell '$cell_name' must match exactly one loaded library cell; matches=$hits"
+    }
+    set exception_cell [lindex $hits 0]
+    if {[lsearch -exact $matched_cells $exception_cell] < 0} {
+      error "GENUS_DONT_USE_EXCEPTIONS cell '$cell_name' is not selected by DONT_USE_CELLS"
+    }
+    lappend exception_cells $exception_cell
+  }
+  set exception_cells [lsort -unique $exception_cells]
+
+  foreach exception_cell $exception_cells {
+    set_db $exception_cell .avoid false
+  }
+
+  set verification_failures {}
+  foreach cell $matched_cells {
+    set cell_name [get_db $cell .name]
+    set avoid_value [get_db $cell .avoid]
+    if {[lsearch -exact $exception_cells $cell] >= 0} {
+      if {$avoid_value ni {false 0}} {
+        lappend verification_failures "$cell_name expected=allowed actual=$avoid_value"
+      }
+    } elseif {$avoid_value ni {true 1}} {
+      lappend verification_failures "$cell_name expected=avoided actual=$avoid_value"
+    }
+  }
+  if {[llength $verification_failures] > 0} {
+    error "Genus dont-use verification failed: $verification_failures"
+  }
+
+  set report_path [file join $::env(REPORTS_DIR) genus_dont_use.rpt]
+  set report_file [open $report_path w]
+  puts $report_file "patterns=$::env(DONT_USE_CELLS)"
+  puts $report_file "exceptions=$exception_names"
+  foreach row $pattern_rows {
+    puts $report_file "pattern=[lindex $row 0] matched=[lindex $row 1]"
+  }
+  puts $report_file "unique_matched_cells=[llength $matched_cells]"
+  puts $report_file "unique_exception_cells=[llength $exception_cells]"
+  foreach cell $matched_cells {
+    set is_exception [expr {[lsearch -exact $exception_cells $cell] >= 0}]
+    puts $report_file "cell=[get_db $cell .name] exception=$is_exception avoid=[get_db $cell .avoid]"
+  }
+  puts $report_file "verification=PASS"
+  close $report_file
+
+  puts "INFO: GENUS_DONT_USE_APPLIED matched=[llength $matched_cells] exceptions=[llength $exception_cells] verification=PASS"
+}
+
 proc configure_constant_tie_cells {} {
   set tie_cells {}
   foreach variable_name {TIELO_CELL_AND_PORT TIEHI_CELL_AND_PORT} {
@@ -121,6 +245,20 @@ set_db hdl_record_naming_style  %s_%s
 
 set_db library $list_lib
 
+# Match synth_preamble.tcl: compile the optional OPENROAD_CLKGATE wrapper with
+# the design RTL.  Designs that provide their own wrapper clear this variable.
+if {[info exists ::env(CLKGATE_MAP_FILE)] && [string trim $::env(CLKGATE_MAP_FILE)] ne ""} {
+  if {[llength $::env(CLKGATE_MAP_FILE)] != 1} {
+    error "CLKGATE_MAP_FILE must contain exactly one file: '$::env(CLKGATE_MAP_FILE)'"
+  }
+  set clkgate_map_file [lindex $::env(CLKGATE_MAP_FILE) 0]
+  if {![file isfile $clkgate_map_file]} {
+    error "CLKGATE_MAP_FILE does not exist or is not a regular file: '$clkgate_map_file'"
+  }
+  lappend rtl_all $clkgate_map_file
+  puts "INFO: Added CLKGATE_MAP_FILE to Genus RTL: $clkgate_map_file"
+}
+
 # Dedup RTL list first (rtl_all comes from design_setup.tcl)
 set rtl_all_uniq [_uniq $rtl_all]
 
@@ -161,8 +299,15 @@ if {[llength $rtl_pkg]} {
   puts "WARN: no package (*.sv) detected; if you still see ibex_pkg::* errors, ensure ibex_pkg.sv is in rtl_all or include dirs."
 }
 
-# Read all RTL in one shot to preserve compilation-unit ordering
-read_hdl -sv $rtl_ordered
+# Read all RTL in one shot to preserve compilation-unit ordering.  Translate
+# the Yosys-style VERILOG_DEFINES into Genus read_hdl arguments.
+set genus_verilog_defines [get_genus_verilog_defines]
+set read_hdl_args [list -sv]
+foreach definition $genus_verilog_defines {
+  lappend read_hdl_args -define $definition
+}
+puts "INFO: Genus Verilog define count = [llength $genus_verilog_defines]"
+read_hdl {*}$read_hdl_args $rtl_ordered
 
 # Elaborate & Constraints & Initialization
 elaborate $DESIGN
@@ -172,11 +317,7 @@ read_sdc $sdc
 init_design
 
 configure_constant_tie_cells
-
-# --- apply global dont-use from env (safe; no TAP/FILL/CLKBUF here) ---
-# if {[info exists ::env(DONT_USE_CELLS)] && $::env(DONT_USE_CELLS) ne ""} {
-#   foreach c $::env(DONT_USE_CELLS) { catch { set_dont_use $c true } }
-# }
+configure_genus_dont_use
 
 check_design -unresolved
 

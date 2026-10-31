@@ -56,7 +56,7 @@ scripts_3dsyn/
 ├── coarse_synth/
 │   ├── run_coarse_synth.sh       Stage driver
 │   ├── yosys/                    Coarse-netlist generation
-│   ├── genus/                    Coarse-unit and hierarchy synthesis
+│   ├── genus/                    Genus synthesis scripts and shared helpers
 │   ├── area/                     Area-model inference and checkpoints
 │   └── common/                   Shared netlist utilities
 ├── coarse_partition/
@@ -159,12 +159,12 @@ driver.
 | `SYN3D_COARSE_UNIT_KEEP_MODE` | `all` | Coarse-unit categories to preserve: `all`, `arithmetic`, `multibit_ff`, or `none`. |
 | `SYN3D_FIXED_UTIL` | unset | Optional fixed coarse-unit utilization in `(0, 1]`; when unset, the area model predicts utilization. |
 | `SYN3D_GENUS_OPT_MODE` | `normal` | Genus optimization mode shared by coarse and per-tier synthesis: `normal` runs `syn_opt`; `low_effort` runs `syn_opt -incr -effort low`. |
-| `SYN3D_HBT_MODEL_MODE` | `scale` | HBT model mode: `scale` or `direct`. |
+| `SYN3D_HBT_MODEL_MODE` | `direct` | HBT model mode: `scale` or `direct`. |
 | `SYN3D_HBT_R_SCALE` | `0` | Producer-tier drive-resistance scale in `scale` mode. |
 | `SYN3D_HBT_C_SCALE` | `0.25` | Consumer-tier input-capacitance scale in `scale` mode. |
-| `SYN3D_HBT_R_OHM` | unset | HBT resistance in ohms; required in `direct` mode. |
-| `SYN3D_HBT_C_FF` | unset | HBT capacitance in femtofarads; required in `direct` mode. |
-| `SYN3D_BACKEND_PREPLACE_OPT` | `0` | Use `0` to preserve the per-tier instance set during backend pre-placement; use `1` to enable pre-placement optimization and partition updating. |
+| `SYN3D_HBT_R_OHM` | `1.0` | Cross-tier interconnect resistance in ohms in `direct` mode. |
+| `SYN3D_HBT_C_FF` | `0.5` | Cross-tier interconnect capacitance in femtofarads in `direct` mode. |
+| `SYN3D_BACKEND_PREPLACE_OPT` | `1` | Use `0` to preserve the per-tier instance set during backend pre-placement; use `1` to enable pre-placement optimization and partition updating. |
 
 `SYN3D_BACKEND_PREPLACE_OPT` has the same meaning for both backends. Innovus
 uses `place_design -noPrePlaceOpt` when it is `0`. OpenROAD retains the complete
@@ -176,7 +176,7 @@ Example using direct HBT values:
 
 ```bash
 SYN3D_HBT_MODEL_MODE=direct \
-SYN3D_HBT_R_OHM=2.0 \
+SYN3D_HBT_R_OHM=1.0 \
 SYN3D_HBT_C_FF=0.5 \
 ./scripts_3dsyn/run_3d_syn.sh asap7_3D gcd direct_rc
 ```

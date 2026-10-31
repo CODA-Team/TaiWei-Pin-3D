@@ -12,6 +12,9 @@ required_variables=(
   SYN3D_PLATFORM
   DESIGN_NAME
   LIB_FILES
+  DONT_USE_CELLS
+  SYN3D_DONT_USE_CELLS_UPPER
+  SYN3D_DONT_USE_CELLS_BOTTOM
   SDC_FILE
   OBJECTS_DIR
   RESULTS_DIR
@@ -32,6 +35,7 @@ prepare_script="${coarse_synth_scripts}/prepare_hierarchy_input.py"
 hierarchy_script="${coarse_synth_scripts}/genus/run_hierarchy_synthesis.tcl"
 finalize_script="${coarse_synth_scripts}/finalize_hierarchy_output.py"
 unit_genus_script="${coarse_synth_scripts}/genus/refine_coarse_unit.tcl"
+genus_dont_use_script="${coarse_synth_scripts}/genus/genus_dont_use.tcl"
 predict_util_script="${coarse_synth_scripts}/area/predict_util.py"
 
 if [[ ! -x "${YOSYS_EXE}" ]]; then
@@ -40,12 +44,15 @@ if [[ ! -x "${YOSYS_EXE}" ]]; then
 fi
 for required_file in "${generate_script}" "${characterize_script}" "${prepare_script}" \
   "${hierarchy_script}" "${finalize_script}" "${unit_genus_script}" \
+  "${genus_dont_use_script}" \
   "${predict_util_script}" "${SDC_FILE}"; do
   if [[ ! -f "${required_file}" ]]; then
     echo "[3D-Syn] Required input is unavailable: ${required_file}" >&2
     exit 1
   fi
 done
+
+export SYN3D_GENUS_DONT_USE_TCL="${genus_dont_use_script}"
 
 if [[ ! -x "${GENUS_EXE}" ]]; then
   echo "[3D-Syn] Genus executable is unavailable: ${GENUS_EXE}" >&2

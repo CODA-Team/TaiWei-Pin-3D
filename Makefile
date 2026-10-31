@@ -663,10 +663,14 @@ export SYN3D_PLATFORM_DIR ?= $(3D_PLATFORM_DIR)
 export SYN3D_PER_TIER_SYNTH_DIR ?= $(OBJECTS_DIR)/3dsyn/per_tier_synth
 export SYN3D_HANDOFF_DIR ?= $(OBJECTS_DIR)/3dsyn/handoff
 export SYN3D_GENUS_OPT_MODE ?= normal
-export SYN3D_HBT_MODEL_MODE ?= scale
+export SYN3D_HBT_MODEL_MODE ?= direct
 export SYN3D_HBT_R_SCALE ?= 0
 export SYN3D_HBT_C_SCALE ?= 0.25
-export SYN3D_BACKEND_PREPLACE_OPT ?= 0
+# Cross-tier interconnect resistance in ohms.
+export SYN3D_HBT_R_OHM ?= $(if $(filter direct,$(SYN3D_HBT_MODEL_MODE)),1.0,)
+# Cross-tier interconnect capacitance in fF.
+export SYN3D_HBT_C_FF ?= $(if $(filter direct,$(SYN3D_HBT_MODEL_MODE)),0.5,)
+export SYN3D_BACKEND_PREPLACE_OPT ?= 1
 
 .PHONY: cds-coarse-synth
 cds-coarse-synth: prep-libs

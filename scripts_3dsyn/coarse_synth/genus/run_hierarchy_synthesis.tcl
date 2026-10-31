@@ -10,6 +10,7 @@
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
+source $::env(SYN3D_GENUS_DONT_USE_TCL)
 
 proc run_configured_syn_opt {} {
   set mode [_get SYN3D_GENUS_OPT_MODE normal]
@@ -197,14 +198,16 @@ if {$genus_extra_dont_use ne ""} {
   set genus_dont_use [concat $genus_dont_use $genus_extra_dont_use]
 }
 set genus_dont_use [_uniq $genus_dont_use]
-if {[llength $genus_dont_use]} {
-  puts "INFO: Applying Genus dont_use cell count = [llength $genus_dont_use]"
-  foreach c $genus_dont_use {
-    catch { set_dont_use $c true }
-  }
+set genus_dont_use_exceptions {}
+if {[info exists ::env(GENUS_DONT_USE_EXCEPTIONS)]} {
+  set genus_dont_use_exceptions $::env(GENUS_DONT_USE_EXCEPTIONS)
 }
 
 configure_constant_tie_cells
+configure_genus_dont_use \
+  $genus_dont_use \
+  $genus_dont_use_exceptions \
+  [file join $REPORTS_DIR genus_dont_use_coarse_hierarchy.rpt]
 
 check_design -unresolved
 check_timing_intent
