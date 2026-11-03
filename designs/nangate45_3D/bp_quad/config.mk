@@ -7,6 +7,9 @@ export PIN3D_INACTIVE_TIER_DONT_TOUCH ?= 1
 export SKIP_INCREMENTAL_REPAIR = 0
 export SKIP_GATE_CLONING = 0
 
+export CLOCK_PORT = p_bsg_tag_clk_i p_clk_A_i p_clk_B_i p_clk_C_i \
+                    p_ci_clk_i p_ci2_tkn_i p_co_clk_i p_co2_tkn_i
+
 export SC_LEF_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.lef \
                             $(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.cover.lef 
 export SC_LEF_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.lef \

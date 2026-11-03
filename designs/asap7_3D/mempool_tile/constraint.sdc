@@ -3,7 +3,7 @@
 #
 # Adapted from TILOS MacroPlacement
 #   Flows/ASAP7/mempool_tile/constraints/mempool_tile.sdc
-# (clock 4 ns -> 4000 ps; uncertainty 80 ps, max_transition 40 ps, max_fanout 16,
+# (clock 4.8 ns -> 4800 ps; uncertainty 80 ps, max_transition 40 ps, max_fanout 16,
 #  pre-CTS clock latency 70 ps; TCDM io fractions 0.85/0.65 from that source).
 #
 # The TILOS source selects ports with filter_collection / "is_on_clock_network",
@@ -16,7 +16,7 @@ set sdc_version 2.0
 set_units -time ps -capacitance fF -resistance kOhm -voltage V -current mA -power pW
 current_design mempool_tile
 
-set clk_period 4000
+set clk_period 4800
 set clock_cycle $clk_period
 set uncertainty 80
 set io_delay 0

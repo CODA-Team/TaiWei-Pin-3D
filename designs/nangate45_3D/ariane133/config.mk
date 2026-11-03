@@ -7,6 +7,8 @@ export PIN3D_INACTIVE_TIER_DONT_TOUCH ?= 1
 export SKIP_INCREMENTAL_REPAIR = 0
 export SKIP_GATE_CLONING = 0
 
+export CTS_ARGS = -sink_clustering_enable -no_insertion_delay -repair_clock_nets
+
 export SC_LEF_UPPER_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.lef \
                             $(PLATFORM_DIR)/lef_upper/NangateOpenCellLibrary.macro.mod.upper.cover.lef 
 export SC_LEF_BOTTOM_COVER = $(PLATFORM_DIR)/lef_bottom/NangateOpenCellLibrary.macro.mod.bottom.cover.lef \

@@ -19,7 +19,7 @@ export ADDITIONAL_LIBS = $(sort $(wildcard $(PLATFORM_DIR)/lib_bottom/fakeram/*.
 
 export CORE_MARGIN = 2
 export ASPECT_RATIO = 1.0
-export CORE_UTILIZATION = 50
+export CORE_UTILIZATION = 40
 export MACRO_PLACE_HALO = 1 1
 export MACRO_PLACE_HALO_UPPER = 1 1
 export MACRO_PLACE_HALO_BOTTOM = 5 5

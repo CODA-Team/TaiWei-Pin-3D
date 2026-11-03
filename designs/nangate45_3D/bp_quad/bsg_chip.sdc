@@ -4,8 +4,8 @@
 
 ###################################################################
 set sdc_version 2.0
-set clk_period 4000
-set clk_uncertainty 150
+set clk_period 6.0
+set clk_uncertainty 0.15
 set bp_clk_hp [expr ${clk_period}/2]
 set l_clk_p1 [expr ${clk_period}*2]
 set l_clk_p2 [expr ${clk_period}*4]
@@ -17,8 +17,8 @@ set mx_delay2 [expr ${l_clk_p2}*0.28]
 set mn_delay1 [expr ${l_clk_p1}*0.02]
 
 
-set_units -time ps -resistance kOhm -capacitance fF -power mW -voltage V \
-  -current uA
+set_units -time ns -resistance kOhm -capacitance fF -power nW -voltage V \
+  -current mA
 create_clock [get_ports p_bsg_tag_clk_i] -name tag_clk -period $l_clk_p2 -waveform $wv3
 set_clock_uncertainty -setup $clk_uncertainty [get_clocks tag_clk]
 set_clock_uncertainty -hold 0 [get_clocks tag_clk]

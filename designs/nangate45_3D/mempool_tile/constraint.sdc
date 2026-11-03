@@ -3,7 +3,7 @@
 #
 # Adapted from TILOS MacroPlacement
 #   Flows/NanGate45/mempool_tile/constraints/mempool_tile.sdc
-# (clock 6.8 ns; uncertainty 0.08 ns, max_transition 0.040 ns, max_fanout 16,
+# (clock 7.3 ns; uncertainty 0.08 ns, max_transition 0.040 ns, max_fanout 16,
 #  pre-CTS clock latency 0.070 ns; TCDM io fractions 0.85/0.65 from that source).
 #
 # The TILOS source selects ports with filter_collection / "is_on_clock_network",
@@ -16,7 +16,7 @@ set sdc_version 2.0
 set_units -time ns -resistance kOhm -capacitance fF -power nW -voltage V -current mA
 current_design mempool_tile
 
-set clk_period 6.8
+set clk_period 7.3
 set clock_cycle $clk_period
 set uncertainty 0.08
 set io_delay 0

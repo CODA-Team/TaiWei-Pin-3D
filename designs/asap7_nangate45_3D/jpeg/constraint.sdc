@@ -2,7 +2,7 @@ current_design jpeg_encoder
 
 set clk_name clk
 set clk_port_name clk
-set clk_period 1.1
+set clk_period 1.02
 if {[info exists ::env(CLK_PERIOD)]} {
 	set clk_period $::env(CLK_PERIOD)
 }
