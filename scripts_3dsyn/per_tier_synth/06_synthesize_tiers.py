@@ -33,6 +33,9 @@ from flow_config import (
     GENUS_DONT_USE_EXCEPTIONS_BOTTOM,
     GENUS_DONT_USE_EXCEPTIONS_UPPER,
     GENUS_DONT_USE_TCL,
+    GENUS_SYNTHESIS_MAX_FANOUT_TCL,
+    GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE,
+    GENUS_SYNTHESIS_TIMING_MARGIN_TCL,
     CELL_MAPPING_PLAN_JSON,
     CELL_NAME_MAPPING_MODE,
     CLOCK_PORT_MAP_JSON,
@@ -400,6 +403,8 @@ def load_inputs():
         CELL_MAPPING_PLAN_JSON,
         DESIGN_SDC_FILE,
         GENUS_DONT_USE_TCL,
+        GENUS_SYNTHESIS_MAX_FANOUT_TCL,
+        GENUS_SYNTHESIS_TIMING_MARGIN_TCL,
     ]:
         assert os.path.isfile(path), "Required 06 input missing: {}".format(path)
     wrapper_design = load_design(WRAPPER_JSON)
@@ -744,7 +749,7 @@ def write_genus_sdc(wrapper_plan):
 
 def report_paths():
     prefix = WRAPPER_TOP_MODULE_NAME
-    return OrderedDict(
+    reports = OrderedDict(
         [
             ("check_design", os.path.join(GENUS_REPORT_DIR, "{}_check_design.rpt".format(prefix))),
             ("timing_intent", os.path.join(GENUS_REPORT_DIR, "{}_check_timing_intent.rpt".format(prefix))),
@@ -758,8 +763,14 @@ def report_paths():
             ("upper_boundary", os.path.join(GENUS_REPORT_DIR, "{}_inst_upper_boundary_opt.rpt".format(prefix))),
             ("bottom_boundary", os.path.join(GENUS_REPORT_DIR, "{}_inst_bottom_boundary_opt.rpt".format(prefix))),
             ("dont_use", os.path.join(GENUS_REPORT_DIR, "genus_dont_use.rpt")),
+            ("max_fanout", os.path.join(GENUS_REPORT_DIR, "genus_synthesis_max_fanout.rpt")),
         ]
     )
+    if GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE:
+        reports["timing_margin"] = os.path.join(
+            GENUS_REPORT_DIR, "genus_synthesis_timing_margin.rpt"
+        )
+    return reports
 
 
 def collect_protected_top_names(wrapper_design, wrapper_plan):
@@ -803,6 +814,27 @@ read_hdl -sv $in_v
 elaborate {wrapper_top}
 init_design
 read_sdc $in_sdc
+
+source {genus_synthesis_timing_margin_tcl}
+source {genus_synthesis_max_fanout_tcl}
+set timing_margin_enabled [genus_synthesis_timing_margin_is_enabled]
+set timing_margin_report {timing_margin_report}
+puts "INFO: GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE=$timing_margin_enabled"
+if {{$timing_margin_enabled}} {{
+  configure_genus_synthesis_timing_margin \
+    0.50 \
+    0.10 \
+    $timing_margin_report
+}} else {{
+  if {{[file exists $timing_margin_report]}} {{
+    file delete -force -- $timing_margin_report
+  }}
+  puts "INFO: Genus synthesis timing margin is disabled"
+}}
+
+set max_fanout_limit [genus_synthesis_max_fanout_limit]
+set max_fanout_report {max_fanout_report}
+configure_genus_synthesis_max_fanout $max_fanout_limit $max_fanout_report
 
 {constant_tie_configuration}
 source {genus_dont_use_tcl}
@@ -868,6 +900,7 @@ report_timing > {pre_timing}
 # Optimize the existing mapped netlist using the configured mode.
 {syn_opt_command}
 write_reports -directory $report_dir -tag final
+report_genus_synthesis_max_fanout
 write_db [file join $db_dir {wrapper_top}_opt.db]
 
 # Database transformations can invalidate previously cached object handles even
@@ -888,6 +921,10 @@ report_area > {area}
 report_timing > {timing}
 
 write_hdl > $out_v
+if {{$timing_margin_enabled}} {{
+  restore_genus_synthesis_timing_margin
+}}
+restore_genus_synthesis_max_fanout
 write_sdc > $out_sdc
 exit
 """.format(
@@ -909,6 +946,14 @@ exit
         genus_opt_mode=GENUS_OPT_MODE,
         syn_opt_command=genus_syn_opt_command(),
         genus_dont_use_tcl=tcl_quote(GENUS_DONT_USE_TCL),
+        genus_synthesis_timing_margin_tcl=tcl_quote(GENUS_SYNTHESIS_TIMING_MARGIN_TCL),
+        genus_synthesis_max_fanout_tcl=tcl_quote(GENUS_SYNTHESIS_MAX_FANOUT_TCL),
+        timing_margin_report=tcl_quote(
+            os.path.join(GENUS_REPORT_DIR, "genus_synthesis_timing_margin.rpt")
+        ),
+        max_fanout_report=tcl_quote(
+            os.path.join(GENUS_REPORT_DIR, "genus_synthesis_max_fanout.rpt")
+        ),
         dont_use_patterns=format_tcl_list(SYN3D_2D_DONT_USE_CELLS),
         dont_use_exceptions=format_tcl_list(SYN3D_2D_GENUS_DONT_USE_EXCEPTIONS),
         constant_tie_configuration=render_constant_tie_configuration(homogeneous_constant_tie_specs()),
@@ -924,6 +969,15 @@ exit
     assert "\n{}\n".format(genus_syn_opt_command()) in loaded, "06 Tcl missing configured syn_opt command"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "06 Tcl missing duplicate constant tie mapping"
     assert "configure_genus_dont_use" in loaded, "06 Tcl missing Genus dont-use configuration"
+    assert "configure_genus_synthesis_timing_margin" in loaded, "06 Tcl missing Genus synthesis timing margin"
+    assert "configure_genus_synthesis_max_fanout" in loaded, "06 Tcl missing Genus synthesis max fanout"
+    assert "if {$timing_margin_enabled}" in loaded, "06 Tcl missing timing-margin enable guard"
+    assert loaded.index("restore_genus_synthesis_timing_margin") < loaded.index("write_sdc > $out_sdc"), (
+        "06 Tcl must restore the original timing constraints before writing SDC"
+    )
+    assert loaded.index("restore_genus_synthesis_max_fanout") < loaded.index("write_sdc > $out_sdc"), (
+        "06 Tcl must restore the original max fanout before writing SDC"
+    )
     assert "Unable to resolve post-synthesis upper hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     assert "Unable to resolve post-synthesis bottom hinst" in loaded, "06 Tcl must refresh post-synthesis hinsts"
     return reports
@@ -1368,6 +1422,7 @@ def build_genus_plan(
                         ("auto_ungroup", "both"),
                         ("kept_boundaries", [UPPER_COARSE_MODULE_NAME, BOTTOM_COARSE_MODULE_NAME]),
                         ("boundary_settings_applied", True),
+                        ("timing_margin_enabled", GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE),
                         ("timing_constraints", timing_constraints),
                         ("hbt_model", d2d_extra_rc_model),
                     ]
@@ -1757,7 +1812,7 @@ def hetero_pass_paths(pass_name):
 
 def hetero_report_paths(paths):
     report_dir = paths["report_dir"]
-    return OrderedDict(
+    reports = OrderedDict(
         [
             ("check_design", os.path.join(report_dir, "check_design.rpt")),
             ("timing_intent", os.path.join(report_dir, "check_timing_intent.rpt")),
@@ -1778,8 +1833,14 @@ def hetero_report_paths(paths):
             ("active_boundary_after", os.path.join(report_dir, "active_boundary_after.rpt")),
             ("frozen_boundary_after", os.path.join(report_dir, "frozen_boundary_after.rpt")),
             ("dont_use", os.path.join(report_dir, "genus_dont_use.rpt")),
+            ("max_fanout", os.path.join(report_dir, "genus_synthesis_max_fanout.rpt")),
         ]
     )
+    if GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE:
+        reports["timing_margin"] = os.path.join(
+            report_dir, "genus_synthesis_timing_margin.rpt"
+        )
+    return reports
 
 
 def dont_use_pattern_for_frozen_tier(frozen_tier):
@@ -1872,6 +1933,27 @@ elaborate {wrapper_top}
 init_design
 read_sdc $in_sdc
 
+source {genus_synthesis_timing_margin_tcl}
+source {genus_synthesis_max_fanout_tcl}
+set timing_margin_enabled [genus_synthesis_timing_margin_is_enabled]
+set timing_margin_report {timing_margin_report}
+puts "INFO: GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE=$timing_margin_enabled"
+if {{$timing_margin_enabled}} {{
+  configure_genus_synthesis_timing_margin \
+    0.50 \
+    0.10 \
+    $timing_margin_report
+}} else {{
+  if {{[file exists $timing_margin_report]}} {{
+    file delete -force -- $timing_margin_report
+  }}
+  puts "INFO: Genus synthesis timing margin is disabled"
+}}
+
+set max_fanout_limit [genus_synthesis_max_fanout_limit]
+set max_fanout_report {max_fanout_report}
+configure_genus_synthesis_max_fanout $max_fanout_limit $max_fanout_report
+
 {constant_tie_configuration}
 source {genus_dont_use_tcl}
 configure_genus_dont_use \
@@ -1959,6 +2041,7 @@ report_boundary_opt $frozen_hinst > {frozen_boundary_before}
 set syn_opt_rc [catch {{ {syn_opt_command} }} syn_opt_msg]
 
 write_reports -directory $report_dir -tag final
+report_genus_synthesis_max_fanout
 report_messages > {post_messages}
 report_gates > {post_gates}
 report_area > {post_area}
@@ -1968,6 +2051,10 @@ report_boundary_opt $frozen_hinst > {frozen_boundary_after}
 write_db {db_opt}
 
 write_hdl > $out_v
+if {{$timing_margin_enabled}} {{
+  restore_genus_synthesis_timing_margin
+}}
+restore_genus_synthesis_max_fanout
 write_sdc > $out_sdc
 if {{$syn_opt_rc != 0}} {{
   puts stderr $syn_opt_msg
@@ -1994,6 +2081,14 @@ exit
         dont_use_patterns=format_tcl_list(desc["dont_use_patterns"]),
         dont_use_exceptions=format_tcl_list(desc["dont_use_exceptions"]),
         genus_dont_use_tcl=tcl_quote(GENUS_DONT_USE_TCL),
+        genus_synthesis_timing_margin_tcl=tcl_quote(GENUS_SYNTHESIS_TIMING_MARGIN_TCL),
+        genus_synthesis_max_fanout_tcl=tcl_quote(GENUS_SYNTHESIS_MAX_FANOUT_TCL),
+        timing_margin_report=tcl_quote(
+            os.path.join(paths["report_dir"], "genus_synthesis_timing_margin.rpt")
+        ),
+        max_fanout_report=tcl_quote(
+            os.path.join(paths["report_dir"], "genus_synthesis_max_fanout.rpt")
+        ),
         pass_name=desc["pass_name"],
         active_tier=desc["active_tier"],
         frozen_tier=desc["frozen_tier"],
@@ -2016,6 +2111,15 @@ exit
     assert "source $d2d_extra_rc_tcl" in loaded, "Hetero Tcl missing d2d extra RC source"
     assert "SYN3D_CONSTANT_TIE_MAPPING=duplicate" in loaded, "Hetero Tcl missing duplicate constant tie mapping"
     assert "configure_genus_dont_use" in loaded, "Hetero Tcl missing Genus dont-use configuration"
+    assert "configure_genus_synthesis_timing_margin" in loaded, "Hetero Tcl missing Genus synthesis timing margin"
+    assert "configure_genus_synthesis_max_fanout" in loaded, "Hetero Tcl missing Genus synthesis max fanout"
+    assert "if {$timing_margin_enabled}" in loaded, "Hetero Tcl missing timing-margin enable guard"
+    assert loaded.index("restore_genus_synthesis_timing_margin") < loaded.index("write_sdc > $out_sdc"), (
+        "Hetero Tcl must restore the original timing constraints before writing SDC"
+    )
+    assert loaded.index("restore_genus_synthesis_max_fanout") < loaded.index("write_sdc > $out_sdc"), (
+        "Hetero Tcl must restore the original max fanout before writing SDC"
+    )
     return db_opt
 
 
@@ -2289,6 +2393,17 @@ def promote_hetero_final_outputs(final_desc):
     final_paths = final_desc["paths"]
     os.makedirs(GENUS_REPORT_DIR, exist_ok=True)
     os.makedirs(GENUS_DB_DIR, exist_ok=True)
+    timing_margin_report = os.path.join(
+        GENUS_REPORT_DIR, "genus_synthesis_timing_margin.rpt"
+    )
+    if not GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE and os.path.lexists(timing_margin_report):
+        if not os.path.isfile(timing_margin_report):
+            raise AssertionError(
+                "Stale timing-margin report path is not a regular file: {}".format(
+                    timing_margin_report
+                )
+            )
+        os.remove(timing_margin_report)
     shutil.copyfile(final_paths["output_v"], GENUS_OUTPUT_V)
     shutil.copyfile(final_paths["output_json"], GENUS_OUTPUT_JSON)
     shutil.copyfile(final_paths["output_sdc"], GENUS_POST_SDC)
@@ -2385,6 +2500,7 @@ def build_hetero_genus_plan(liberty_checks, timing_constraints, d2d_extra_rc_mod
                         ("kept_boundaries", [UPPER_COARSE_MODULE_NAME, BOTTOM_COARSE_MODULE_NAME]),
                         ("top_shell_protection", "enabled"),
                         ("boundary_settings_applied", True),
+                        ("timing_margin_enabled", GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE),
                         ("timing_constraints", timing_constraints),
                         ("hbt_model", d2d_extra_rc_model),
                     ]

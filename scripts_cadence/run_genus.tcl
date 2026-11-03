@@ -10,6 +10,8 @@
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
+source $::env(CADENCE_SCRIPTS_DIR)/genus_synthesis_timing_margin.tcl
+source $::env(CADENCE_SCRIPTS_DIR)/genus_synthesis_max_fanout.tcl
 
 proc run_configured_syn_opt {} {
   set mode [_get SYN3D_GENUS_OPT_MODE normal]
@@ -212,8 +214,8 @@ set OUT_V   [file join $RESULTS_DIR "1_synth.v"]
 set OUT_SDC [file join $RESULTS_DIR "1_synth.sdc"]
 
 # Threads
-set_db max_cpus_per_server [_get NUM_CORES 16] 
-set_db super_thread_servers "localhost" 
+set_db max_cpus_per_server [_get NUM_CORES 16]
+set_db super_thread_servers "localhost"
 
 set list_lib "$libworst"
 
@@ -316,6 +318,25 @@ time_info Elaboration
 read_sdc $sdc
 init_design
 
+set timing_margin_enabled [genus_synthesis_timing_margin_is_enabled]
+set timing_margin_report [file join $REPORTS_DIR genus_synthesis_timing_margin.rpt]
+puts "INFO: GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE=$timing_margin_enabled"
+if {$timing_margin_enabled} {
+  configure_genus_synthesis_timing_margin \
+    0.50 \
+    0.10 \
+    $timing_margin_report
+} else {
+  if {[file exists $timing_margin_report]} {
+    file delete -force -- $timing_margin_report
+  }
+  puts "INFO: Genus synthesis timing margin is disabled"
+}
+
+set max_fanout_limit [genus_synthesis_max_fanout_limit]
+set max_fanout_report [file join $REPORTS_DIR genus_synthesis_max_fanout.rpt]
+configure_genus_synthesis_max_fanout $max_fanout_limit $max_fanout_report
+
 configure_constant_tie_cells
 configure_genus_dont_use
 
@@ -324,7 +345,7 @@ check_design -unresolved
 check_timing_intent
 
 # reports the physical layout estimation report from lef and QRC tech file
-report_ple > ${REPORTS_DIR}/ple.rpt 
+report_ple > ${REPORTS_DIR}/ple.rpt
 
 # keep hierarchy during synthesis
 
@@ -343,6 +364,7 @@ write_db  ${OBJECTS_DIR}/${DESIGN}_map.db
 
 run_configured_syn_opt
 time_info OPT
+report_genus_synthesis_max_fanout
 write_db ${OBJECTS_DIR}/${DESIGN}_opt.db
 
 # Flatten all modules except for macros/black boxes unless hierarchy retention is requested.
@@ -358,9 +380,13 @@ report_messages > ${REPORTS_DIR}/${DESIGN}_messages.rpt
 report_gates > ${REPORTS_DIR}/${DESIGN}_gates.rpt
 report_power > ${REPORTS_DIR}/${DESIGN}_power.rpt
 report_area > ${REPORTS_DIR}/${DESIGN}_power.rpt
-write_reports -directory ${REPORTS_DIR} -tag final 
+write_reports -directory ${REPORTS_DIR} -tag final
 
 write_hdl > $OUT_V
+if {$timing_margin_enabled} {
+  restore_genus_synthesis_timing_margin
+}
+restore_genus_synthesis_max_fanout
 write_sdc > $OUT_SDC
 
 puts "INFO: Wrote $OUT_V"

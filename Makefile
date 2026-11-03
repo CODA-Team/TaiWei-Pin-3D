@@ -648,6 +648,9 @@ ord-hotspot:
 # =========================================
 # ============== Cadence (cds-*) ==========
 # =========================================
+export GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE ?= 1
+export GENUS_SYNTHESIS_MAX_FANOUT ?= 64
+
 .PHONY: cds-synth
 cds-synth:
 	@echo "[CDS] Genus synthesis"

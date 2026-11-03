@@ -27,6 +27,15 @@ def _env_flag(name: str, default: bool = False) -> bool:
     return value.lower() in {"1", "true", "yes", "on"}
 
 
+def _env_binary_flag(name: str, default: bool) -> bool:
+    value = os.getenv(name)
+    if value is None:
+        return default
+    if value not in {"0", "1"}:
+        raise RuntimeError("{} must be 0 or 1: {!r}".format(name, value))
+    return value == "1"
+
+
 def _required_env(name: str) -> str:
     value = os.getenv(name)
     if not value:
@@ -130,6 +139,9 @@ GENUS_OPT_MODE = _env_or_default("SYN3D_GENUS_OPT_MODE", "normal").lower()
 SUPPORTED_GENUS_OPT_MODES = {"normal", "low_effort"}
 assert GENUS_OPT_MODE in SUPPORTED_GENUS_OPT_MODES, (
     "Unsupported SYN3D_GENUS_OPT_MODE: {}".format(GENUS_OPT_MODE)
+)
+GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE = _env_binary_flag(
+    "GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE", True
 )
 
 # TritonPart partition encoding
@@ -354,6 +366,18 @@ CELL_NAME_MAPPING_MODE = (
 BOTTOM_CELL_SUFFIX = "_bottom"
 UPPER_CELL_SUFFIX = "_upper"
 GENUS_DONT_USE_TCL = _norm(_required_env("SYN3D_GENUS_DONT_USE_TCL"))
+GENUS_SYNTHESIS_TIMING_MARGIN_TCL = _norm(
+    os.path.join(
+        _required_env("CADENCE_SCRIPTS_DIR"),
+        "genus_synthesis_timing_margin.tcl",
+    )
+)
+GENUS_SYNTHESIS_MAX_FANOUT_TCL = _norm(
+    os.path.join(
+        _required_env("CADENCE_SCRIPTS_DIR"),
+        "genus_synthesis_max_fanout.tcl",
+    )
+)
 SYN3D_2D_DONT_USE_CELLS = _env_cell_list("DONT_USE_CELLS", required=True)
 SYN3D_2D_GENUS_DONT_USE_EXCEPTIONS = _env_cell_list("GENUS_DONT_USE_EXCEPTIONS")
 DONT_USE_CELLS_UPPER = _env_cell_list("SYN3D_DONT_USE_CELLS_UPPER", required=True)

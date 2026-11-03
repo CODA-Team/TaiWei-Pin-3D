@@ -10,6 +10,8 @@
 source $::env(CADENCE_SCRIPTS_DIR)/utils.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/lib_setup.tcl
 source $::env(CADENCE_SCRIPTS_DIR)/design_setup.tcl
+source $::env(CADENCE_SCRIPTS_DIR)/genus_synthesis_timing_margin.tcl
+source $::env(CADENCE_SCRIPTS_DIR)/genus_synthesis_max_fanout.tcl
 source $::env(SYN3D_GENUS_DONT_USE_TCL)
 
 proc run_configured_syn_opt {} {
@@ -162,6 +164,25 @@ time_info Elaboration
 read_sdc $sdc
 init_design
 
+set timing_margin_enabled [genus_synthesis_timing_margin_is_enabled]
+set timing_margin_report [file join $REPORTS_DIR genus_synthesis_timing_margin.rpt]
+puts "INFO: GENUS_SYNTHESIS_TIMING_MARGIN_ENABLE=$timing_margin_enabled"
+if {$timing_margin_enabled} {
+  configure_genus_synthesis_timing_margin \
+    0.50 \
+    0.10 \
+    $timing_margin_report
+} else {
+  if {[file exists $timing_margin_report]} {
+    file delete -force -- $timing_margin_report
+  }
+  puts "INFO: Genus synthesis timing margin is disabled"
+}
+
+set max_fanout_limit [genus_synthesis_max_fanout_limit]
+set max_fanout_report [file join $REPORTS_DIR genus_synthesis_max_fanout.rpt]
+configure_genus_synthesis_max_fanout $max_fanout_limit $max_fanout_report
+
 set coarse_unit_names [read_module_name_list $COARSE_UNIT_LIST_FILE]
 puts "INFO: Requested coarse-unit count = [llength $coarse_unit_names]"
 set coarse_mods [collect_named_modules $coarse_unit_names]
@@ -215,6 +236,7 @@ report_ple > ${REPORTS_DIR}/ple.rpt
 
 run_configured_syn_opt
 time_info OPT
+report_genus_synthesis_max_fanout
 write_db ${OBJECTS_DIR}/${DESIGN}_opt.db
 
 report_messages > ${REPORTS_DIR}/${DESIGN}_messages.rpt
@@ -224,6 +246,10 @@ report_area > ${REPORTS_DIR}/${DESIGN}_area.rpt
 write_reports -directory ${REPORTS_DIR} -tag final
 
 write_hdl > $OUT_V
+if {$timing_margin_enabled} {
+  restore_genus_synthesis_timing_margin
+}
+restore_genus_synthesis_max_fanout
 write_sdc > $OUT_SDC
 
 puts "INFO: Wrote $OUT_V"
