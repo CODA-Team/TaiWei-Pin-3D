@@ -62,7 +62,7 @@ export DESIGN_NICKNAME ?= $(DESIGN_NAME)
 export FLOW_VARIANT    ?= base
 export PIN3D_VIEW_IMPL ?= tcl
 # 3D frontend targets load config2d.mk but publish into the 3D experiment tree.
-export WORK_PLATFORM   ?= $(if $(filter cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
+export WORK_PLATFORM   ?= $(if $(filter ord-3d-synth cds-coarse-synth cds-coarse-partition ord-coarse-partition cds-per-tier-synth cds-3dsyn-handoff ord-3dsyn-handoff,$(MAKECMDGOALS)),$(3D_PLATFORM),$(PLATFORM))
 
 export LOG_DIR     ?= $(WORK_HOME)/logs/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
 export OBJECTS_DIR ?= $(WORK_HOME)/objects/$(WORK_PLATFORM)/$(DESIGN_NICKNAME)/$(FLOW_VARIANT)
@@ -537,10 +537,18 @@ ord-3d-flow-2dpart:
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-preplace
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-tier-partition
 
+.PHONY: ord-3d-synth
+# Run with config2d.mk; all four stages share the 3D experiment directories.
+ord-3d-synth:
+	@test "$(notdir $(DESIGN_CONFIG))" = config2d.mk || { echo "ord-3d-synth requires DESIGN_CONFIG=.../config2d.mk"; exit 1; }
+	@$(MAKE) --no-print-directory cds-coarse-synth
+	@$(MAKE) --no-print-directory ord-coarse-partition
+	@$(MAKE) --no-print-directory cds-per-tier-synth
+	@$(MAKE) --no-print-directory ord-3dsyn-handoff
+
 .PHONY: ord-3d-flow
 ord-3d-flow:
-	@echo "[ORD] Full 3D flow"
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-pre
+	@echo "[ORD] Native 3D backend from 3D-Syn handoff"
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-3d-floorplan
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-3d-io
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-3d-split-net
@@ -552,15 +560,13 @@ ord-3d-flow:
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-place-init-bottom
 	@for i in $$(seq 1 $(OUTER_ITERATIONS)); do \
 		echo "Iteration: $$i"; \
-		$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-place-upper; \
-		$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-place-bottom; \
+		$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-place-upper || exit $$?; \
+		$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-place-bottom || exit $$?; \
 	done
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-gp2lg
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-legalize-upper
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-legalize-bottom
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-cts
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-cts-post
-	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-route
+	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-detail-place-3d
+	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-cts-3d
+	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-route-3d-cts
 	@$(MAKE) --no-print-directory DESIGN_CONFIG=$(DESIGN_CONFIG) ord-final
 
 # ----- HotSpot -----

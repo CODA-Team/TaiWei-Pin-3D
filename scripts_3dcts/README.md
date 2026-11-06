@@ -56,11 +56,12 @@ CTS handoff
   4_cts.def / 4_cts.v / 4_cts.sdc / 4_cts.odb
                          |
                          v
-                     ord-route
+                     ord-route-3d-cts
 ```
 
-`ord-cts-3d` is an explicit stage target. It does not run placement and is not
-selected automatically by another CTS target.
+`ord-cts-3d` is the default clock stage in the OpenROAD launcher and
+`ord-3d-flow` on `native-3d`. It includes clock-cell legalization and publishes
+`4_cts.*`; the default pipeline does not run the legacy `ord-cts-post` afterwards.
 
 ## Running 3DCTS
 
@@ -102,7 +103,7 @@ variant:
 ```bash
 make DESIGN_CONFIG=designs/asap7_3D/gcd/config.mk \
      FLOW_VARIANT=3dcts_test \
-     ord-route
+     ord-route-3d-cts
 ```
 
 The platform adapter currently provides tier-buffer mappings for:

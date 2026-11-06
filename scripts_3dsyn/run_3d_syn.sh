@@ -18,7 +18,7 @@ FLOW_VARIANT="${3:-3dsyn}"
 NUM_CORES="${NUM_CORES:-16}"
 
 # Physical backend: cds or ord.
-SYN3D_BACKEND="${SYN3D_BACKEND:-cds}"
+SYN3D_BACKEND="${SYN3D_BACKEND:-ord}"
 
 # Coarse-unit recognition: all, arithmetic, multibit_ff, or none.
 SYN3D_COARSE_UNIT_KEEP_MODE="${SYN3D_COARSE_UNIT_KEEP_MODE:-all}"

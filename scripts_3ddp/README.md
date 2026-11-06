@@ -1,9 +1,8 @@
 # True-3D Detailed Placement Stage
 
 This directory connects OpenROAD's timing-driven 3D detailed placement (TDP)
-module to the TaiWei placement handoff.  It is an explicit plugin stage and
-does not replace or modify the original upper- and bottom-tier legalization
-targets.
+module to the TaiWei placement handoff. On `native-3d`, the default OpenROAD
+launcher and `ord-3d-flow` select this stage after `ord-gp2lg`.
 
 ## Flow position
 
@@ -23,7 +22,7 @@ ord-gp2lg
                          3_place.def / 3_place.v / 3_place.sdc
                                                |
                                                v
-                             ord-cts or ord-cts-3d
+                             ord-cts-3d (default)
 ```
 
 The repair and TDP phases intentionally use separate OpenROAD processes.  The
@@ -45,12 +44,12 @@ make DESIGN_CONFIG=designs/asap7_3D/gcd/config.mk \
 ```
 
 The selected variant must already contain the `ord-gp2lg` outputs.  After a
-successful run, continue with either the original CTS stages or 3DCTS using
+successful run, continue with `ord-cts-3d` using
 the same configuration and variant.
 
-`ord-detail-place-3d` is not selected by an implementation variable and is not
-inserted into the existing complete flow.  The original
-`ord-legalize-upper` and `ord-legalize-bottom` commands remain unchanged.
+`ord-detail-place-3d` replaces the two tier legalization calls in the default
+OpenROAD pipeline on this branch. The existing tier legalization commands
+remain available for explicit stage-level experiments.
 
 ## Inputs and outputs
 

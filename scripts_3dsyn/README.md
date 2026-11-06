@@ -8,7 +8,7 @@ Cadence Innovus or OpenROAD, while the Genus-based synthesis stages are shared.
 The original TaiWei 2D synthesis flow remains available.
 
 The Yosys commands used by this flow are implemented in
-`ORFS-Research/tools/yosys/passes/3dsyn` and are compiled directly into Yosys.
+`ORFS-Research/tools/yosys-research/passes/3dsyn` and are compiled directly into Yosys.
 This directory contains the Tcl, Python, and shell code that composes those
 commands with Yosys, Cadence Genus, Innovus, OpenROAD, and TaiWei.
 
@@ -140,11 +140,13 @@ For example:
 If omitted, `flow_variant` defaults to `3dsyn`. A flow variant identifies one
 run and must be reused when stages are invoked separately.
 
-The default backend is Cadence/Innovus. Select OpenROAD with:
+On `native-3d`, the default backend is OpenROAD, and the default OpenROAD
+full-flow launcher runs all four 3D-Syn stages automatically. Genus is required
+for synthesis. Select Cadence/Innovus explicitly with:
 
 ```bash
-SYN3D_BACKEND=ord \
-./scripts_3dsyn/run_3d_syn.sh asap7_3D gcd release_test_ord
+SYN3D_BACKEND=cds \
+./scripts_3dsyn/run_3d_syn.sh asap7_3D gcd release_test_cds
 ```
 
 ### Configuration
@@ -155,7 +157,7 @@ driver.
 | Variable | Default | Description |
 | --- | --- | --- |
 | `NUM_CORES` | `16` | Maximum parallel worker count used by the flow. |
-| `SYN3D_BACKEND` | `cds` | Physical backend used by coarse partition and handoff: `cds` or `ord`. |
+| `SYN3D_BACKEND` | `ord` | Physical backend used by coarse partition and handoff: `cds` or `ord`. |
 | `SYN3D_COARSE_UNIT_KEEP_MODE` | `all` | Coarse-unit categories to preserve: `all`, `arithmetic`, `multibit_ff`, or `none`. |
 | `SYN3D_FIXED_UTIL` | unset | Optional fixed coarse-unit utilization in `(0, 1]`; when unset, the area model predicts utilization. |
 | `SYN3D_GENUS_OPT_MODE` | `normal` | Genus optimization mode shared by coarse and per-tier synthesis: `normal` runs `syn_opt`; `low_effort` runs `syn_opt -incr -effort low`. |

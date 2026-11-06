@@ -101,7 +101,7 @@ Behavior:
 
 ## OpenROAD Entry Points
 
-### Full 3D OpenROAD flow
+### Default Native 3D OpenROAD flow
 
 - `test/openroad/ORD_3D_NEW_FLOW.sh <enablement> <flow_variant> <use_flow> <design_nickname>`
 
@@ -112,14 +112,40 @@ bash test/openroad/ORD_3D_NEW_FLOW.sh asap7_3D ORD_CI openroad ibex
 bash test/openroad/ORD_3D_NEW_FLOW.sh nangate45_3D debug_variant openroad swerv_wrapper
 ```
 
+On `native-3d`, this launcher (also used by per-case `run.sh` and
+`run_experiments.py --flow ord`) selects 3D-Syn, TDP and 3DCTS automatically.
+Genus, 3D-Syn-enabled Yosys and TDP/3DCTS-enabled OpenROAD must be available.
+
+The frontend runs `cds-coarse-synth`, `ord-coarse-partition`,
+`cds-per-tier-synth`, and `ord-3dsyn-handoff` with `config2d.mk`. The backend
+uses `config.mk`, starting with `ord-3d-floorplan`, keeping the existing
+floorplan/IO/macro/PDN/global-placement preparation, then running
+`ord-gp2lg`, `ord-detail-place-3d`, `ord-cts-3d`, `ord-route-3d-cts`, and `ord-final`.
+Both configurations use the same 3D platform, design and variant output paths.
+The 3D-Syn handoff supplies `<design>_3D.fp.v/.def`; do not run `ord-pre`
+after it, because that would regenerate views from the coarse netlist.
+
+For Make-level operation, run the frontend and backend with their respective
+library configurations:
+
+```bash
+make DESIGN_CONFIG=designs/asap7_3D/gcd/config2d.mk FLOW_VARIANT=native ord-3d-synth
+make DESIGN_CONFIG=designs/asap7_3D/gcd/config.mk FLOW_VARIANT=native ord-3d-flow
+```
+
+`START_FROM` skips cleaning and earlier stages. It accepts the four frontend
+targets and the native backend stages, including `ord-detail-place-3d`,
+`ord-cts-3d` and `ord-route-3d-cts` (`ord-route` is a resume alias).
+Use `START_FROM=ord-3d-floorplan` after an existing 3D-Syn handoff.
+Legacy `SKIP_2D_PART`, `REUSE_2DPART_FROM_VARIANT`, `ord-pre` and
+`ord-cts-post` resume requests are rejected before cleaning results.
+
 Useful environment variables:
 
 - `NUM_CORES`
 - `OUTER_ITERATIONS`
 - `PIN3D_ALLOW_NET_FLOW`
 - `PIN3D_SPLIT_NET_FLOW`
-- `SKIP_2D_PART`
-- `REUSE_2DPART_FROM_VARIANT`
 - `START_FROM`
 
 ### Allow-net comparison matrix
@@ -158,7 +184,7 @@ bash test/commercial/CDS_3D_NEW_FLOW.sh asap7_3D cadence cadence ibex
 bash test/commercial/CDS_3D_NEW_FLOW.sh asap7_nangate45_3D cadence_debug cadence swerv_wrapper
 ```
 
-Useful environment variables mirror the OpenROAD launcher:
+The Cadence launcher retains its own staged flow and these controls:
 
 - `NUM_CORES`
 - `OUTER_ITERATIONS`
@@ -210,7 +236,7 @@ FLOW_VARIANT=ORD_CI bash test/asap7_3D/ibex/ord/run.sh
 ### Resume one OpenROAD stage
 
 ```bash
-bash test/common/run_stage.sh asap7_3D ORD_CI openroad ibex ord-cts-post
+bash test/common/run_stage.sh asap7_3D ORD_CI openroad ibex ord-cts-3d
 ```
 
 ### Fresh Cadence run

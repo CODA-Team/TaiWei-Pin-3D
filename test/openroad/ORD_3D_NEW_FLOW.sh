@@ -12,16 +12,14 @@ Arguments:
   design_nickname Design nickname under designs/<enablement>/
 
 Optional environment variables:
-  SKIP_2D_PART=1          Skip clean_all and ord-3d-flow-2dpart
-  REUSE_2DPART_FROM_VARIANT=<variant>
-                          Copy 1_synth.sdc, 2_2_floorplan_io.def/.v, and
-                          partition artifacts from an existing result variant,
-                          then continue from ord-pre
-  START_FROM=<stage>      Resume from a later stage
+  START_FROM=<stage>      Resume from a native stage (including 3D-Syn stages);
+                          use ord-3d-floorplan after an existing 3D-Syn handoff
   OUTER_ITERATIONS=N      Number of staged preCTS outer-loop iterations (default: 1)
   NUM_CORES=N             Exported before sourcing the flow environment
   PIN3D_ALLOW_NET_FLOW    on/off, default on
   PIN3D_SPLIT_NET_FLOW    on/off, default on
+
+Default: 3D-Syn (requires Genus), TDP detailed placement, and 3DCTS.
 EOF
   exit 1
 fi
@@ -81,12 +79,14 @@ export RESULTS_DIR="./results/${ENABLEMENT}/${DESIGN_NICKNAME}/${FLOW_VARIANT}"
 
 OUTER_ITERATIONS="${OUTER_ITERATIONS:-1}"
 export OUTER_ITERATIONS
-export OUTER_ITERATIONS="${OUTER_ITERATIONS}"
 START_FROM="${START_FROM:-}"
 
 stage_order_index() {
   case "$1" in
-    ord-pre) echo 10 ;;
+    cds-coarse-synth) echo 1 ;;
+    ord-coarse-partition) echo 2 ;;
+    cds-per-tier-synth) echo 3 ;;
+    ord-3dsyn-handoff) echo 4 ;;
     ord-3d-floorplan) echo 20 ;;
     ord-3d-io) echo 30 ;;
     ord-3d-split-net) echo 40 ;;
@@ -98,11 +98,9 @@ stage_order_index() {
     ord-place-init-bottom) echo 100 ;;
     staged-prects) echo 110 ;;
     ord-gp2lg) echo 120 ;;
-    ord-legalize-upper) echo 130 ;;
-    ord-legalize-bottom) echo 140 ;;
-    ord-cts) echo 150 ;;
-    ord-cts-post) echo 160 ;;
-    ord-route) echo 170 ;;
+    ord-detail-place-3d) echo 130 ;;
+    ord-cts-3d) echo 150 ;;
+    ord-route|ord-route-3d-cts) echo 170 ;;
     ord-final) echo 180 ;;
     *)
       echo "ERROR: unsupported START_FROM stage '$1'" >&2
@@ -138,43 +136,15 @@ run_make_with_allow_net() {
   TIER_ALLOW_NET="${allow_net}" make DESIGN_CONFIG="${DESIGN_CONFIG_3D}" "${target}"
 }
 
-seed_reused_2dpart_artifacts() {
-  local source_variant="$1"
-  local source_results="./results/${ENABLEMENT}/${DESIGN_NICKNAME}/${source_variant}"
-  local required_files=(
-    "1_synth.sdc"
-    "2_2_floorplan_io.def"
-    "2_2_floorplan_io.v"
-    "partition.txt"
-  )
-  local optional_files=(
-    "1_synth.v"
-    "partition.result.tcl"
-    "partition.simple_plan.txt"
-  )
-
-  if [[ ! -d "${source_results}" ]]; then
-    echo "ERROR: missing reuse source directory ${source_results}" >&2
-    exit 1
-  fi
-
-  for file_name in "${required_files[@]}"; do
-    if [[ ! -f "${source_results}/${file_name}" ]]; then
-      echo "ERROR: missing required reuse artifact ${source_results}/${file_name}" >&2
-      exit 1
-    fi
-  done
-
-  mkdir -p "${RESULTS_DIR}" "${LOG_DIR}" "${OBJECTS_DIR}" "${REPORTS_DIR}"
-
-  echo "[run] reuse 2D-part artifacts from ${source_results}"
-  for file_name in "${required_files[@]}" "${optional_files[@]}"; do
-    if [[ -f "${source_results}/${file_name}" ]]; then
-      cp -f "${source_results}/${file_name}" "${RESULTS_DIR}/${file_name}"
-      echo "[run] copied ${file_name}"
-    fi
-  done
-}
+# Reject legacy bootstrap controls before cleaning any existing results.
+if [[ "${SKIP_2D_PART:-0}" != "0" || -n "${REUSE_2DPART_FROM_VARIANT:-}" ]]; then
+  echo "ERROR: native-3d uses 3D-Syn; use START_FROM=ord-3d-floorplan with an existing 3D-Syn handoff instead of SKIP_2D_PART/REUSE_2DPART_FROM_VARIANT." >&2
+  exit 1
+fi
+if [[ ! "${OUTER_ITERATIONS}" =~ ^[1-9][0-9]*$ ]]; then
+  echo "ERROR: OUTER_ITERATIONS must be a positive integer." >&2
+  exit 1
+fi
 
 echo "[run] enablement=${ENABLEMENT} design=${DESIGN_NICKNAME} use_flow=${USE_FLOW} flow_variant=${FLOW_VARIANT}"
 echo "[run] design_config_3d=${DESIGN_CONFIG_3D}"
@@ -182,25 +152,24 @@ echo "[run] design_config_2d=${DESIGN_CONFIG_2D}"
 echo "[run] outer_iterations=${OUTER_ITERATIONS}"
 echo "[run] PIN3D_ALLOW_NET_FLOW=${PIN3D_ALLOW_NET_FLOW:-on}"
 echo "[run] PIN3D_SPLIT_NET_FLOW=${PIN3D_SPLIT_NET_FLOW:-on}"
-echo "[run] REUSE_2DPART_FROM_VARIANT=${REUSE_2DPART_FROM_VARIANT:-}"
+echo "[run] native-3d: 3D-Syn -> TDP -> 3DCTS (Genus required for synthesis)"
 echo "[run] START_FROM=${START_FROM:-}"
 
 if [[ -n "${START_FROM}" ]]; then
-  echo "[run] resume mode enabled, skip clean_all/reuse/ord-3d-flow-2dpart bootstrap"
-elif [[ -n "${REUSE_2DPART_FROM_VARIANT:-}" ]]; then
-  rm -rf "${LOG_DIR}" "${OBJECTS_DIR}" "${REPORTS_DIR}" "${RESULTS_DIR}"
-  seed_reused_2dpart_artifacts "${REUSE_2DPART_FROM_VARIANT}"
-  echo "[run] reuse mode enabled, skip clean_all and ord-3d-flow-2dpart"
-elif [[ "${SKIP_2D_PART:-0}" != "1" ]]; then
-  run_make clean_all "${DESIGN_CONFIG_3D}"
-  run_make ord-3d-flow-2dpart "${DESIGN_CONFIG_2D}"
+  echo "[run] resume mode enabled; preserve existing handoffs"
 else
-  echo "[run] SKIP_2D_PART=1, skip clean_all and ord-3d-flow-2dpart"
+  run_make clean_all "${DESIGN_CONFIG_3D}"
 fi
 
-if should_run_stage ord-pre; then
-  run_make ord-pre
-fi
+# The frontend uses 2D libraries but publishes into this same 3D variant.
+# Its handoff generates <design>_3D.fp.v/.def; ord-pre would overwrite it
+# with the coarse-partition netlist and must not run afterwards.
+for stage in cds-coarse-synth ord-coarse-partition cds-per-tier-synth ord-3dsyn-handoff; do
+  if should_run_stage "${stage}"; then
+    run_make "${stage}" "${DESIGN_CONFIG_2D}"
+  fi
+done
+
 if should_run_stage ord-3d-floorplan; then
   run_make ord-3d-floorplan
 fi
@@ -238,20 +207,14 @@ fi
 if should_run_stage ord-gp2lg; then
   run_make ord-gp2lg
 fi
-if should_run_stage ord-legalize-upper; then
-  run_make ord-legalize-upper
+if should_run_stage ord-detail-place-3d; then
+  run_make ord-detail-place-3d
 fi
-if should_run_stage ord-legalize-bottom; then
-  run_make ord-legalize-bottom
+if should_run_stage ord-cts-3d; then
+  run_make ord-cts-3d
 fi
-if should_run_stage ord-cts; then
-  run_make ord-cts
-fi
-if should_run_stage ord-cts-post; then
-  run_make ord-cts-post
-fi
-if should_run_stage ord-route; then
-  run_make ord-route
+if should_run_stage ord-route-3d-cts; then
+  run_make ord-route-3d-cts
 fi
 if should_run_stage ord-final; then
   run_make ord-final

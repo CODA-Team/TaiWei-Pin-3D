@@ -14,7 +14,7 @@ Arguments:
 
 Notes:
   - This wrapper runs exactly one make target.
-  - *-3d-flow-2dpart automatically uses config2d.mk.
+  - 3D-Syn and *-3d-flow-2dpart targets automatically use config2d.mk.
   - All other targets use config.mk.
 EOF
   exit 1
@@ -66,7 +66,7 @@ export RESULTS_DIR="./results/${ENABLEMENT}/${DESIGN_NICKNAME}/${FLOW_VARIANT}"
 
 select_design_config() {
   case "$1" in
-    ord-3d-flow-2dpart|cds-3d-flow-2dpart|ord-tier-partition|cds-tier-partition)
+    ord-3d-synth|cds-coarse-synth|ord-coarse-partition|cds-coarse-partition|cds-per-tier-synth|ord-3dsyn-handoff|cds-3dsyn-handoff|ord-3d-flow-2dpart|cds-3d-flow-2dpart|ord-tier-partition|cds-tier-partition)
       echo "${DESIGN_CONFIG_2D}"
       ;;
     *)

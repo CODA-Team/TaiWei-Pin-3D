@@ -4,6 +4,15 @@ Taiwei-3D-Eval is an end-to-end reproducible physical design (PD) flow for face-
 which leverages Pin3D methodology and mature 2D physical design tools (ORFS and Cadence tools) for high-quality 3D IC implementation.
 Our flow allows academic researchers to validate and compare their 3D point tools in a full flow context.
 
+
+On the `native-3d` branch, the default OpenROAD flow uses **3D-Syn → TDP
+3D detailed placement → 3DCTS**, followed by routing and final reports.
+`python3 run_experiments.py --flow ord --tech asap7_3D --case gcd` and the
+per-case `run.sh` wrappers select these stages automatically. Genus is required
+for the 3D-Syn frontend, together with the integrated Yosys and OpenROAD builds.
+See [the launcher guide](test/README.md) for prerequisites, Make entry points
+and native-stage resume commands.
+
 ## [Quick Start](#quick-start)
 
 ## Documentation Map
@@ -27,10 +36,10 @@ The most useful documents in this repository are:
 
 ### Supported Tools
 - **Open-source PD tools**: [ORFS-Research](https://github.com/ieee-ceda-datc/ORFS-Research) (ORD)
-  - **Tested ORFS-Research commit**: `568eb04da9173695d6bfc1b10ba868e0b6b8a9fa`
-  - **Bundled OpenROAD commit**: `305d3ba2ddfd00591924cc586ad408179f566afe`
+  - **Historical baseline ORFS-Research commit**: `568eb04da9173695d6bfc1b10ba868e0b6b8a9fa`
+  - **Historical baseline OpenROAD commit**: `305d3ba2ddfd00591924cc586ad408179f566afe`
   - Other versions may work but have not been fully validated. If you encounter issues, please open a GitHub issue in this repository.
-  - Note: the branch used in the paper differs from the public release; please use the commits above for reproducibility.
+  - For `native-3d`, build the tool versions pinned by the TaiWei parent repository; the historical commits above describe the baseline flow.
 - **Commercial PD tools**: Cadence tool suite (CDS)
   - Innovus `v21.39`
   - Genus `v21.39`
@@ -48,9 +57,9 @@ The most useful documents in this repository are:
 source env.sh
 ```
 
-### Example 1: Run the open-source flow for GCD design (3D stack setting: ASAP7 + ASAP7)
+### Example 1: Run the native OpenROAD flow for GCD design (3D stack setting: ASAP7 + ASAP7)
 ```bash
-# Run open-source flow for the GCD design (3D stack setting: ASAP7 + ASAP7)
+# Run the native OpenROAD flow for the GCD (Genus required) design (3D stack setting: ASAP7 + ASAP7)
 python3 run_experiments.py --flow ord --tech asap7_3D --case gcd
 ```
 
@@ -63,7 +72,7 @@ After running above command (ASASP7-NanGate45-GCD), you can visualize chip layou
 
 ### Example 3: Run the end-to-end flow for the GCD design using the provided bash script (3D stack setting: ASAP7 + NanGate45)
 ```bash
-bash experiment_scripts/gcd.sh
+bash test/asap7_nangate45_3D/gcd/ord/run.sh
 ```
 
 <p align="center">
@@ -133,8 +142,8 @@ The key strategies are:
 - **Unified 2D abstraction for F2F 3D**: hybrid bonding terminals (HBTs) are modeled as special vias in an extended metal stack, so existing 2D routers can realize cross-tier connections without a custom 3D router.
 - **Tier-specific library views**: every physical cell has tier-local masters such as `*_bottom` and `*_upper`, and both OpenROAD and Cadence use COVER views to hide the inactive tier from local optimization while preserving logical connectivity.
 - **Mixed-fanout split before detailed optimization**: the flow explicitly identifies nets whose real sinks span both tiers, inserts a tier-local split buffer to isolate one sink cluster, and converts one mixed-fanout net into two tier-pure fanout nets whenever possible. The buffer tier is selected with a lightweight cost model that penalizes high-util tiers and choices with higher estimated split-side HBT burden.
-- **Tier-by-tier optimization instead of flat 3D optimization**: placement and legalization alternate between the upper and bottom tiers, with explicit tier policy, row/site rebuilding, and stage-specific active-tier control.
-- **Split PDN and staged CTS**: PDN is built separately for bottom and upper tiers. CTS is structured as owner-tier tree construction followed by receive-tier clock repair/optimization, rather than a single flat 3D clock stage.
+- **Native 3D detailed placement**: tier-by-tier global placement prepares the initial locations, then TDP optimizes both tiers through `ord-detail-place-3d`.
+- **Split PDN and native 3DCTS**: PDN is built separately for bottom and upper tiers. The default OpenROAD clock stage builds and refines a shared-tap useful-skew 3D tree and legalizes its clock cells.
 - **3D-specific observability**: the flow reports both structural `cross-tier` nets and functional `mixed_fanout` nets, because these are different quantities and they must be tracked separately during 3D optimization.
 
 ## [Enablements](#enablements)
@@ -169,19 +178,19 @@ This enablement strategy allows existing 2D physical design engines to operate o
 ## [Implementaion Flows](#implementation-flow)
 Our current 3D IC implementation flow is organized around a few explicit 3D stages rather than hidden tool-specific hacks:
 
-- *Front-end 3D construction*: after 2D synthesis and partitioning, the flow builds tier-aware 3D floorplan, IO, split-net, macro-placement and PDN views.
-- *Iterative tier-by-tier physical optimization*: upper and bottom tiers are optimized separately with inactive-tier COVER views and explicit tier policy.
-- *Staged clocking and routing*: CTS is split into owner-tier tree construction and receive-tier clock repair/optimization, then routing uses the full merged 3D metal stack.
+- *Front-end 3D construction*: after 3D-Syn coarse synthesis, partitioning and HBT-aware per-tier synthesis, the flow builds tier-aware 3D floorplan, IO, split-net, macro-placement and PDN views.
+- *Physical optimization*: tier-by-tier global placement feeds the native TDP detailed-placement stage.
+- *Native clocking and routing*: shared-tap 3DCTS produces the clock handoff, then routing uses the full merged 3D metal stack.
 - *Stage-managed reproducibility*: every major stage writes canonical handoff files and metrics so the flow can be resumed, compared, and analyzed stage by stage.
 
 
 The following figure presents an overview of our homogeneous and heterogeneous Pin-3D physical design flow. The practical flow used in this repository has the following structure:
 
-- **2D bootstrap**: RTL is synthesized, floorplanned and partitioned in 2D to generate the initial tier assignment.
+- **3D-Syn frontend**: RTL passes through coarse synthesis, coarse tier partitioning, HBT-aware per-tier synthesis and the OpenROAD backend handoff.
 - **3D floorplan and IO construction**: the partitioned design is converted into a tier-aware 3D view with tier-local libraries, tier-local PDN intent and HBT-capable routing resources.
 - **Mixed-fanout split stage**: before the main physical optimization loop, the flow isolates one tier's sink cluster so later optimization works on cleaner tier-local fanout structure. The current split policy evaluates upper and bottom buffer placement using three lightweight terms: global tier utilization, an `estimated_extra_hbt` proxy, and the inserted buffer area normalized by the current core area. The HBT proxy is not the final routed HBT count.
-- **Iterative 3D placement and legalization**: the flow alternates active optimization between upper and bottom tiers instead of optimizing both tiers blindly in one flat pass.
-- **Staged 3D CTS**: `CTS_LAYER` selects the owner tier. The clock tree is first built from that owner-tier view and then refined from the receive side. The current `single_trunk_handoff` name describes this staged owner/receive flow; it does not enforce exactly one physical handoff point per clock domain.
+- **Global and detailed placement**: tier-by-tier global placement supplies the initial solution; TDP then performs native 3D detailed placement.
+- **Native 3DCTS**: `ord-cts-3d` builds a balanced 3D tree, schedules useful skew, delivers shared taps and performs physical refinement and legalization.
 - **3D route and final extraction**: routing uses the merged 3D stack, then timing, power, DRC and cross-tier reports are collected from final outputs.
 
 <p align="center">
@@ -204,8 +213,8 @@ This distinction is important because a split operation may keep one controlled 
 | Stage                   | OpenROAD target            | Cadence target             | Notes                                                        |
 | :---------------------- | :------------------------- | :------------------------- | :----------------------------------------------------------- |
 | **Clean**               | `clean_all`                | `clean_all`                | Remove `results/ reports/ logs/ objects/`.                   |
-| **2D Bootstrap**        | `ord-3d-flow-2dpart`       | `cds-3d-flow-2dpart`       | Runs synth, preplace and partition with `config2d.mk`.       |
-| **3D Prep (views)**     | `ord-pre`                  | `cds-pre`                  | Import partition artifacts and build 3D logical views.       |
+| **Frontend**            | `ord-3d-synth`       | `cds-3d-flow-2dpart`       | OpenROAD: four 3D-Syn stages with `config2d.mk`; Cadence: 2D bootstrap.       |
+| **3D Prep (views)**     | included in `ord-3d-synth`                  | `cds-pre`                  | Import partition artifacts and build 3D logical views.       |
 | **3D Floorplan**        | `ord-3d-floorplan`         | `cds-3d-floorplan`         | Build tier-aware floorplan from the partitioned design.      |
 | **3D IO**               | `ord-3d-io`                | `cds-3d-io`                | Tier-aware IO/pin placement.                                 |
 | **Split Mixed Fanout**  | `ord-3d-split-net`         | `cds-3d-split-net`         | Split mixed-fanout nets with cost-based buffer tier selection before main optimization. |
@@ -218,11 +227,11 @@ This distinction is important because a split operation may keep one controlled 
 | **Place — Upper Tier**  | `ord-place-upper`          | `cds-place-upper`          | Upper-owner timing/congestion refinement.                    |
 | **Place — Bottom Tier** | `ord-place-bottom`         | `cds-place-bottom`         | Bottom-owner timing/congestion refinement.                   |
 | **GP to LG Handoff**    | `ord-gp2lg`                | `cds-gp2lg`                | Convert iterative global-placement handoff to legalize view. |
-| **Legalize — Upper**    | `ord-legalize-upper`       | `cds-legalize-upper`       | Upper-owner legalization and preCTS cleanup.                 |
-| **Legalize — Bottom**   | `ord-legalize-bottom`      | `cds-legalize-bottom`      | Bottom-owner legalization and merged place handoff.          |
-| **CTS Owner Stage**     | `ord-cts`                  | `cds-cts`                  | Owner-tree CTS stage.                                        |
-| **CTS Receive Stage**   | `ord-cts-post`             | `cds-cts`                  | Receive-side clock optimization and cleanup.                 |
-| **Route (3D)**          | `ord-route`                | `cds-route`                | Full 3D routing on the merged stack with HBT generation.     |
+| **Detailed placement** | `ord-detail-place-3d`       | `cds-legalize-upper`       | OpenROAD: TDP; Cadence: upper-tier legalization.                 |
+| **Legalize — Bottom**   | included in TDP      | `cds-legalize-bottom`      | Bottom-owner legalization and merged place handoff.          |
+| **Clock tree**          | `ord-cts-3d`                  | `cds-cts`                  | OpenROAD: useful-skew 3DCTS; Cadence: staged CTS.                                        |
+| **CTS Receive Stage**   | included in `ord-cts-3d`             | `cds-cts`                  | Receive-side clock optimization and cleanup.                 |
+| **Route (3D)**          | `ord-route-3d-cts`                | `cds-route`                | Full 3D routing on the merged stack with HBT generation.     |
 | **Final / Reports**     | `ord-final`                | `cds-restore/final`              | Final reports, summaries, and restored final database.       |
 | **Thermal / Hotspot**   | `ord-hotspot`              |                            | Reuses OpenROAD HotSpot harness.                             |
 
@@ -235,7 +244,7 @@ bash test/common/run_stage.sh <enablement> <flow_variant> <use_flow> <design> <m
 Example:
 
 ```bash
-bash test/common/run_stage.sh asap7_3D debug_openroad openroad ibex ord-cts
+bash test/common/run_stage.sh asap7_3D debug_openroad openroad ibex ord-cts-3d
 bash test/common/run_stage.sh asap7_nangate45_3D debug_cadence cadence gcd cds-pre
 ```
 

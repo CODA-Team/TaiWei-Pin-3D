@@ -1,5 +1,11 @@
 # OpenROAD 3D Co-Optimization Strategy
 
+> On `native-3d`, the default launcher uses 3D-Syn, TDP detailed placement
+> and 3DCTS. See [the current launcher guide](../test/README.md) for the
+> default sequence and resume targets. The staged legalization/CTS sections
+> below document the retained baseline targets and shared tier-policy
+> mechanisms; those baseline stages are not the default native pipeline.
+
 ## Scope
 
 This document describes the current OpenROAD 3D commercial-style flow implemented in this repository. It is intentionally code-aligned:
