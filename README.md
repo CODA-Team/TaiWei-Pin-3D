@@ -35,6 +35,22 @@ The most useful documents in this repository are:
   - Innovus `v21.39`
   - Genus `v21.39`
 
+### Case selection on `pesudo-3d`
+
+This branch retains the standard-cell cases `aes`, `gcd`, `ibex`, `jpeg`,
+`picorv32`, and `tpu`, plus `swerv_wrapper` as the hard-macro case.
+ASAP7 and Nangate45 provide all seven cases; the mixed ASAP7/Nangate45
+platform provides `aes`, `gcd`, `ibex`, `jpeg`, and `swerv_wrapper`.
+Other hard-macro case configurations, dedicated RTL, and test launchers
+have been removed. Shared platform libraries and macro-handling stages
+remain available for `swerv_wrapper`.
+
+List the available OpenROAD runs with:
+
+```bash
+python3 run_experiments.py --flow ord --list
+```
+
 ### Environment Setup
 
 - Install **ORFS-Research** first by following the instructions in its repository.

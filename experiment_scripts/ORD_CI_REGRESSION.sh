@@ -11,7 +11,7 @@ Modes:
          nangate45_3D/{ibex,swerv_wrapper}
          asap7_nangate45_3D/{ibex,swerv_wrapper}
 
-  all    Run all discovered OpenROAD cases (currently 20 cases).
+  all    Run all discovered OpenROAD cases.
 
 Behavior:
   - Only runs OpenROAD.

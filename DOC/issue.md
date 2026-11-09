@@ -230,6 +230,10 @@ designs.
 
 ## OpenROAD ariane133 Has CTS and Pin-Access Blockers
 
+Historical note: `ariane133` has been removed from the `pesudo-3d` case
+collection. The observations below describe earlier runs and are retained
+for reference; they are not part of this branch's current regression set.
+
 ### Summary
 
 The OpenROAD 3D flow currently has unresolved `ariane133` blockers that should
